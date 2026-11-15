@@ -113,7 +113,7 @@ Release definitions are in [MVP-SCOPE.md](./MVP-SCOPE.md).
 | Q6 | ~~Sign-in method~~ | **Answered: partner = QR key (no login screen); owner = email + password** (TD-008) | — |
 | Q7 | Language (English / Tagalog / Taglish) | English UI, content in any language | Copy |
 | Q8 | Display names / nicknames | Placeholders `[OWNER_NAME]`, `[PARTNER_NAME]` | Copy |
-| Q9 | Custom domain? | Default `*.vercel.app` | Deployment |
+| Q9 | ~~Custom domain?~~ | **Answered: free `*.vercel.app` address** (TD-017) | — |
 | Q10 | Existing GitHub/Supabase/Vercel accounts? | Owner creates free accounts | Build start |
 | Q11 | Does the partner know the site exists before launch? | No, it's a surprise | Launch checklist |
 

@@ -141,6 +141,14 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 - Security never depends on repo visibility: it relies on auth + RLS, not obscurity.
 - Post-deployment action: owner switches visibility to private (added to the launch checklist). Vercel Hobby can deploy from a private personal repo; GitHub Actions on private repos use the free minutes quota, more than enough for weekly backup + keep-alive.
 
+## TD-017 Address: free Vercel subdomain — *Approved (owner, THINK)*
+
+- The site lives at `<project-name>.vercel.app`. No custom domain, $0.
+- **The address is permanent once the QR card is printed.** The Vercel project name must be final before the first QR is generated; renaming the project later breaks the card.
+- Project name must **not** contain personal names (keeps the address non-identifying). Final name chosen by the owner at deployment.
+- Only the production address goes on the QR. Preview deployments keep Vercel's default deployment protection; they are also behind app sign-in and RLS.
+- Changing to a custom domain later is possible, but needs a redirect from the old address so printed cards keep working. That would be a change request.
+
 ---
 
 ## Change log

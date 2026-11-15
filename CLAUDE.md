@@ -35,6 +35,7 @@ clarification at a time.
 - Launch = the first monthsary, at the anchor minute (fixed date, flexible scope).
 - Partner permissions (approved): memories only. Create, and edit/delete her own. Read-only everywhere else (plus letter read status via `open_letter()`).
 - Sign-in (approved, TD-008): partner scans a **QR key** and is signed in automatically, with no login screen. The key lives in the URL fragment and is removed after sign-in; it is never committed or logged. Owner uses email + password on a separate route. Key rotation = revoke + reprint.
+- Address (approved, TD-017): free `<project>.vercel.app`; project name non-identifying and frozen before the QR is printed.
 - Partner device: **Android** (Chrome assumed; also test Samsung Internet if Samsung). Test priority 1 = Android Chrome.
 
 ## Stack (proposed, pending approval)
