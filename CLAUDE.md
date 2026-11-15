@@ -17,7 +17,8 @@ clarification at a time.
 
 ## Hard rules
 
-1. **Public repository.** Never commit personal data: relationship date/time,
+1. **Public repository** (owner will make it private after deployment; the rule stays
+   permanent because public history can't be recalled). Never commit personal data: relationship date/time,
    timezone, names, messages, photos, real seed data. Refer to config keys
    (`relationship.start_at`, `relationship.timezone`). Never commit secrets; `.env*` is gitignored.
 2. Never invent personal content. Use placeholders like `[PARTNER_NAME]`.

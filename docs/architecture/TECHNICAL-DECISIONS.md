@@ -105,9 +105,9 @@ Indicative tables: `profiles`, `relationship`, `relationship_members`,
 - A scheduled job calls a harmless `keepalive()` database function every ~3 days.
 - **Options:** (a) GitHub Actions cron (free; note: GitHub disables scheduled workflows after 60 days without repo activity, so needs a monthly check); (b) Vercel Cron (Hobby allows daily cron; requires one tiny serverless function). Choose in DESIGN.
 
-## TD-013 Backups: automated, encrypted, off-platform — *Proposed* (pending Q3)
+## TD-013 Backups: automated, encrypted, off-platform — *Proposed*
 
-- Weekly scheduled `pg_dump` + storage object sync, **encrypted before leaving the runner** (the repo is public, and artifacts of public repos are broadly downloadable). Stored in a private location chosen by the owner.
+- Weekly scheduled `pg_dump` + storage object sync, **always encrypted before leaving the runner**. Required while the repo is public (public-repo artifacts are broadly downloadable) and kept after it goes private as defense in depth. Stored in a private location chosen by the owner.
 - A restore drill into a fresh project is required before L.
 - Secrets (DB password, encryption key) only in CI secret storage.
 
@@ -128,9 +128,13 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 - Two Supabase projects (free limit = 2): `dev` and `prod`. Migrations live in `supabase/migrations` and are applied to both. RLS tests run against `dev` with two test accounts.
 - No personal content in `dev` or in seed files committed to git.
 
-## TD-016 Repository privacy rule — *Approved by necessity, owner to confirm (Q3)*
+## TD-016 Repository privacy rule — *Approved (owner, THINK)*
 
-- The repo is public. Therefore: no personal values, photos, messages, or real seed data in git; `.env*` ignored; docs reference config keys only. Making the repo private is recommended but not required for security, since security relies on auth + RLS, not obscurity.
+- **Owner decision:** the repo stays public until deployment, then becomes private.
+- **Rule (permanent, not only while public):** no personal values, photos, messages, or real seed data in git; `.env*` ignored; docs reference config keys only.
+- **Why permanent:** making a repo private later does not erase what was public. Earlier commits may already be cloned, forked, or cached. Everything committed during the public period must be safe to stay public forever.
+- Security never depends on repo visibility: it relies on auth + RLS, not obscurity.
+- Post-deployment action: owner switches visibility to private (added to the launch checklist). Vercel Hobby can deploy from a private personal repo; GitHub Actions on private repos use the free minutes quota, more than enough for weekly backup + keep-alive.
 
 ---
 

@@ -12,7 +12,7 @@
 | R2 | **Data loss**: free tier lacks downloadable backups; memories are irreplaceable | M | H | **High** | Encrypted automated backups + restore drill before launch (TD-013) | Owner | Open |
 | R3 | **Locked content leaks** via API, storage URL, or page payload | M | H | **High** | Envelope/content split + RLS + `open_letter()` + storage policies (TD-007, TD-009); direct-API tests as the partner | Build/Validate | Open |
 | R4 | **Launch date slips**: 23 days for 4 phases + content writing | M | H | **High** | Fixed-date, flexible-scope plan; cut order defined (MVP-SCOPE §3) | Owner | Open |
-| R5 | **Personal data exposed in the public repo** | M | M | **High** | No personal values in git (TD-016); `.env*` ignored; pre-commit review; recommend making repo private | Owner | Open |
+| R5 | **Personal data exposed in the public repo** (public until deployment; going private later does not erase history) | M | M | **High** | Permanent no-personal-data rule (TD-016); `.env*` ignored; scan before every commit; switch to private after deployment (launch checklist) | Owner | Open |
 | R6 | Account takeover (weak password / shared device) | L | H | Medium | Strong passwords + password manager; signups off; sessions revocable; membership check | Owner | Open |
 | R7 | Storage quota (1 GB) or egress (5 GB) exhausted | L | M | Medium | Client-side compression, size caps, URL caching; usage readout (R2) | Build | Open |
 | R8 | Monthsary / timezone calculation errors | L | M | Medium | Single date module, DR-01…05, exhaustive unit tests incl. month-end and leap cases | Build/Validate | Open |

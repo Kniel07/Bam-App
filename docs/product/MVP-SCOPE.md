@@ -57,6 +57,7 @@ Easter eggs, advanced animations, extra scrapbook interactions, export.
 | L-2 | Content freeze; dry run with a test scheduled letter | Test letter unlocks correctly, then deleted |
 | L-1 | Restore drill verified; launch checklist signed off | — |
 | **L** | Launch: share the link + her account | 🎉 |
+| L+1 | Owner switches GitHub repo to private (TD-016) | Vercel still deploys |
 
 **Critical path:** auth + RLS + letter locking. If BUILD slips past L-7,
 cut in this order: Memories replace/edit → milestone photos → opening
