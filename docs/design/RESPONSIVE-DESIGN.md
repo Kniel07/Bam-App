@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **DRAFT — awaiting owner approval (DESIGN)** |
+| Status | **APPROVED by owner (DESIGN)** |
 | Version | 0.1 |
 
 Mobile-first: base styles target a 360–430 px Android phone (the partner's

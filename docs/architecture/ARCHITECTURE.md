@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **DRAFT — awaiting owner approval (DESIGN)** |
+| Status | **APPROVED by owner (DESIGN)** |
 | Version | 0.1 |
 | Related | [DATABASE-DESIGN](../database/DATABASE-DESIGN.md) · [TECHNICAL-DECISIONS](./TECHNICAL-DECISIONS.md) |
 

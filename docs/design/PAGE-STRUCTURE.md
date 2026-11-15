@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **DRAFT — awaiting owner approval (DESIGN)** |
+| Status | **APPROVED by owner (DESIGN)** |
 | Version | 0.1 |
 
 Covers information architecture, routes, navigation, and a text wireframe

@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **DRAFT — awaiting owner approval (DESIGN)** |
+| Status | **APPROVED by owner (DESIGN)** |
 | Version | 0.1 |
 | Related | [PAGE-STRUCTURE](./PAGE-STRUCTURE.md) · [COMPONENT-SPECIFICATION](./COMPONENT-SPECIFICATION.md) · [RESPONSIVE-DESIGN](./RESPONSIVE-DESIGN.md) |
 

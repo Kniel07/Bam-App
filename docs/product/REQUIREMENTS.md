@@ -36,7 +36,7 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | FR-SET-01 | Owner can set `start_at` (date + time) and `timezone` (IANA name). Neither is hardcoded. | R1 |
 | FR-SET-02 | Owner can set display names and the counter message (e.g. "Every day with you is another favorite memory."). | R1 |
 | FR-SET-03 | Owner can define special dates (e.g. first anniversary) with a label. | R2 |
-| FR-SET-05 | *(Proposed in DESIGN, A1)* Owner can write a welcome message shown once, in an envelope, on the partner's first visit. | R1 if approved |
+| FR-SET-05 | *(Approved in DESIGN, A1)* Owner can write a welcome message shown once, in an envelope, on the partner's first visit. | R1 |
 | FR-SET-04 | Owner can toggle partner contribution permissions per module. | R2 (R1 uses fixed defaults) |
 
 ### 1.2 Our Story — `STORY`

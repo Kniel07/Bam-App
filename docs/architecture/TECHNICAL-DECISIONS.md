@@ -149,20 +149,20 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 - Only the production address goes on the QR. Preview deployments keep Vercel's default deployment protection; they are also behind app sign-in and RLS.
 - Changing to a custom domain later is possible, but needs a redirect from the old address so printed cards keep working. That would be a change request.
 
-## TD-018 Partner login identity: synthetic address — *Proposed (DESIGN)*
+## TD-018 Partner login identity: synthetic address — *Approved (owner, DESIGN)*
 
 - The partner's Supabase user uses a synthetic, non-personal login address on a reserved domain. Her real email is never stored. The constant may appear in the public JS bundle because it reveals nothing.
 - **Why:** QR sign-in needs a login identifier on the client. Putting her real email in the bundle (public) or in the QR would expose personal data. Recovery doesn't need email, since the owner rotates the key.
 - **Fallback** if Supabase rejects the address: a plus-addressed variant of the owner's own mailbox.
 
-## TD-019 Letter content readable only through `open_letter()` — *Proposed (DESIGN)*, refines TD-009
+## TD-019 Letter content readable only through `open_letter()` — *Approved (owner, DESIGN)*, refines TD-009
 
 - **Previous (TD-009):** partner may SELECT `letter_contents` via RLS when unlocked; `open_letter()` records read status.
 - **Proposed:** partner has **no** SELECT policy on `letter_contents`; `open_letter()` is the single path.
 - **Reason:** one code path to secure and test; read status can't be bypassed; removes a whole class of policy mistakes.
 - **Impact:** none on UX; slightly simpler RLS.
 
-## TD-020 Keep-alive and backups on GitHub Actions — *Proposed (DESIGN)*, resolves TD-012 options
+## TD-020 Keep-alive and backups on GitHub Actions — *Approved (owner, DESIGN)*, resolves TD-012 options
 
 - Both jobs in GitHub Actions (one platform, free). The 60-day inactivity auto-disable applies to scheduled workflows in public repos; the repo goes private after launch (TD-016). The monthly maintenance check stays as a safety net.
 - Backups encrypted with `age` to a public recipient key; the private key stays offline with the owner.
@@ -173,6 +173,6 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 
 | Date | Decision | Change | Reason | Approval |
 |---|---|---|---|---|
-| THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | Pending |
-| DESIGN | TD-009 → TD-019 | Partner reads letter content only via `open_letter()` | Single secured path | Pending |
+| THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | **Approved by owner** |
+| DESIGN | TD-009 → TD-019 | Partner reads letter content only via `open_letter()` | Single secured path | **Approved by owner** |
 | THINK | TD-008 | **Previous:** email + password for both users. **New:** owner password; partner signs in by scanning a QR key (no login screen) | Owner wants no login for the partner, access by unique QR code. Option chosen keeps real accounts, RLS roles and revocation | **Approved by owner** |
