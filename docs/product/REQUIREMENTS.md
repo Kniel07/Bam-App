@@ -179,4 +179,8 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | Love reasons | CRUD | read published; favorite (R2) |
 | Media files | all | read files whose parent row she can read; upload/delete files for own memories |
 
-Pending owner confirmation (Q4).
+**Confirmed by owner (Q4 = option A: memories only).** Clarifications:
+
+- Partner-created memories are published immediately (no draft step for her).
+- The owner can still edit or delete any memory (e.g. to remove an accidental upload). The partner cannot edit or delete the owner's memories.
+- Every memory records `created_by`, which drives the "edit/delete own" rule in RLS and storage policies.

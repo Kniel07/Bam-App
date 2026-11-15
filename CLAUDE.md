@@ -33,6 +33,7 @@ clarification at a time.
 - Two users: `owner`, `partner`. Exactly two, ever.
 - Anchor moment and timezone: **provided by owner, stored privately** (not in git). It is shortly after midnight, so the default unlock = the anchor minute (TD-011).
 - Launch = the first monthsary, at the anchor minute (fixed date, flexible scope).
+- Partner permissions (approved): memories only. Create, and edit/delete her own. Read-only everywhere else (plus letter read status via `open_letter()`).
 - Partner device: TBD (assume iPhone Safari).
 
 ## Stack (proposed, pending approval)

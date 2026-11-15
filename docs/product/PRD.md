@@ -108,7 +108,7 @@ Release definitions are in [MVP-SCOPE.md](./MVP-SCOPE.md).
 | Q1 | ~~Relationship anchor moment & timezone~~ | **Answered** (stored privately) | — |
 | Q2 | ~~Launch target~~ | **Answered: first monthsary** | — |
 | Q3 | ~~Keep repo public or make it private?~~ | **Answered: public until deployment, then private** (TD-016) | — |
-| Q4 | What may the partner create/edit? | Memories only (create/edit/delete own) | RLS design |
+| Q4 | ~~What may the partner create/edit?~~ | **Answered: memories only, create + edit/delete her own** | — |
 | Q5 | Partner's main device/browser | iPhone Safari (test priority) | Test matrix |
 | Q6 | Sign-in method | Email + password (TD-008) | Auth design |
 | Q7 | Language (English / Tagalog / Taglish) | English UI, content in any language | Copy |
