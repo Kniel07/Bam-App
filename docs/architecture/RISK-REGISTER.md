@@ -1,0 +1,28 @@
+# Risk Register — Our Little Universe
+
+| Field | Value |
+|---|---|
+| Status | Living document |
+| Version | 0.1 (THINK) |
+| Scale | Likelihood / Impact: L · M · H |
+
+| ID | Risk | L | I | Severity | Mitigation | Owner | Status |
+|---|---|---|---|---|---|---|---|
+| R1 | Supabase free project **pauses after 1 week of inactivity**; site is down on a monthsary | H | H | **Critical** | Keep-alive job (TD-012); monthly check that the job is still enabled; documented un-pause steps | Owner | Open |
+| R2 | **Data loss**: free tier lacks downloadable backups; memories are irreplaceable | M | H | **High** | Encrypted automated backups + restore drill before launch (TD-013) | Owner | Open |
+| R3 | **Locked content leaks** via API, storage URL, or page payload | M | H | **High** | Envelope/content split + RLS + `open_letter()` + storage policies (TD-007, TD-009); direct-API tests as the partner | Build/Validate | Open |
+| R4 | **Launch date slips**: 23 days for 4 phases + content writing | M | H | **High** | Fixed-date, flexible-scope plan; cut order defined (MVP-SCOPE §3) | Owner | Open |
+| R5 | **Personal data exposed in the public repo** | M | M | **High** | No personal values in git (TD-016); `.env*` ignored; pre-commit review; recommend making repo private | Owner | Open |
+| R6 | Account takeover (weak password / shared device) | L | H | Medium | Strong passwords + password manager; signups off; sessions revocable; membership check | Owner | Open |
+| R7 | Storage quota (1 GB) or egress (5 GB) exhausted | L | M | Medium | Client-side compression, size caps, URL caching; usage readout (R2) | Build | Open |
+| R8 | Monthsary / timezone calculation errors | L | M | Medium | Single date module, DR-01…05, exhaustive unit tests incl. month-end and leap cases | Build/Validate | Open |
+| R9 | iPhone photo format (HEIC) or huge images fail to upload | M | L | Low | Accept `image/*`, canvas re-encode, clear error message; tested on iPhone Safari | Build/Validate | Open |
+| R10 | Surprise spoiled: partner finds site/content early | L | M | Low | Draft/published status; partner account created at L; preview-as-partner | Owner | Open |
+| R11 | Scheduled keep-alive/backup silently disabled (GitHub 60-day rule) | M | M | Medium | Monthly maintenance checklist; consider Vercel Cron alternative | Owner | Open |
+| R12 | External embeds (Spotify/YouTube) unavailable or tracking | L | L | Low | Fallback link + note; embeds loaded only on playlist screen | Build | Open (R2) |
+| R13 | Over-animation hurts performance or accessibility | M | L | Low | Scoped Motion usage; reduced-motion support; perf budget NFR-08 | Design/Build | Open |
+| R14 | Free-tier terms change | L | M | Low | Limits re-checked before deploy; documented in TECHNICAL-DECISIONS | Owner | Open |
+
+## Review cadence
+
+Re-assess at the end of each phase and at every monthsary.

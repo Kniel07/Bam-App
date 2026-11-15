@@ -1,0 +1,28 @@
+# Secrets and local environment: never commit
+.env
+.env.*
+!.env.example
+
+# Private content and backups: never commit (public repository)
+/private/
+*.dump
+*.sql.gz
+*.age
+
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+
+# Supabase local
+supabase/.temp/
+supabase/.branches/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
