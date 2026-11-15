@@ -74,12 +74,17 @@ Indicative tables: `profiles`, `relationship`, `relationship_members`,
 (R1 stretch), then `monthly_surprises`, `surprise_contents`,
 `playlist_items` (R2), `easter_eggs` (R3).
 
-## TD-008 Authentication: email + password, signups disabled — *Proposed* (pending Q6)
+## TD-008 Authentication: owner password + partner QR key — *Approved (owner, THINK)*
 
-- **Why:** magic links on iOS open in the default browser, not a home-screen web app, which breaks session continuity and confuses the "it just opens" experience. A saved password via the iOS password manager is smoother.
-- **Recovery:** owner-triggered password reset email.
-- **Defense in depth:** even if signup were accidentally enabled, a non-member account can read nothing (FR-AUTH-01).
-- **Alternative:** magic link only (no password to remember; worse on iOS home-screen).
+- **Owner:** email + password on a separate, unlinked owner route. The owner account can see drafts and future content, so it keeps the stronger factor.
+- **Partner, "QR key":** the QR code encodes `https://<app>/key#<secret>`. `<secret>` is a long random value (≥ 32 bytes of entropy) used as her account password. On load, the app reads the fragment, signs in with her account email + secret, replaces the URL to drop the fragment, and keeps the session (refresh token) on that device. She never sees a login screen.
+- **Why the fragment:** browsers don't send `#…` to servers, so the key stays out of Vercel/Supabase request logs and referrers.
+- **Revocation:** changing her password (= rotating the key) invalidates the old card; sign-out of all her sessions is forced at the same time. A new QR is produced locally.
+- **Rejected alternatives:**
+  - *Secret link with no accounts:* anyone with a copy has permanent, irrevocable access; breaks RLS roles, drafts, early-surprise protection and "own memories" rules; contradicts the security principle "a private URL is not private access".
+  - *Single-use QR via serverless function:* stronger, but a printed keepsake card would stop working after the first scan, and it adds a moving part.
+- **Accepted residual risk:** whoever holds the physical/photographed QR can enter until the key is rotated (R15). Comparable to a house key.
+- **Defense in depth:** public signups disabled; non-member accounts can read nothing (FR-AUTH-01); Supabase auth rate limits apply.
 
 ## TD-009 Unlock enforcement in the database — *Proposed*
 
@@ -143,3 +148,4 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 | Date | Decision | Change | Reason | Approval |
 |---|---|---|---|---|
 | THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | Pending |
+| THINK | TD-008 | **Previous:** email + password for both users. **New:** owner password; partner signs in by scanning a QR key (no login screen) | Owner wants no login for the partner, access by unique QR code. Option chosen keeps real accounts, RLS roles and revocation | **Approved by owner** |

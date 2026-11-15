@@ -23,6 +23,9 @@
 | R13 | Over-animation hurts performance or accessibility | M | L | Low | Scoped Motion usage; reduced-motion support; perf budget NFR-08 | Design/Build | Open |
 | R14 | Free-tier terms change | L | M | Low | Limits re-checked before deploy; documented in TECHNICAL-DECISIONS | Owner | Open |
 
+| R15 | **Partner QR card lost, photographed, or shared** → someone else can enter as the partner | L | H | Medium | Key in URL fragment (not logged), removed from address bar after sign-in; owner rotates key + reprints (FR-AUTH-11); owner account unaffected (separate password) | Owner | Open (accepted residual) |
+| R16 | **iOS home-screen web app has separate storage from Safari** → partner appears signed out if she adds the site to her home screen | M | M | Medium | Design decision in DESIGN: either guide her to use it in the browser, or let the app open her key from inside the home-screen version; tested on her device | Design/Validate | Open |
+
 ## Review cadence
 
 Re-assess at the end of each phase and at every monthsary.

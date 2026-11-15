@@ -110,7 +110,7 @@ Release definitions are in [MVP-SCOPE.md](./MVP-SCOPE.md).
 | Q3 | ~~Keep repo public or make it private?~~ | **Answered: public until deployment, then private** (TD-016) | — |
 | Q4 | ~~What may the partner create/edit?~~ | **Answered: memories only, create + edit/delete her own** | — |
 | Q5 | Partner's main device/browser | iPhone Safari (test priority) | Test matrix |
-| Q6 | Sign-in method | Email + password (TD-008) | Auth design |
+| Q6 | ~~Sign-in method~~ | **Answered: partner = QR key (no login screen); owner = email + password** (TD-008) | — |
 | Q7 | Language (English / Tagalog / Taglish) | English UI, content in any language | Copy |
 | Q8 | Display names / nicknames | Placeholders `[OWNER_NAME]`, `[PARTNER_NAME]` | Copy |
 | Q9 | Custom domain? | Default `*.vercel.app` | Deployment |

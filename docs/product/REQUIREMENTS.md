@@ -19,11 +19,15 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | FR-AUTH-01 | Only accounts listed as members of the relationship can read or write any personal content. | R1 |
 | FR-AUTH-02 | Public self-registration is disabled at the auth-provider level. | R1 |
 | FR-AUTH-03 | Accounts are provisioned only by the owner (invite or manual creation). | R1 |
-| FR-AUTH-04 | All app routes except sign-in require an authenticated member session; unauthenticated visitors see only the sign-in screen. | R1 |
+| FR-AUTH-04 | All app routes require an authenticated member session. A visitor with no session sees only a neutral "scan your key" screen that reveals no personal content. | R1 |
 | FR-AUTH-05 | Two roles: `owner` (full control) and `partner` (read released content + permitted contributions). | R1 |
 | FR-AUTH-06 | Sessions persist across browser refresh and app relaunch on mobile. | R1 |
-| FR-AUTH-07 | Sign-out is available from every screen's navigation. | R1 |
-| FR-AUTH-08 | Password reset / account recovery path exists and is documented. | R1 |
+| FR-AUTH-07 | Sign-out is available from the navigation (owner); the partner has it in a less prominent place so she isn't signed out by accident. | R1 |
+| FR-AUTH-08 | Recovery is documented. Partner: owner rotates her key and makes a new QR. Owner: password reset email. | R1 |
+| FR-AUTH-09 | **Partner QR key sign-in:** scanning the partner's QR code signs her into her account automatically, with no login screen and nothing typed. The key is carried in the URL fragment (`#…`, never sent to servers) and removed from the address bar immediately after sign-in. | R1 |
+| FR-AUTH-10 | **Owner sign-in:** email + password on a separate owner sign-in route that isn't linked from the partner experience. | R1 |
+| FR-AUTH-11 | **Key rotation:** the owner can revoke the partner's key and generate a new QR. Rotation invalidates the old key and ends existing partner sessions. R1 does this through a documented Supabase dashboard procedure; R2 adds an in-app button. | R1 (procedure) / R2 (UI) |
+| FR-AUTH-12 | The QR code is generated offline or locally by the owner. The key is never committed to git, logged, or stored in plain text in the database. | R1 |
 
 ### 1.1 Relationship settings — `SET`
 
