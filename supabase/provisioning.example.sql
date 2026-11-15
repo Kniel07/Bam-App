@@ -7,15 +7,14 @@
 
 begin;
 
+-- The anchor moment is typed as LOCAL wall-clock time and converted using the
+-- relationship timezone, so the stored instant is exact regardless of server timezone.
 insert into public.relationship (start_at, timezone, counter_message)
 values (
-  '<YYYY-MM-DD HH:MM:SS>',      -- the anchor moment, local wall-clock time
-  '<IANA_TIMEZONE>',           -- e.g. Region/City
+  ('<YYYY-MM-DD HH:MM:SS>'::timestamp at time zone '<IANA_TIMEZONE>'),
+  '<IANA_TIMEZONE>',            -- e.g. Region/City
   '<COUNTER_MESSAGE>'
 );
--- start_at is interpreted in the session timezone; convert explicitly:
-update public.relationship
-   set start_at = ('<YYYY-MM-DD HH:MM:SS>'::timestamp at time zone '<IANA_TIMEZONE>');
 
 insert into public.relationship_members (user_id, relationship_id, role)
 select u.id, r.id, 'owner'
