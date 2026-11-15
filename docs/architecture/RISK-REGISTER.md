@@ -16,7 +16,7 @@
 | R6 | Account takeover (weak password / shared device) | L | H | Medium | Strong passwords + password manager; signups off; sessions revocable; membership check | Owner | Open |
 | R7 | Storage quota (1 GB) or egress (5 GB) exhausted | L | M | Medium | Client-side compression, size caps, URL caching; usage readout (R2) | Build | Open |
 | R8 | Monthsary / timezone calculation errors | L | M | Medium | Single date module, DR-01…05, exhaustive unit tests incl. month-end and leap cases | Build/Validate | Open |
-| R9 | iPhone photo format (HEIC) or huge images fail to upload | M | L | Low | Accept `image/*`, canvas re-encode, clear error message; tested on iPhone Safari | Build/Validate | Open |
+| R9 | Unusual photo formats (HEIF on some Android/Samsung cameras, HEIC from owner's iPhone) or huge images fail to upload | L | L | Low | Accept `image/*`, canvas re-encode, clear error message; tested on Android Chrome first | Build/Validate | Open |
 | R10 | Surprise spoiled: partner finds site/content early | L | M | Low | Draft/published status; partner account created at L; preview-as-partner | Owner | Open |
 | R11 | Scheduled keep-alive/backup silently disabled (GitHub 60-day rule) | M | M | Medium | Monthly maintenance checklist; consider Vercel Cron alternative | Owner | Open |
 | R12 | External embeds (Spotify/YouTube) unavailable or tracking | L | L | Low | Fallback link + note; embeds loaded only on playlist screen | Build | Open (R2) |
@@ -24,7 +24,7 @@
 | R14 | Free-tier terms change | L | M | Low | Limits re-checked before deploy; documented in TECHNICAL-DECISIONS | Owner | Open |
 
 | R15 | **Partner QR card lost, photographed, or shared** → someone else can enter as the partner | L | H | Medium | Key in URL fragment (not logged), removed from address bar after sign-in; owner rotates key + reprints (FR-AUTH-11); owner account unaffected (separate password) | Owner | Open (accepted residual) |
-| R16 | **iOS home-screen web app has separate storage from Safari** → partner appears signed out if she adds the site to her home screen | M | M | Medium | Design decision in DESIGN: either guide her to use it in the browser, or let the app open her key from inside the home-screen version; tested on her device | Design/Validate | Open |
+| R16 | **Home-screen web app sign-in mismatch.** Lowered: partner uses Android, where Chrome-installed web apps share Chrome's sign-in. Remaining case: her phone's QR scanner opens a different default browser (e.g. Samsung Internet) than the one she later uses | L | M | Low | Test the QR scan → browser path on her actual phone; if the browsers differ, she rescans once in the right one | Validate | Open |
 
 ## Review cadence
 

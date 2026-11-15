@@ -166,7 +166,7 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | NFR-13 | Durability | Automated, encrypted, off-platform backups of database + storage; documented and rehearsed restore (TD-013). |
 | NFR-14 | Cost | All services on free tiers; usage limits documented; no paid feature enabled without approval. |
 | NFR-15 | Maintainability | TypeScript strict mode; no `any` without justification; feature-modular folders. |
-| NFR-16 | Browser support | Latest 2 versions of Safari iOS, Chrome Android, Chrome/Edge/Firefox/Safari desktop. |
+| NFR-16 | Browser support | **Test priority 1: Chrome on Android** (partner's device); Samsung Internet if her phone is a Samsung. Also supported: latest 2 versions of Safari iOS and Chrome/Edge/Firefox/Safari desktop (owner). |
 
 ---
 

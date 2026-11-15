@@ -52,7 +52,7 @@ Pro ($25/mo). It is **not** approved and would need explicit owner approval.
 ## TD-005 Dates: date-fns v4 + `@date-fns/tz` — *Proposed*
 
 - **Why:** month-end and timezone maths is error-prone; tree-shakeable, well tested.
-- **Alternatives:** native `Temporal` (cleanest API, but Safari support must be confirmed and the partner likely uses iPhone); Luxon (heavier); hand-written (rejected: risk).
+- **Alternatives:** native `Temporal` (cleanest API, but support across every browser the owner might use, especially Safari, must be confirmed; the partner uses Android); Luxon (heavier); hand-written (rejected: risk).
 - All monthsary logic lives in one pure module (`lib/dates`) with exhaustive unit tests (DR-01…05).
 
 ## TD-006 Animation: Motion (formerly Framer Motion), scoped — *Proposed*

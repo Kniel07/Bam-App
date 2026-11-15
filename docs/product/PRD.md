@@ -39,7 +39,7 @@ Exactly two. No other users will ever exist.
 | `owner` | The creator | Author and schedule content; prepare surprises in secret; manage settings; keep data safe. |
 | `partner` | The recipient | Discover, read, revisit; contribute memories (if permitted); never see unreleased content early. |
 
-Primary device assumption: **mobile phone browser** (exact device pending — see §9).
+Primary device: **partner on an Android phone** (Chrome assumed). Owner device: any modern browser.
 
 ## 4. Goals & success measures
 
@@ -109,7 +109,7 @@ Release definitions are in [MVP-SCOPE.md](./MVP-SCOPE.md).
 | Q2 | ~~Launch target~~ | **Answered: first monthsary** | — |
 | Q3 | ~~Keep repo public or make it private?~~ | **Answered: public until deployment, then private** (TD-016) | — |
 | Q4 | ~~What may the partner create/edit?~~ | **Answered: memories only, create + edit/delete her own** | — |
-| Q5 | Partner's main device/browser | iPhone Safari (test priority) | Test matrix |
+| Q5 | ~~Partner's main device/browser~~ | **Answered: Android** (assume Chrome; Samsung Internet also tested if her phone is a Samsung) | — |
 | Q6 | ~~Sign-in method~~ | **Answered: partner = QR key (no login screen); owner = email + password** (TD-008) | — |
 | Q7 | Language (English / Tagalog / Taglish) | English UI, content in any language | Copy |
 | Q8 | Display names / nicknames | Placeholders `[OWNER_NAME]`, `[PARTNER_NAME]` | Copy |
