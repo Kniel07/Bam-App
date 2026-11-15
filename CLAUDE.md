@@ -34,7 +34,7 @@ clarification at a time.
 - Two users: `owner`, `partner`. Exactly two, ever.
 - Anchor moment and timezone: **provided by owner, stored privately** (not in git). It is shortly after midnight, so the default unlock = the anchor minute (TD-011).
 - Launch = the first monthsary, at the anchor minute (fixed date, flexible scope).
-- Partner permissions (approved): memories only. Create, and edit/delete her own. Read-only everywhere else (plus letter read status via `open_letter()`).
+- Partner permissions (approved): memories (create, edit/delete own) and **letters both ways (CR-01, TD-021)**: each writes letters for the other; author controls own; recipient opens when unlocked; owner may delete any visible letter but cannot read hers before they unlock.
 - Sign-in (approved, TD-008): partner scans a **QR key** and is signed in automatically, with no login screen. The key lives in the URL fragment and is removed after sign-in; it is never committed or logged. Owner uses email + password on a separate route. Key rotation = revoke + reprint.
 - Address (approved, TD-017): free `<project>.vercel.app`; project name non-identifying and frozen before the QR is printed.
 - Partner device: **Android** (Chrome assumed; also test Samsung Internet if Samsung). Test priority 1 = Android Chrome.
@@ -89,7 +89,7 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 
 - THINK and DESIGN approved.
 - S0: Vite + React 19 + TS 5.9 strict + Tailwind 4 tokens, ESLint, Vitest, CI (app + database jobs), Vercel headers (CSP, noindex).
-- S1a: migrations 0001–0007; `npm run test:db` → 69 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
+- S1a: migrations 0001–0007 (+0008 CR-01); `npm run test:db` → 101 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
 - S1b: QR key landing (fragment stripped before network, tested), owner sign-in, locked screen, guards, `npm run partner-key -- create|rotate`.
 - S2: `lib/dates/monthsary.ts` (27 tests, device-TZ independent), counter, next monthsary, monthsary-day celebration, welcome envelope (A1), settings.
 - S3: shared media lib (client compression → WebP, EXIF stripped; upload; cached signed URLs), Polaroid, PhotoPicker; Our Story timeline with the anchor placed chronologically, owner CRUD with drafts/highlight/photo; Home corner card. Feature routes lazy-loaded.
@@ -109,4 +109,5 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - KI-06 Desktop Home is single-column until Letters/Memories corners exist (S4–S5).
 - KI-08 Supabase SQL editor warns on 0002/0003 (tables created before 0005 enables RLS); owner chooses "Run and enable RLS". Future migrations: enable RLS in the same file that creates a table.
 - KI-09 Vitest: `vi.fn().mockRejectedValue` is reported as unhandled even when caught; tests use plain functions for rejecting async mocks.
+- KI-10 When the owner removes her *unopened* letter, its photo path is sealed from him, so the photo file is orphaned (covered by the planned R2 cleanup).
 - KI-07 Orphaned storage files possible if a delete of the file fails after the row is deleted (logged warning); cleanup query planned for R2.

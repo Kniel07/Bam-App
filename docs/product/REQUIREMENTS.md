@@ -73,6 +73,7 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | FR-LETTER-07 | Owner can create, edit, delete letters and set draft/published + unlock config. | R1 |
 | FR-LETTER-08 | **A locked or draft letter's body and attachments are never returned to the partner by any API, storage request, or page payload.** Enforced by the database. | R1 |
 | FR-LETTER-09 | Scheduled locked letters show a countdown to unlock. | R1 |
+| FR-LETTER-10 | *(CR-01)* Both members write letters for each other. Authors edit/delete their own; the recipient opens them when unlocked; the owner may delete any letter he can see. | R1 |
 
 ### 1.5 Our Memories — `MEM`
 
@@ -177,9 +178,9 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 |---|---|---|
 | Relationship settings | read/write | read |
 | Story milestones | CRUD (incl. drafts) | read published |
-| Letters (envelope) | CRUD | read published |
-| Letter contents | CRUD | read only when published **and** (on_demand **or** `unlock_at ≤ now()`) |
-| Letter read status | read | set on open (via database function) |
+| Letters (envelope) | *(CR-01)* CRUD own; read her published; delete any visible | CRUD own; read his published |
+| Letter contents | *(CR-01)* own: always; hers: only when open, via `open_letter()` | own: always; his: only when open, via `open_letter()` |
+| Letter read status | set by opening her letters | set by opening his letters |
 | Memories | CRUD all | create; read all published; edit/delete **own** |
 | Love reasons | CRUD | read published; favorite (R2) |
 | Media files | all | read files whose parent row she can read; upload/delete files for own memories |

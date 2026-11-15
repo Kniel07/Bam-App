@@ -35,6 +35,16 @@ export function useNames() {
   }
 }
 
+/** Display name for a member's user id, with a neutral fallback. */
+export function useDisplayNameFor(): (userId: string | null | undefined) => string {
+  const { data } = useMembers()
+  return (userId) => {
+    const member = data?.find((candidate) => candidate.userId === userId)
+    if (!member) return 'someone'
+    return member.displayName || (member.role === 'owner' ? 'me' : 'you')
+  }
+}
+
 /** The signed-in member's own record. */
 export function useCurrentMember(): Member | undefined {
   const { auth } = useAuth()

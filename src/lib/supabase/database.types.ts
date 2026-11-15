@@ -150,6 +150,7 @@ export interface Database {
           photo_path: string | null
           audio_path: string | null
           first_opened_at: string | null
+          author_id: string | null
         }[]
       }
       mark_welcomed: { Args: Record<never, never>; Returns: undefined }

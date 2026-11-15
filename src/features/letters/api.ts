@@ -13,6 +13,7 @@ export interface OpenedLetter {
   body: string
   photoPath: string | null
   firstOpenedAt: string | null
+  authorId: string | null
 }
 
 export interface LetterInput {
@@ -59,11 +60,12 @@ export async function openLetter(letterId: string): Promise<OpenedLetter> {
     body: row.body,
     photoPath: row.photo_path,
     firstOpenedAt: row.first_opened_at,
+    authorId: row.author_id,
   }
 }
 
-/** Owner editor only: the partner's request would be refused by RLS. */
-export async function fetchLetterContentForOwner(letterId: string) {
+/** Author's editor only: anyone else's request is refused by RLS (CR-01). */
+export async function fetchLetterContentForAuthor(letterId: string) {
   const { data, error } = await supabase
     .from('letter_contents')
     .select('body, photo_path')
@@ -127,7 +129,11 @@ export async function updateLetter(
   if (photo.kind !== 'keep') await removeMedia([currentPhotoPath])
 }
 
-/** Deleting the envelope cascades to its content (DATABASE-DESIGN §3); then the file. */
+/**
+ * Deleting the envelope cascades to its content (DATABASE-DESIGN §3); then the file.
+ * When the owner removes the partner's unopened letter, its photo path is
+ * unknown to him (content is sealed), so the file may be orphaned (KI-07).
+ */
 export async function deleteLetter(letter: Letter, photoPath: string | null): Promise<void> {
   const { error } = await supabase.from('letters').delete().eq('id', letter.id)
   if (error) throw new ApiError('Could not delete the letter', error)

@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router'
 import { ArrowLeft, Lock } from 'lucide-react'
 import { LetterPaper } from '@/components/shared/LetterPaper'
 import { ErrorState, Skeleton } from '@/components/ui/States'
-import { useNames, useRelationship } from '@/features/relationship/hooks'
+import { useDisplayNameFor, useRelationship } from '@/features/relationship/hooks'
 import { formatInstantDate } from '@/lib/dates/format'
 import { LetterLockedError } from './api'
 import { useOpenedLetter } from './hooks'
@@ -15,7 +15,7 @@ export function LetterReadingPage() {
   const { letterId = '' } = useParams()
   const opened = useOpenedLetter(letterId)
   const relationship = useRelationship()
-  const names = useNames()
+  const nameFor = useDisplayNameFor()
 
   return (
     <div className="mx-auto flex max-w-[640px] flex-col gap-4">
@@ -37,7 +37,7 @@ export function LetterReadingPage() {
         )
       ) : (
         <>
-          <LetterPaper label={opened.data.label} body={opened.data.body} signature={names.owner} photoPath={opened.data.photoPath} />
+          <LetterPaper label={opened.data.label} body={opened.data.body} signature={nameFor(opened.data.authorId)} photoPath={opened.data.photoPath} />
           {opened.data.firstOpenedAt && relationship.data && (
             <p className="text-center text-small text-ink-soft">
               First opened {formatInstantDate(opened.data.firstOpenedAt, relationship.data.timezone)}

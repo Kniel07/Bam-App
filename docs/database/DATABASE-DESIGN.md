@@ -234,3 +234,14 @@ Integration tests run against the `dev` project with three test accounts:
 | S12 | partner sees draft milestones | 0 rows |
 | S13 | anyone inserts a 3rd member | denied |
 | S14 | owner full CRUD | succeeds |
+
+## 10. Change CR-01: letters go both ways (migration 0008)
+
+| Table / object | SELECT | INSERT | UPDATE | DELETE |
+|---|---|---|---|---|
+| `letters` | member and (author or published) | member, `created_by = auth.uid()` | author only (envelope columns only) | author, or owner |
+| `letter_contents` | author only | author | author | author, or owner |
+| `open_letter()` | author anytime; recipient when open; records the recipient's first opening; returns `author_id` | | | |
+| storage `letters/<id>/` | `can_read_letter_content(id)` | new folder or own letter | owner, never in her letter folders | owner, or uploader |
+
+New helpers: `is_letter_author(uuid)`, `can_read_letter_content(uuid)`, `can_write_letter_folder(text)`.

@@ -167,6 +167,13 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 - Both jobs in GitHub Actions (one platform, free). The 60-day inactivity auto-disable applies to scheduled workflows in public repos; the repo goes private after launch (TD-016). The monthly maintenance check stays as a safety net.
 - Backups encrypted with `age` to a public recipient key; the private key stays offline with the owner.
 
+## TD-021 Letters go both ways (CR-01) — *Approved (owner, BUILD)*
+
+- Both members write letters for each other. **Author** (`letters.created_by`): full control of own letters and reads own content anytime. **Recipient** (the other member): sees published envelopes; reads content only via `open_letter()` once open. **Owner**: may also delete any letter he can see.
+- Drafts are private to their author; the owner can no longer read the partner's letters before they unlock (her surprises stay surprises).
+- `open_letter()` now records read status for the recipient (not "the partner") and returns `author_id` for the signature.
+- Migration `0008_partner_letters.sql`; tests `supabase/tests/partner_letters.test.sql` (32 assertions).
+
 ---
 
 ## Change log
@@ -174,6 +181,7 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 | Date | Decision | Change | Reason | Approval |
 |---|---|---|---|---|
 | THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | **Approved by owner** |
+| BUILD S4 | Q4 / TD-009 / TD-019 → TD-021 | **Previous:** partner reads letters only; owner reads all content. **New:** both write letters; author + recipient model; owner may delete any visible letter but cannot read her letters before they unlock | Owner request: "add the create letter for the partner" | **Approved by owner** |
 | BUILD S0 | TD-002 detail | Tokens declared in CSS `@theme` (Tailwind v4) instead of a JS theme config | Tailwind v4's native mechanism; same single source of truth | Implementation detail, no approval needed |
 | BUILD S0 | TD-001 detail | TypeScript pinned to 5.9.3 (not 7.x) | typescript-eslint tooling not yet reliable on TS 7 | Implementation detail |
 | BUILD S0 | TD-014 detail | react-router pinned to 7.18.5 | Patched release; avoids advisories in older 7.x | Implementation detail |

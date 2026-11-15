@@ -58,14 +58,20 @@ describe('sortEnvelopes', () => {
 })
 
 describe('getUnreadAvailableLetters', () => {
-  it('returns only letters that can be opened and are unread', () => {
+  const ME = 'me'
+  const THEM = 'them'
+  it('returns only letters for me that can be opened and are unread', () => {
     const letters = [
-      letter('sealed'),
-      letter('opened', { first_opened_at: hoursFromNow(-1) }),
-      letter('locked', { unlock_type: 'scheduled', unlock_at: hoursFromNow(5) }),
-      letter('new', { unlock_type: 'scheduled', unlock_at: hoursFromNow(-5) }),
-      letter('draft', { status: 'draft' }),
+      letter('sealed', { created_by: THEM }),
+      letter('opened', { created_by: THEM, first_opened_at: hoursFromNow(-1) }),
+      letter('locked', { created_by: THEM, unlock_type: 'scheduled', unlock_at: hoursFromNow(5) }),
+      letter('new', { created_by: THEM, unlock_type: 'scheduled', unlock_at: hoursFromNow(-5) }),
+      letter('draft', { created_by: THEM, status: 'draft' }),
+      letter('mine', { created_by: ME }),
     ]
-    expect(getUnreadAvailableLetters(letters, NOW).map((item) => item.id)).toEqual(['new', 'sealed'])
+    expect(getUnreadAvailableLetters(letters, NOW, ME).map((item) => item.id)).toEqual(['new', 'sealed'])
+  })
+  it('returns nothing when signed out', () => {
+    expect(getUnreadAvailableLetters([letter('a', { created_by: THEM })], NOW, null)).toEqual([])
   })
 })

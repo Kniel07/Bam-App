@@ -27,7 +27,8 @@ for migration in supabase/migrations/*.sql; do
   echo "migrate  $(basename "$migration")"
   run_file "$migration"
 done
-for test_file in supabase/tests/*.test.sql; do
+# Test files share fixtures, so they run in a fixed order.
+for test_file in supabase/tests/security.test.sql supabase/tests/partner_letters.test.sql; do
   echo "test     $(basename "$test_file")"
   run_file "$test_file" 2>&1 | grep -E "FAIL|pass:|passed|ERROR" | sed 's/^psql:<stdin>:[0-9]*: //'
 done

@@ -7,13 +7,14 @@ import { TextArea } from '@/components/ui/TextArea'
 import { TextField } from '@/components/ui/TextField'
 import { Toggle } from '@/components/ui/Toggle'
 import { PhotoPicker } from '@/components/shared/PhotoPicker'
-import { useRelationship } from '@/features/relationship/hooks'
+import { useNames, useRelationship } from '@/features/relationship/hooks'
+import { useRole } from '@/features/auth/useAuth'
 import { getNextMonthsary, instantToZonedWallTime, zonedWallTimeToInstant } from '@/lib/dates/monthsary'
 import type { PhotoChange } from '@/lib/media/storage'
 import type { UnlockType } from '@/lib/supabase/database.types'
 import { copy } from '@/lib/copy'
 import type { Letter } from './api'
-import { useDeleteLetter, useOwnerLetterContent, useSaveLetter } from './hooks'
+import { useDeleteLetter, useAuthorLetterContent, useSaveLetter } from './hooks'
 
 interface LetterEditorSheetProps {
   letter?: Letter
@@ -21,13 +22,14 @@ interface LetterEditorSheetProps {
 }
 
 interface FormProps extends LetterEditorSheetProps {
+  recipientName: string
   initialBody: string
   initialPhotoPath: string | null
   timeZone: string
   defaultUnlock: { date: string; time: string }
 }
 
-function LetterForm({ letter, onClose, initialBody, initialPhotoPath, timeZone, defaultUnlock }: FormProps) {
+function LetterForm({ letter, onClose, recipientName, initialBody, initialPhotoPath, timeZone, defaultUnlock }: FormProps) {
   const initialUnlock = letter?.unlock_at ? instantToZonedWallTime(new Date(letter.unlock_at), timeZone) : defaultUnlock
   const [label, setLabel] = useState(letter?.label ?? 'Open when ')
   const [body, setBody] = useState(initialBody)
@@ -143,8 +145,8 @@ function LetterForm({ letter, onClose, initialBody, initialPhotoPath, timeZone, 
             description={
               isPublished
                 ? unlockType === 'scheduled'
-                  ? 'She sees the envelope now; the letter stays locked until its moment.'
-                  : 'She can see and open it.'
+                  ? `${recipientName} sees the envelope now; the letter stays locked until its moment.`
+                  : `${recipientName} can see and open it.`
                 : 'Draft: only you can see it.'
             }
             checked={isPublished}
@@ -184,10 +186,12 @@ function LetterForm({ letter, onClose, initialBody, initialPhotoPath, timeZone, 
   )
 }
 
-/** Owner letter editor (F8, FR-LETTER-07). Loads the existing content first when editing. */
+/** Letter editor for either member (F8, FR-LETTER-07, CR-01). Loads existing content first when editing. */
 export function LetterEditorSheet({ letter, onClose }: LetterEditorSheetProps) {
   const relationship = useRelationship()
-  const content = useOwnerLetterContent(letter?.id)
+  const names = useNames()
+  const isOwner = useRole() === 'owner'
+  const content = useAuthorLetterContent(letter?.id)
   const isLoading = relationship.isPending || (letter !== undefined && content.isPending)
 
   if (isLoading) {
@@ -213,6 +217,7 @@ export function LetterEditorSheet({ letter, onClose }: LetterEditorSheetProps) {
     <LetterForm
       letter={letter}
       onClose={onClose}
+      recipientName={isOwner ? names.partner : names.owner}
       initialBody={content.data?.body ?? ''}
       initialPhotoPath={content.data?.photo_path ?? null}
       timeZone={timezone}

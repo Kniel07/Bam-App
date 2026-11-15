@@ -3,7 +3,7 @@ import type { PhotoChange } from '@/lib/media/storage'
 import {
   createLetter,
   deleteLetter,
-  fetchLetterContentForOwner,
+  fetchLetterContentForAuthor,
   fetchLetters,
   openLetter,
   updateLetter,
@@ -15,7 +15,7 @@ import {
 export const letterKeys = {
   all: ['letters'] as const,
   opened: (letterId: string) => ['letters', 'opened', letterId] as const,
-  ownerContent: (letterId: string) => ['letters', 'owner-content', letterId] as const,
+  authorContent: (letterId: string) => ['letters', 'author-content', letterId] as const,
 }
 
 export function useLetters() {
@@ -46,10 +46,10 @@ export function useOpenLetter() {
   })
 }
 
-export function useOwnerLetterContent(letterId: string | undefined) {
+export function useAuthorLetterContent(letterId: string | undefined) {
   return useQuery({
-    queryKey: letterKeys.ownerContent(letterId ?? 'new'),
-    queryFn: () => fetchLetterContentForOwner(letterId as string),
+    queryKey: letterKeys.authorContent(letterId ?? 'new'),
+    queryFn: () => fetchLetterContentForAuthor(letterId as string),
     enabled: Boolean(letterId),
   })
 }

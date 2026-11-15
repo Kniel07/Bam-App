@@ -40,9 +40,14 @@ export function sortEnvelopes(letters: Letter[], now: Date): Letter[] {
     .map(({ letter }) => letter)
 }
 
-/** Letters she can open now but hasn't yet ("Waiting for you" on Home). */
-export function getUnreadAvailableLetters(letters: Letter[], now: Date): Letter[] {
+export function isWrittenBy(letter: Letter, userId: string | null): boolean {
+  return userId !== null && letter.created_by === userId
+}
+
+/** Letters written for `userId` that can be opened now but haven't been ("Waiting for you"). */
+export function getUnreadAvailableLetters(letters: Letter[], now: Date, userId: string | null): Letter[] {
   return sortEnvelopes(letters, now).filter((letter) => {
+    if (userId === null || isWrittenBy(letter, userId)) return false
     const state = getEnvelopeState(letter, now)
     return state === 'new' || state === 'sealed'
   })
