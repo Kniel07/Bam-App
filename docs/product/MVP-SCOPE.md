@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **DRAFT — awaiting owner approval** |
+| Status | **APPROVED by owner (THINK)** |
 | Version | 0.1 |
 | Launch | **L = the first monthsary, at the anchor minute** (exact date stored privately) |
 | Time available | ~23 days from THINK start |

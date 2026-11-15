@@ -5,8 +5,8 @@ state; do not rely on conversation history.
 
 ## Current status
 
-- **Phase:** 1 — THINK. Deliverables drafted, **awaiting owner approval**.
-- **Next:** owner review + independent review → approve → Phase 2 DESIGN.
+- **Phase:** 2 — DESIGN. THINK approved. DESIGN deliverables drafted, **awaiting owner approval**.
+- **Next:** owner approves DESIGN (incl. ERD/RLS) → Phase 3 BUILD, slice S0 (see ARCHITECTURE §9).
 - **Do not** write application code, install packages, or scaffold the app until DESIGN is approved.
 
 ## Workflow (Kniel Framework)
@@ -38,7 +38,7 @@ clarification at a time.
 - Address (approved, TD-017): free `<project>.vercel.app`; project name non-identifying and frozen before the QR is printed.
 - Partner device: **Android** (Chrome assumed; also test Samsung Internet if Samsung). Test priority 1 = Android Chrome.
 
-## Stack (proposed, pending approval)
+## Stack (approved, THINK)
 
 React + Vite + TypeScript (strict) · Tailwind · Supabase (Postgres, Auth,
 Storage, RLS) · Vercel Hobby · date-fns v4 + @date-fns/tz · Motion (scoped) ·
@@ -60,13 +60,24 @@ React Router · TanStack Query · Lucide · Vitest · Playwright.
 | MVP scope | `docs/product/MVP-SCOPE.md` |
 | Technical decisions | `docs/architecture/TECHNICAL-DECISIONS.md` |
 | Risk register | `docs/architecture/RISK-REGISTER.md` |
+| Architecture (folders, auth, ops, security, build order) | `docs/architecture/ARCHITECTURE.md` |
+| Database (ERD, RLS, RPC, storage) | `docs/database/DATABASE-DESIGN.md` |
+| Design system | `docs/design/DESIGN-SYSTEM.md` |
+| Page structure & wireframes | `docs/design/PAGE-STRUCTURE.md` |
+| User flows | `docs/design/USER-FLOWS.md` |
+| Components | `docs/design/COMPONENT-SPECIFICATION.md` |
+| Responsive | `docs/design/RESPONSIVE-DESIGN.md` |
 
-## Decisions awaiting approval
+## Decisions
 
-D1 stack (TD-001…006, TD-014) · D2 owner editing in R1 · D3 no unlock-rules
-table + envelope/content split (TD-007, TD-009) · D4 single relationship +
-two roles · D5 keep-alive + backups before launch (TD-012, TD-013) ·
-D6 month-end rule DR-01 · D7 default unlock = anchor minute (TD-011).
+- Approved (THINK): D1–D7 (stack, owner editing in R1, envelope/content split, single relationship + 2 roles, keep-alive + backups before launch, month-end rule, unlock at anchor minute), TD-008, TD-016, TD-017.
+- Awaiting approval (DESIGN): visual direction (DS-01…06), TD-018 synthetic partner login, TD-019 content only via `open_letter()`, TD-020 GitHub Actions ops, design additions A1–A3 (see below).
+
+## Design additions beyond approved requirements (need explicit approval)
+
+- A1 First-visit welcome envelope + `welcome_message` setting.
+- A2 Story "anchor marker" derived from settings (timeline never empty).
+- A3 Two-tap letter opening (tap envelope, then tap seal).
 
 ## Open questions
 
@@ -74,7 +85,8 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 
 ## Completed
 
-- THINK deliverables drafted.
+- THINK deliverables approved.
+- DESIGN deliverables drafted.
 
 ## Known issues
 

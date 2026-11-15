@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document status | **DRAFT — awaiting owner approval (THINK phase)** |
+| Document status | **APPROVED by owner (THINK)** |
 | Version | 0.1 |
 | Phase | 1 — THINK |
 | Related | [REQUIREMENTS.md](./REQUIREMENTS.md) · [MVP-SCOPE.md](./MVP-SCOPE.md) · [TECHNICAL-DECISIONS.md](../architecture/TECHNICAL-DECISIONS.md) · [RISK-REGISTER.md](../architecture/RISK-REGISTER.md) |
@@ -121,5 +121,5 @@ Release definitions are in [MVP-SCOPE.md](./MVP-SCOPE.md).
 
 | Role | Name | Decision | Date |
 |---|---|---|---|
-| Owner | `[OWNER]` | Pending | — |
+| Owner | `[OWNER]` | Approved | THINK close |
 | Independent reviewer | `[REVIEWER]` | Pending | — |
