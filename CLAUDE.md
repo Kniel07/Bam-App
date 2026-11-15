@@ -5,9 +5,10 @@ state; do not rely on conversation history.
 
 ## Current status
 
-- **Phase:** 2 — DESIGN. THINK approved. DESIGN deliverables drafted, **awaiting owner approval**.
-- **Next:** owner approves DESIGN (incl. ERD/RLS) → Phase 3 BUILD, slice S0 (see ARCHITECTURE §9).
-- **Do not** write application code, install packages, or scaffold the app until DESIGN is approved.
+- **Phase:** 3 — BUILD. THINK and DESIGN approved.
+- **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings.
+- **Next:** S3 Our Story → S4 Letters → S5 Memories → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
+- **Blocked on owner (needed before deploy/real-data tests):** free GitHub/Supabase/Vercel accounts (Q10).
 
 ## Workflow (Kniel Framework)
 
@@ -71,9 +72,9 @@ React Router · TanStack Query · Lucide · Vitest · Playwright.
 ## Decisions
 
 - Approved (THINK): D1–D7 (stack, owner editing in R1, envelope/content split, single relationship + 2 roles, keep-alive + backups before launch, month-end rule, unlock at anchor minute), TD-008, TD-016, TD-017.
-- Awaiting approval (DESIGN): visual direction (DS-01…06), TD-018 synthetic partner login, TD-019 content only via `open_letter()`, TD-020 GitHub Actions ops, design additions A1–A3 (see below).
+- Approved (DESIGN): visual direction DS-01…06, TD-018, TD-019, TD-020, additions A1–A3.
 
-## Design additions beyond approved requirements (need explicit approval)
+## Design additions (approved)
 
 - A1 First-visit welcome envelope + `welcome_message` setting.
 - A2 Story "anchor marker" derived from settings (timeline never empty).
@@ -85,9 +86,21 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 
 ## Completed
 
-- THINK deliverables approved.
-- DESIGN deliverables drafted.
+- THINK and DESIGN approved.
+- S0: Vite + React 19 + TS 5.9 strict + Tailwind 4 tokens, ESLint, Vitest, CI (app + database jobs), Vercel headers (CSP, noindex).
+- S1a: migrations 0001–0007; `npm run test:db` → 69 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
+- S1b: QR key landing (fragment stripped before network, tested), owner sign-in, locked screen, guards, `npm run partner-key -- create|rotate`.
+- S2: `lib/dates/monthsary.ts` (27 tests, device-TZ independent), counter, next monthsary, monthsary-day celebration, welcome envelope (A1), settings.
+
+## How to verify
+
+`npm run typecheck && npm run lint && npm test && npm run test:db && npm run build`
 
 ## Known issues
 
-- None (no code yet).
+- KI-01 Dev-only: `minimatch` moderate advisory via typescript-eslint (lint tooling, not shipped).
+- KI-02 `database.types.ts` is hand-written; regenerate from the real project and diff.
+- KI-03 Playwright's fake clock breaks `@date-fns/tz` (Date subclass). Test-harness only; visual tests must use data-relative dates instead of a fake clock.
+- KI-04 Main bundle ~169 KB gzip (budget 180 KB). Motion must stay lazy-loaded (S4).
+- KI-05 Android back button closing sheets: planned for S6 polish.
+- KI-06 Desktop Home is single-column until Story/Letters/Memories corners exist (S3–S5).

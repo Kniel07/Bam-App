@@ -67,6 +67,7 @@
   --animate-shimmer: shimmer 1.6s var(--ease-gentle) infinite;
   --animate-pulse-soft: pulse-soft 1.8s ease-in-out infinite;
   --animate-float-up: float-up 3.2s var(--ease-gentle) forwards;
+  --animate-fade-in: fade-in 400ms var(--ease-gentle);
 
   @keyframes shimmer {
     0% { opacity: 0.55; }
@@ -76,6 +77,10 @@
   @keyframes pulse-soft {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.08); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   @keyframes float-up {
     0% { transform: translateY(0) scale(0.8); opacity: 0; }

@@ -174,5 +174,8 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 | Date | Decision | Change | Reason | Approval |
 |---|---|---|---|---|
 | THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | **Approved by owner** |
+| BUILD S0 | TD-002 detail | Tokens declared in CSS `@theme` (Tailwind v4) instead of a JS theme config | Tailwind v4's native mechanism; same single source of truth | Implementation detail, no approval needed |
+| BUILD S0 | TD-001 detail | TypeScript pinned to 5.9.3 (not 7.x) | typescript-eslint tooling not yet reliable on TS 7 | Implementation detail |
+| BUILD S0 | TD-014 detail | react-router pinned to 7.18.5 | Patched release; avoids advisories in older 7.x | Implementation detail |
 | DESIGN | TD-009 → TD-019 | Partner reads letter content only via `open_letter()` | Single secured path | **Approved by owner** |
 | THINK | TD-008 | **Previous:** email + password for both users. **New:** owner password; partner signs in by scanning a QR key (no login screen) | Owner wants no login for the partner, access by unique QR code. Option chosen keeps real accounts, RLS roles and revocation | **Approved by owner** |
