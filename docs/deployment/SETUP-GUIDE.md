@@ -122,15 +122,17 @@ Open the printed address followed by `/owner` and sign in with your owner accoun
 1. vercel.com → **Add New → Project** → import `Kniel07/Bam-App`.
 2. **Project name:** this becomes the address `<name>.vercel.app` and is **printed on the QR card**, so choose carefully and don't change it later (TD-017). No personal names.
 3. Framework preset: **Vite** (detected automatically). Build command `npm run build`, output `dist`.
-4. **Environment Variables:**
+4. **Environment Variables** (Settings → Environment Variables):
 
-   | Name | Preview (dev project) | Production (prod project, later) |
+   | Name | Value now (dev project) | At L-7 (switch to prod project) |
    |---|---|---|
-   | `VITE_SUPABASE_URL` | dev URL | prod URL |
-   | `VITE_SUPABASE_ANON_KEY` | dev anon/publishable key | prod anon/publishable key |
+   | `VITE_SUPABASE_URL` | dev Project URL, e.g. `https://<ref>.supabase.co` (no trailing `/`, no `/rest/v1`) | prod Project URL |
+   | `VITE_SUPABASE_ANON_KEY` | dev anon / publishable key | prod anon / publishable key |
 
-   **Never** add the service role / secret key to Vercel.
-5. Deploy. Until the work is merged to `main`, test with the **Preview** deployment of branch `claude/sleepy-babbage-5rohvx` (Vercel → Deployments). Preview deployments are behind Vercel's own login as well.
+   - Tick **Production, Preview and Development** for both. While the repository has only one branch, Vercel builds it as **Production**, so Production needs values from day one. They point at the dev project until you switch at L-7.
+   - Names must match exactly (they must start with `VITE_`). Paste values without quotes.
+   - **Never** add the service role / secret key to Vercel.
+5. **Redeploy after any variable change:** Deployments → latest → ⋯ → **Redeploy**. Vite bakes these values into the site at build time, so a variable added after a build has no effect until the next build. Symptom if missing: the page says *"The app is not configured yet (missing Supabase settings)."*
 6. Go back to **A1** and fill in the Site URL / Redirect URLs.
 
 ---
@@ -163,7 +165,7 @@ Open the printed address followed by `/owner` and sign in with your owner accoun
 
 ## Part E: Before launch (prod)
 
-- Repeat Parts A, C (Production variables), and D against the **prod** project.
+- Repeat Parts A and D against the **prod** project, then replace both Vercel variables with the prod values and **Redeploy** (Part C, steps 4–5).
 - Around **L-2**, run `npm run partner-key -- rotate` on prod to issue the **final** key, then print that QR. Any earlier test cards stop working.
 - After launch, switch the GitHub repository to **private** (TD-016).
 
