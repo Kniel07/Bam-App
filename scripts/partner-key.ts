@@ -99,7 +99,11 @@ async function main() {
 
   const filePath = await writeQrCode(appUrl, secret)
   console.warn(`✔ QR code saved to ${filePath}`)
-  console.warn('  Print it or send it privately. Delete old copies; the previous key no longer works.')
+  console.warn(
+    command === 'rotate'
+      ? '  Print it or send it privately. Delete old copies: the previous key no longer works.'
+      : '  Keep it private: anyone with this image can enter as her.',
+  )
 }
 
 void main()
