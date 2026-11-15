@@ -28,13 +28,13 @@ function wall(instant: Date, timeZone: string): string {
 
 describe('getMonthsary (DR-01)', () => {
   it('keeps the same day and wall-clock minute for ordinary dates', () => {
-    const start = at('2025-03-10 00:47', TOKYO)
-    expect(wall(getMonthsary(start, 1, TOKYO), TOKYO)).toBe('2025-04-10 00:47')
-    expect(wall(getMonthsary(start, 12, TOKYO), TOKYO)).toBe('2026-03-10 00:47')
+    const start = at('2025-03-10 00:35', TOKYO)
+    expect(wall(getMonthsary(start, 1, TOKYO), TOKYO)).toBe('2025-04-10 00:35')
+    expect(wall(getMonthsary(start, 12, TOKYO), TOKYO)).toBe('2026-03-10 00:35')
   })
 
   it('n = 0 is the anchor itself', () => {
-    const start = at('2025-03-10 00:47', TOKYO)
+    const start = at('2025-03-10 00:35', TOKYO)
     expect(getMonthsary(start, 0, TOKYO).getTime()).toBe(start.getTime())
   })
 
@@ -77,19 +77,19 @@ describe('getMonthsary (DR-01)', () => {
 })
 
 describe('countMonthsariesReached', () => {
-  const start = at('2025-03-10 00:47', TOKYO)
+  const start = at('2025-03-10 00:35', TOKYO)
   it('is 0 before the anchor and before the first monthsary', () => {
     expect(countMonthsariesReached(start, at('2025-03-01 00:00', TOKYO), TOKYO)).toBe(0)
-    expect(countMonthsariesReached(start, at('2025-04-10 00:46', TOKYO), TOKYO)).toBe(0)
+    expect(countMonthsariesReached(start, at('2025-04-10 00:34', TOKYO), TOKYO)).toBe(0)
   })
   it('ticks over at the exact anchor minute', () => {
-    expect(countMonthsariesReached(start, at('2025-04-10 00:47', TOKYO), TOKYO)).toBe(1)
+    expect(countMonthsariesReached(start, at('2025-04-10 00:35', TOKYO), TOKYO)).toBe(1)
   })
 })
 
 describe('calculateRelationshipDuration (DR-02)', () => {
   it('is all zeros at or before the anchor', () => {
-    const start = at('2025-03-10 00:47', TOKYO)
+    const start = at('2025-03-10 00:35', TOKYO)
     expect(calculateRelationshipDuration(start, start, TOKYO)).toEqual({
       years: 0, months: 0, days: 0, hours: 0, minutes: 0, totalMonths: 0,
     })
@@ -97,9 +97,9 @@ describe('calculateRelationshipDuration (DR-02)', () => {
   })
 
   it('breaks down a simple duration', () => {
-    const start = at('2025-03-10 00:47', TOKYO)
+    const start = at('2025-03-10 00:35', TOKYO)
     expect(calculateRelationshipDuration(start, at('2025-03-17 15:02', TOKYO), TOKYO)).toEqual({
-      years: 0, months: 0, days: 7, hours: 14, minutes: 15, totalMonths: 0,
+      years: 0, months: 0, days: 7, hours: 14, minutes: 27, totalMonths: 0,
     })
   })
 
@@ -111,15 +111,15 @@ describe('calculateRelationshipDuration (DR-02)', () => {
   })
 
   it('rolls months into years', () => {
-    const start = at('2025-03-10 00:47', TOKYO)
+    const start = at('2025-03-10 00:35', TOKYO)
     expect(calculateRelationshipDuration(start, at('2026-05-12 01:00', TOKYO), TOKYO)).toEqual({
-      years: 1, months: 2, days: 2, hours: 0, minutes: 13, totalMonths: 14,
+      years: 1, months: 2, days: 2, hours: 0, minutes: 25, totalMonths: 14,
     })
   })
 
   it('shows exactly one month at the first monthsary minute, not 30/31 days', () => {
-    const start = at('2025-03-10 00:47', TOKYO)
-    expect(calculateRelationshipDuration(start, at('2025-04-10 00:47', TOKYO), TOKYO)).toEqual({
+    const start = at('2025-03-10 00:35', TOKYO)
+    expect(calculateRelationshipDuration(start, at('2025-04-10 00:35', TOKYO), TOKYO)).toEqual({
       years: 0, months: 1, days: 0, hours: 0, minutes: 0, totalMonths: 1,
     })
   })
@@ -133,16 +133,16 @@ describe('calculateRelationshipDuration (DR-02)', () => {
 })
 
 describe('getNextMonthsary', () => {
-  const start = at('2025-03-10 00:47', TOKYO)
+  const start = at('2025-03-10 00:35', TOKYO)
   it('is the first monthsary before it arrives', () => {
     const next = getNextMonthsary(start, at('2025-03-20 08:00', TOKYO), TOKYO)
     expect(next.number).toBe(1)
-    expect(wall(next.at, TOKYO)).toBe('2025-04-10 00:47')
+    expect(wall(next.at, TOKYO)).toBe('2025-04-10 00:35')
   })
   it('advances immediately at the monthsary minute', () => {
-    const next = getNextMonthsary(start, at('2025-04-10 00:47', TOKYO), TOKYO)
+    const next = getNextMonthsary(start, at('2025-04-10 00:35', TOKYO), TOKYO)
     expect(next.number).toBe(2)
-    expect(wall(next.at, TOKYO)).toBe('2025-05-10 00:47')
+    expect(wall(next.at, TOKYO)).toBe('2025-05-10 00:35')
   })
   it('is the first monthsary even before the anchor', () => {
     expect(getNextMonthsary(start, at('2025-01-01 00:00', TOKYO), TOKYO).number).toBe(1)
@@ -150,12 +150,12 @@ describe('getNextMonthsary', () => {
 })
 
 describe('getMonthsaryToday', () => {
-  const start = at('2025-03-10 00:47', TOKYO)
+  const start = at('2025-03-10 00:35', TOKYO)
   it('is null before the moment on the day itself', () => {
     expect(getMonthsaryToday(start, at('2025-04-10 00:30', TOKYO), TOKYO)).toBeNull()
   })
   it('celebrates from the exact minute to the end of that calendar day', () => {
-    expect(getMonthsaryToday(start, at('2025-04-10 00:47', TOKYO), TOKYO)?.number).toBe(1)
+    expect(getMonthsaryToday(start, at('2025-04-10 00:35', TOKYO), TOKYO)?.number).toBe(1)
     expect(getMonthsaryToday(start, at('2025-04-10 23:59', TOKYO), TOKYO)?.number).toBe(1)
   })
   it('stops the next day', () => {
@@ -179,12 +179,12 @@ describe('helpers', () => {
     expect(isAnniversary(13)).toBe(false)
   })
   it('round-trips wall-clock time through an instant', () => {
-    const instant = zonedWallTimeToInstant('2025-03-10', '00:47', TOKYO)
-    expect(instant.toISOString()).toBe('2025-03-09T15:47:00.000Z')
-    expect(instantToZonedWallTime(instant, TOKYO)).toEqual({ date: '2025-03-10', time: '00:47' })
+    const instant = zonedWallTimeToInstant('2025-03-10', '00:35', TOKYO)
+    expect(instant.toISOString()).toBe('2025-03-09T15:35:00.000Z')
+    expect(instantToZonedWallTime(instant, TOKYO)).toEqual({ date: '2025-03-10', time: '00:35' })
   })
   it('rejects malformed wall-clock input', () => {
-    expect(() => zonedWallTimeToInstant('2025/03/10', '00:47', TOKYO)).toThrow(RangeError)
+    expect(() => zonedWallTimeToInstant('2025/03/10', '00:35', TOKYO)).toThrow(RangeError)
     expect(() => zonedWallTimeToInstant('2025-03-10', '0:47', TOKYO)).toThrow(RangeError)
   })
 })

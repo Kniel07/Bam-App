@@ -3,7 +3,7 @@ import { zonedWallTimeToInstant } from '@/lib/dates/monthsary'
 import { MonthsaryCounter } from './MonthsaryCounter'
 
 const TZ = 'Asia/Tokyo'
-const start = zonedWallTimeToInstant('2025-03-10', '00:47', TZ)
+const start = zonedWallTimeToInstant('2025-03-10', '00:35', TZ)
 const at = (date: string, time: string) => zonedWallTimeToInstant(date, time, TZ)
 
 function tile(label: string) {
@@ -20,7 +20,7 @@ describe('MonthsaryCounter', () => {
     expect(tile('month')).toBe('1')
     expect(tile('days')).toBe('7')
     expect(tile('hours')).toBe('14')
-    expect(tile('minutes')).toBe('15')
+    expect(tile('minutes')).toBe('27')
     expect(screen.getByRole('heading')).toHaveTextContent('1 month · 7 days')
   })
 
