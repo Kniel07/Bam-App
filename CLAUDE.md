@@ -6,8 +6,8 @@ state; do not rely on conversation history.
 ## Current status
 
 - **Phase:** 3 — BUILD. THINK and DESIGN approved.
-- **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings.
-- **Next:** S3 Our Story → S4 Letters → S5 Memories → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
+- **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings · S3 Our Story.
+- **Next:** S4 Letters → S5 Memories → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
 - **Owner in parallel:** accounts exist (Q10 answered). Owner follows `docs/deployment/SETUP-GUIDE.md` for the dev environment.
 
 ## Workflow (Kniel Framework)
@@ -92,6 +92,7 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - S1a: migrations 0001–0007; `npm run test:db` → 69 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
 - S1b: QR key landing (fragment stripped before network, tested), owner sign-in, locked screen, guards, `npm run partner-key -- create|rotate`.
 - S2: `lib/dates/monthsary.ts` (27 tests, device-TZ independent), counter, next monthsary, monthsary-day celebration, welcome envelope (A1), settings.
+- S3: shared media lib (client compression → WebP, EXIF stripped; upload; cached signed URLs), Polaroid, PhotoPicker; Our Story timeline with the anchor placed chronologically, owner CRUD with drafts/highlight/photo; Home corner card. Feature routes lazy-loaded.
 
 ## How to verify
 
@@ -102,6 +103,7 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - KI-01 Dev-only: `minimatch` moderate advisory via typescript-eslint (lint tooling, not shipped).
 - KI-02 `database.types.ts` is hand-written; regenerate from the real project and diff.
 - KI-03 Playwright's fake clock breaks `@date-fns/tz` (Date subclass). Test-harness only; visual tests must use data-relative dates instead of a fake clock.
-- KI-04 Main bundle ~169 KB gzip (budget 180 KB). Motion must stay lazy-loaded (S4).
+- KI-04 Main bundle ~117 KB gzip after route splitting (budget 180 KB). Keep feature routes lazy; Motion lazy-loaded (S4).
 - KI-05 Android back button closing sheets: planned for S6 polish.
-- KI-06 Desktop Home is single-column until Story/Letters/Memories corners exist (S3–S5).
+- KI-06 Desktop Home is single-column until Letters/Memories corners exist (S4–S5).
+- KI-07 Orphaned storage files possible if a delete of the file fails after the row is deleted (logged warning); cleanup query planned for R2.

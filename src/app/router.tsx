@@ -19,7 +19,10 @@ function NotFoundPage() {
   )
 }
 
-/** Route map (PAGE-STRUCTURE §1–2). Feature routes are added per build slice. */
+/**
+ * Route map (PAGE-STRUCTURE §1–2). Feature pages are lazy-loaded so the first
+ * load stays within the performance budget (ARCHITECTURE §8).
+ */
 export const router = createBrowserRouter([
   { path: KEY_ROUTE, element: <KeyLanding /> },
   // Owner-only screens are split out so the partner's phone never downloads them.
@@ -31,6 +34,7 @@ export const router = createBrowserRouter([
         element: <AppLayout />,
         children: [
           { index: true, element: <HomePage /> },
+          { path: 'story', lazy: async () => ({ Component: (await import('@/features/story/StoryPage')).StoryPage }) },
           {
             element: <RequireOwner />,
             children: [

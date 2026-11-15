@@ -5,6 +5,8 @@ import { MonthsaryCounter } from '@/features/monthsary/MonthsaryCounter'
 import { NextMonthsaryPill } from '@/features/monthsary/NextMonthsaryPill'
 import { useCurrentMember, useNames, useRelationship } from '@/features/relationship/hooks'
 import { WelcomeEnvelope } from '@/features/welcome/WelcomeEnvelope'
+import { useMilestones } from '@/features/story/hooks'
+import { CornerCard } from './CornerCard'
 import { copy } from '@/lib/copy'
 import { useNow } from '@/lib/time/useNow'
 
@@ -15,6 +17,8 @@ export function HomePage() {
   const currentMember = useCurrentMember()
   const names = useNames()
   const now = useNow()
+  const milestones = useMilestones()
+  const latestMilestone = milestones.data?.filter((milestone) => milestone.status === 'published').at(-1)
 
   const showWelcome =
     role === 'partner' &&
@@ -48,6 +52,19 @@ export function HomePage() {
           />
           <NextMonthsaryPill startAt={new Date(relationship.data.start_at)} timeZone={relationship.data.timezone} now={now} />
         </div>
+      )}
+
+      {relationship.data && (
+        <section aria-labelledby="corners-heading" className="flex flex-col gap-3">
+          <h2 id="corners-heading" className="font-sans text-micro font-bold uppercase tracking-[0.06em] text-ink-soft">
+            Corners of our universe
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <CornerCard to="/story" title="Our Story">
+              {latestMilestone ? `Latest: ${latestMilestone.title}` : 'Where it all began.'}
+            </CornerCard>
+          </div>
+        </section>
       )}
 
       {showWelcome && relationship.data && (
