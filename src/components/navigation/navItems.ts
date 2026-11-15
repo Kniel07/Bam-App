@@ -13,10 +13,10 @@ export interface NavItem {
 export const PRIMARY_NAV: NavItem[] = [
   { to: '/', label: 'Home', icon: House },
   { to: '/story', label: 'Story', icon: BookHeart },
+  { to: '/letters', label: 'Letters', icon: Mail },
 ]
 
-/** Planned destinations, enabled slice by slice (S4 letters, S5 memories). */
-export const PLANNED_NAV: Record<'letters' | 'memories', NavItem> = {
-  letters: { to: '/letters', label: 'Letters', icon: Mail },
+/** Planned destinations, enabled slice by slice (S5 memories). */
+export const PLANNED_NAV: Record<'memories', NavItem> = {
   memories: { to: '/memories', label: 'Memories', icon: Images },
 }

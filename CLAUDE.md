@@ -6,9 +6,9 @@ state; do not rely on conversation history.
 ## Current status
 
 - **Phase:** 3 — BUILD. THINK and DESIGN approved.
-- **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings · S3 Our Story.
-- **Next:** S4 Letters → S5 Memories → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
-- **Owner in parallel:** accounts exist (Q10 answered). Owner follows `docs/deployment/SETUP-GUIDE.md` for the dev environment.
+- **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings · S3 Our Story · S4 Letters.
+- **Next:** S5 Memories → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
+- **Dev environment live:** Vercel (production URL points at the dev Supabase project), migrations applied, owner + partner provisioned, QR sign-in verified by owner. Prod project setup at L-7 (SETUP-GUIDE Part E).
 
 ## Workflow (Kniel Framework)
 
@@ -93,6 +93,7 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - S1b: QR key landing (fragment stripped before network, tested), owner sign-in, locked screen, guards, `npm run partner-key -- create|rotate`.
 - S2: `lib/dates/monthsary.ts` (27 tests, device-TZ independent), counter, next monthsary, monthsary-day celebration, welcome envelope (A1), settings.
 - S3: shared media lib (client compression → WebP, EXIF stripped; upload; cached signed URLs), Polaroid, PhotoPicker; Our Story timeline with the anchor placed chronologically, owner CRUD with drafts/highlight/photo; Home corner card. Feature routes lazy-loaded.
+- S4: Letters grid (sealed/new/locked/opened/draft), two-tap ceremony (Motion, lazy, reduced-motion fade), reading view via `open_letter()` only, owner editor (anytime / on a date, default = next monthsary minute), Home "Waiting for you", Letters corner card, unread dot in nav.
 
 ## How to verify
 
@@ -107,4 +108,5 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - KI-05 Android back button closing sheets: planned for S6 polish.
 - KI-06 Desktop Home is single-column until Letters/Memories corners exist (S4–S5).
 - KI-08 Supabase SQL editor warns on 0002/0003 (tables created before 0005 enables RLS); owner chooses "Run and enable RLS". Future migrations: enable RLS in the same file that creates a table.
+- KI-09 Vitest: `vi.fn().mockRejectedValue` is reported as unhandled even when caught; tests use plain functions for rejecting async mocks.
 - KI-07 Orphaned storage files possible if a delete of the file fails after the row is deleted (logged warning); cleanup query planned for R2.

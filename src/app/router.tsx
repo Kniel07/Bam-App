@@ -34,6 +34,11 @@ export const router = createBrowserRouter([
         element: <AppLayout />,
         children: [
           { index: true, element: <HomePage /> },
+          { path: 'letters', lazy: async () => ({ Component: (await import('@/features/letters/LettersPage')).LettersPage }) },
+          {
+            path: 'letters/:letterId',
+            lazy: async () => ({ Component: (await import('@/features/letters/LetterReadingPage')).LetterReadingPage }),
+          },
           { path: 'story', lazy: async () => ({ Component: (await import('@/features/story/StoryPage')).StoryPage }) },
           {
             element: <RequireOwner />,

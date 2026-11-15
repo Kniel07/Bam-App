@@ -5,12 +5,18 @@ import { MoreSheet } from '@/components/navigation/MoreSheet'
 import { PRIMARY_NAV } from '@/components/navigation/navItems'
 import { Sparkle } from '@/components/shared/Decorations'
 import { copy } from '@/lib/copy'
+import { useUnreadLetters } from '@/features/letters/useUnreadLetters'
 
 const linkBase = 'flex items-center justify-center rounded-md font-semibold transition-colors'
 
 /** Member area shell: bottom tab bar on mobile, top bar from 1024 px (RESPONSIVE §2). */
 export function AppLayout() {
   const [isMoreOpen, setIsMoreOpen] = useState(false)
+  const hasUnreadLetters = useUnreadLetters().length > 0
+  const dotFor = (to: string) =>
+    to === '/letters' && hasUnreadLetters ? (
+      <span aria-label="new letters" className="absolute -right-1 -top-0.5 size-2.5 rounded-full bg-rose-deep ring-2 ring-surface" />
+    ) : null
 
   return (
     <div className="min-h-dvh">
@@ -30,7 +36,10 @@ export function AppLayout() {
                     `${linkBase} min-h-11 px-4 ${isActive ? 'bg-blush text-rose-deep' : 'text-ink-soft hover:text-ink'}`
                   }
                 >
-                  {item.label}
+                  <span className="relative">
+                    {item.label}
+                    {dotFor(item.to)}
+                  </span>
                 </NavLink>
               </li>
             ))}
@@ -59,7 +68,10 @@ export function AppLayout() {
                   `flex h-full flex-col items-center justify-center gap-0.5 text-micro font-bold tracking-wide ${isActive ? 'text-rose-deep' : 'text-ink-soft'}`
                 }
               >
-                <Icon aria-hidden className="size-6" strokeWidth={1.75} />
+                <span className="relative">
+                  <Icon aria-hidden className="size-6" strokeWidth={1.75} />
+                  {dotFor(to)}
+                </span>
                 {label}
               </NavLink>
             </li>

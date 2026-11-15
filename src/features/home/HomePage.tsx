@@ -7,6 +7,9 @@ import { useCurrentMember, useNames, useRelationship } from '@/features/relation
 import { WelcomeEnvelope } from '@/features/welcome/WelcomeEnvelope'
 import { useMilestones } from '@/features/story/hooks'
 import { CornerCard } from './CornerCard'
+import { WaitingForYou } from './WaitingForYou'
+import { useLetters } from '@/features/letters/hooks'
+import { useUnreadLetters } from '@/features/letters/useUnreadLetters'
 import { copy } from '@/lib/copy'
 import { useNow } from '@/lib/time/useNow'
 
@@ -18,6 +21,8 @@ export function HomePage() {
   const names = useNames()
   const now = useNow()
   const milestones = useMilestones()
+  const letters = useLetters()
+  const unreadLetters = useUnreadLetters()
   const latestMilestone = milestones.data?.filter((milestone) => milestone.status === 'published').at(-1)
 
   const showWelcome =
@@ -54,6 +59,8 @@ export function HomePage() {
         </div>
       )}
 
+      {unreadLetters.length > 0 && <WaitingForYou letters={unreadLetters} />}
+
       {relationship.data && (
         <section aria-labelledby="corners-heading" className="flex flex-col gap-3">
           <h2 id="corners-heading" className="font-sans text-micro font-bold uppercase tracking-[0.06em] text-ink-soft">
@@ -62,6 +69,13 @@ export function HomePage() {
           <div className="grid gap-3 sm:grid-cols-2">
             <CornerCard to="/story" title="Our Story">
               {latestMilestone ? `Latest: ${latestMilestone.title}` : 'Where it all began.'}
+            </CornerCard>
+            <CornerCard to="/letters" title="Letters">
+              {unreadLetters.length > 0
+                ? `${unreadLetters.length} waiting for you`
+                : letters.data?.length
+                  ? `${letters.data.length} envelope${letters.data.length === 1 ? '' : 's'}`
+                  : 'Little envelopes for little moments.'}
             </CornerCard>
           </div>
         </section>
