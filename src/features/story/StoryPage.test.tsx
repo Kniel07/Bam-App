@@ -2,12 +2,19 @@ import { render, screen } from '@testing-library/react'
 import type { Milestone } from './api'
 import { StoryPage } from './StoryPage'
 
+const OWNER = 'owner-id'
+const PARTNER = 'partner-id'
 const role = { current: 'owner' as 'owner' | 'partner' }
+const userIdFor = () => (role.current === 'owner' ? OWNER : PARTNER)
 const milestones: { current: Milestone[] } = { current: [] }
 
-vi.mock('@/features/auth/useAuth', () => ({ useRole: () => role.current }))
+vi.mock('@/features/auth/useAuth', () => ({
+  useRole: () => role.current,
+  useAuth: () => ({ auth: { status: 'member', userId: userIdFor(), role: role.current } }),
+}))
 vi.mock('@/lib/media/storage', () => ({ useSignedUrl: () => ({ data: undefined, isError: false }) }))
 vi.mock('@/features/relationship/hooks', () => ({
+  useDisplayNameFor: () => (id: string) => (id === OWNER ? 'Owner Name' : 'Partner Name'),
   useRelationship: () => ({
     isPending: false,
     isError: false,
@@ -30,7 +37,7 @@ function milestone(overrides: Partial<Milestone>): Milestone {
     is_highlighted: false,
     sort_order: 0,
     status: 'published',
-    created_by: null,
+    created_by: OWNER,
     created_at: '',
     updated_at: '',
     ...overrides,
@@ -65,11 +72,22 @@ describe('StoryPage', () => {
     expect(screen.getByText('Draft')).toBeInTheDocument()
   })
 
-  it('gives the partner no editing controls', () => {
+  it('lets the partner add milestones and edit only her own (CR-02)', () => {
     role.current = 'partner'
-    milestones.current = [milestone({ title: 'First date' })]
+    milestones.current = [milestone({ title: 'His milestone' }), milestone({ title: 'Her milestone', created_by: PARTNER })]
     render(<StoryPage />)
-    expect(screen.queryByRole('button', { name: /Edit/ })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Add milestone' })).not.toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: 'Add milestone' }).length).toBeGreaterThan(0)
+    expect(screen.getByRole('button', { name: 'Edit Her milestone' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Edit His milestone' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Remove/ })).not.toBeInTheDocument()
+    expect(screen.getByText('added by Owner Name')).toBeInTheDocument()
+  })
+
+  it('lets the owner remove (not edit) her milestones', () => {
+    milestones.current = [milestone({ title: 'Her milestone', created_by: PARTNER })]
+    render(<StoryPage />)
+    expect(screen.getByRole('button', { name: 'Remove Her milestone' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Edit Her milestone' })).not.toBeInTheDocument()
+    expect(screen.getByText('added by Partner Name')).toBeInTheDocument()
   })
 })

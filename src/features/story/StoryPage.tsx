@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import { Pencil } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { DraftBadge } from '@/components/shared/DraftBadge'
 import { Heart, Sparkle } from '@/components/shared/Decorations'
 import { Polaroid } from '@/components/shared/Polaroid'
 import { Fab } from '@/components/ui/Fab'
 import { ErrorState, Skeleton } from '@/components/ui/States'
-import { useRole } from '@/features/auth/useAuth'
-import { useRelationship } from '@/features/relationship/hooks'
+import { useAuth, useRole } from '@/features/auth/useAuth'
+import { useDisplayNameFor, useRelationship } from '@/features/relationship/hooks'
 import { formatCalendarDate, todayInZone } from '@/lib/dates/format'
 import type { Milestone } from './api'
-import { useMilestones } from './hooks'
+import { useDeleteMilestone, useMilestones } from './hooks'
 import { MilestoneEditorSheet } from './MilestoneEditorSheet'
 import { buildTimeline } from './timeline'
 
@@ -25,7 +26,16 @@ function TimelineMarker({ isHighlighted }: { isHighlighted: boolean }) {
   )
 }
 
-function MilestoneItem({ milestone, canEdit, onEdit }: { milestone: Milestone; canEdit: boolean; onEdit: () => void }) {
+interface MilestoneItemProps {
+  milestone: Milestone
+  authorName: string | null
+  canEdit: boolean
+  canRemove: boolean
+  onEdit: () => void
+  onRemove: () => void
+}
+
+function MilestoneItem({ milestone, authorName, canEdit, canRemove, onEdit, onRemove }: MilestoneItemProps) {
   return (
     <li className="relative pl-2">
       <TimelineMarker isHighlighted={milestone.is_highlighted} />
@@ -47,9 +57,20 @@ function MilestoneItem({ milestone, canEdit, onEdit }: { milestone: Milestone; c
                 <Pencil aria-hidden className="size-4" />
               </button>
             )}
+            {canRemove && (
+              <button
+                type="button"
+                onClick={onRemove}
+                aria-label={`Remove ${milestone.title}`}
+                className="grid size-11 place-items-center rounded-full text-ink-soft hover:bg-surface hover:text-error"
+              >
+                <Trash2 aria-hidden className="size-4" />
+              </button>
+            )}
           </div>
         </div>
         {milestone.caption && <p className="mt-2 whitespace-pre-line text-body text-ink-soft">{milestone.caption}</p>}
+        {authorName && <p className="mt-2 text-small text-ink-soft">added by {authorName}</p>}
         {milestone.photo_path && (
           <div className="mt-4 w-44 sm:w-52">
             <Polaroid path={milestone.photo_path} alt={milestone.title} tiltSeed={milestone.id} />
@@ -60,12 +81,17 @@ function MilestoneItem({ milestone, canEdit, onEdit }: { milestone: Milestone; c
   )
 }
 
-/** Our Story (PAGE-STRUCTURE §4.5, FR-STORY-01…05). */
+/** Our Story (PAGE-STRUCTURE §4.5, FR-STORY-01…05). Both members add milestones (CR-02). */
 export function StoryPage() {
   const relationship = useRelationship()
   const milestones = useMilestones()
   const isOwner = useRole() === 'owner'
+  const { auth } = useAuth()
+  const userId = auth.status === 'member' ? auth.userId : null
+  const nameFor = useDisplayNameFor()
+  const remove = useDeleteMilestone()
   const [editor, setEditor] = useState<EditorState>({ isOpen: false })
+  const [removing, setRemoving] = useState<Milestone | null>(null)
 
   const isLoading = relationship.isPending || milestones.isPending
   const hasError = relationship.isError || milestones.isError
@@ -78,11 +104,9 @@ export function StoryPage() {
           <h1 className="text-h1">Our Story</h1>
           <p className="font-hand text-hand text-rose-deep">How our little universe began.</p>
         </div>
-        {isOwner && (
-          <div className="hidden lg:block">
-            <Fab label="Add milestone" onClick={() => setEditor({ isOpen: true, key: crypto.randomUUID() })} />
-          </div>
-        )}
+        <div className="hidden lg:block">
+          <Fab label="Add milestone" onClick={() => setEditor({ isOpen: true, key: crypto.randomUUID() })} />
+        </div>
       </header>
 
       {isLoading ? (
@@ -117,8 +141,12 @@ export function StoryPage() {
                 <MilestoneItem
                   key={entry.milestone.id}
                   milestone={entry.milestone}
-                  canEdit={isOwner}
+                  // "added by" only for the other person's milestones
+                  authorName={entry.milestone.created_by && entry.milestone.created_by !== userId ? nameFor(entry.milestone.created_by) : null}
+                  canEdit={entry.milestone.created_by === userId}
+                  canRemove={isOwner && entry.milestone.created_by !== userId}
                   onEdit={() => setEditor({ isOpen: true, milestone: entry.milestone, key: entry.milestone.id + entry.milestone.updated_at })}
+                  onRemove={() => setRemoving(entry.milestone)}
                 />
               ),
             )}
@@ -134,11 +162,22 @@ export function StoryPage() {
         </>
       )}
 
-      {isOwner && (
-        <div className="lg:hidden">
-          <Fab label="Add milestone" onClick={() => setEditor({ isOpen: true, key: crypto.randomUUID() })} />
-        </div>
-      )}
+      <div className="lg:hidden">
+        <Fab label="Add milestone" onClick={() => setEditor({ isOpen: true, key: crypto.randomUUID() })} />
+      </div>
+
+      <ConfirmDialog
+        isOpen={removing !== null}
+        title="Remove this milestone?"
+        message={`"${removing?.title ?? ''}" will be removed from our story for both of you. This can't be undone.`}
+        confirmLabel="Remove"
+        tone="danger"
+        isPending={remove.isPending}
+        onConfirm={() => {
+          if (removing) void remove.mutateAsync(removing).finally(() => setRemoving(null))
+        }}
+        onCancel={() => setRemoving(null)}
+      />
 
       {editor.isOpen && (
         <MilestoneEditorSheet

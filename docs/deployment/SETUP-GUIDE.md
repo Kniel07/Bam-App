@@ -51,6 +51,8 @@ Do **dev** now. Repeat the same steps for **prod** around L-7.
 5. `0005_rls.sql`
 6. `0006_rpc.sql`
 7. `0007_storage.sql`
+8. `0008_partner_letters.sql`
+9. `0009_shared_story.sql`
 
 Open the file on GitHub, copy all of it, paste it into a new query, click **Run**. Each should end with "Success. No rows returned." If one fails, **stop** and send me the error message (it contains no personal data).
 

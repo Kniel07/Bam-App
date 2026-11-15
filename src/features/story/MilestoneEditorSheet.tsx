@@ -18,7 +18,7 @@ interface MilestoneEditorSheetProps {
   onClose: () => void
 }
 
-/** Owner editor for a story milestone (F9, FR-STORY-03/04). */
+/** Milestone editor for either member; each edits their own (F9, FR-STORY-03/04, CR-02). */
 export function MilestoneEditorSheet({ isOpen, milestone, defaultDate, onClose }: MilestoneEditorSheetProps) {
   const [title, setTitle] = useState(milestone?.title ?? '')
   const [caption, setCaption] = useState(milestone?.caption ?? '')
@@ -87,7 +87,7 @@ export function MilestoneEditorSheet({ isOpen, milestone, defaultDate, onClose }
           <Toggle label="Highlight" description="Anniversary-style emphasis on the timeline." checked={isHighlighted} onChange={setIsHighlighted} />
           <Toggle
             label="Published"
-            description={isPublished ? 'Visible to her.' : 'Draft: only you can see it.'}
+            description={isPublished ? 'Visible to both of you.' : 'Draft: only you can see it.'}
             checked={isPublished}
             onChange={setIsPublished}
           />

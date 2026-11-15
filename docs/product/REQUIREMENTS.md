@@ -85,6 +85,7 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | FR-MEM-04 | Replace and delete a memory's photo; delete removes the storage object. | R1 |
 | FR-MEM-05 | Partner can contribute memories (default permission, Q4). | R1 |
 | FR-MEM-06 | Memory categories and timeline filtering. | R2 |
+| FR-MEM-08 | *(CR-03)* Either member can mark a memory as featured; featured memories are shown on Home. | R1 (S5) |
 | FR-MEM-07 | Photos are stored privately and served via signed URLs to members only. | R1 |
 
 ### 1.6 Reasons Why I Love You — `REASON`
@@ -177,7 +178,7 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | Resource | Owner | Partner |
 |---|---|---|
 | Relationship settings | read/write | read |
-| Story milestones | CRUD (incl. drafts) | read published |
+| Story milestones | *(CR-02)* CRUD own (incl. drafts); read her published; remove any visible | *(CR-02)* CRUD own (incl. drafts); read his published |
 | Letters (envelope) | *(CR-01)* CRUD own; read her published; delete any visible | CRUD own; read his published |
 | Letter contents | *(CR-01)* own: always; hers: only when open, via `open_letter()` | own: always; his: only when open, via `open_letter()` |
 | Letter read status | set by opening her letters | set by opening his letters |

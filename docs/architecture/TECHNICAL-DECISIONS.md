@@ -174,6 +174,16 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 - `open_letter()` now records read status for the recipient (not "the partner") and returns `author_id` for the signature.
 - Migration `0008_partner_letters.sql`; tests `supabase/tests/partner_letters.test.sql` (32 assertions).
 
+## TD-022 Shared authorship for all content (CR-02) — *Approved (owner, BUILD)*
+
+- One rule for every content section: **both members add; each edits/deletes their own; drafts are private to their author; the owner may also remove anything he can see.** Applies to letters (TD-021), memories, Our Story (migration `0009_shared_story.sql`), and future modules (reasons, surprises, playlist).
+- Settings, partner key and the anchor moment remain **owner-only** (they govern the whole site and its security).
+- Storage policies consolidated: read follows row visibility; upload needs a new folder or your own row; overwrite only by the uploader; delete by the uploader or the owner.
+
+## TD-023 Featured photos on Home (CR-03) — *Approved (owner, BUILD), delivered in S5*
+
+- Either member can mark a memory as featured; featured memories appear on Home. Implemented with S5 Memories (`memories.is_featured`).
+
 ---
 
 ## Change log
@@ -181,6 +191,8 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 | Date | Decision | Change | Reason | Approval |
 |---|---|---|---|---|
 | THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | **Approved by owner** |
+| BUILD S4 | Q4 → TD-022 | **Previous:** partner adds memories (and letters, CR-01) only. **New:** partner adds to every content section; author model everywhere; settings stay owner-only | Owner request: "give her adding access to all" | **Approved by owner** |
+| BUILD S4 | New TD-023 | Featured photos shown on Home | Owner request: "partner can add feature photos… shown on the homepage" | **Approved by owner** (S5) |
 | BUILD S4 | Q4 / TD-009 / TD-019 → TD-021 | **Previous:** partner reads letters only; owner reads all content. **New:** both write letters; author + recipient model; owner may delete any visible letter but cannot read her letters before they unlock | Owner request: "add the create letter for the partner" | **Approved by owner** |
 | BUILD S0 | TD-002 detail | Tokens declared in CSS `@theme` (Tailwind v4) instead of a JS theme config | Tailwind v4's native mechanism; same single source of truth | Implementation detail, no approval needed |
 | BUILD S0 | TD-001 detail | TypeScript pinned to 5.9.3 (not 7.x) | typescript-eslint tooling not yet reliable on TS 7 | Implementation detail |

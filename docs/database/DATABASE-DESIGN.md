@@ -245,3 +245,8 @@ Integration tests run against the `dev` project with three test accounts:
 | storage `letters/<id>/` | `can_read_letter_content(id)` | new folder or own letter | owner, never in her letter folders | owner, or uploader |
 
 New helpers: `is_letter_author(uuid)`, `can_read_letter_content(uuid)`, `can_write_letter_folder(text)`.
+
+## 11. Change CR-02: shared authorship for Our Story (migration 0009)
+
+`story_milestones` follows the author model: SELECT member and (author or published); INSERT member as author; UPDATE author only (no ownership change); DELETE author or owner.
+Storage policies for all modules are consolidated: SELECT follows row visibility; INSERT needs a new folder or your own row (`can_write_story_folder`, `can_write_letter_folder`, `can_write_memory_folder`); UPDATE uploader only; DELETE uploader or owner.

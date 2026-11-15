@@ -7,7 +7,8 @@ state; do not rely on conversation history.
 
 - **Phase:** 3 — BUILD. THINK and DESIGN approved.
 - **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings · S3 Our Story · S4 Letters.
-- **Next:** S5 Memories → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
+- **Owner must apply in Supabase SQL editor:** `0008_partner_letters.sql`, then `0009_shared_story.sql`.
+- **Next:** S5 Memories (+ featured photos on Home, CR-03) → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
 - **Dev environment live:** Vercel (production URL points at the dev Supabase project), migrations applied, owner + partner provisioned, QR sign-in verified by owner. Prod project setup at L-7 (SETUP-GUIDE Part E).
 
 ## Workflow (Kniel Framework)
@@ -34,7 +35,8 @@ clarification at a time.
 - Two users: `owner`, `partner`. Exactly two, ever.
 - Anchor moment and timezone: **provided by owner, stored privately** (not in git). It is shortly after midnight, so the default unlock = the anchor minute (TD-011).
 - Launch = the first monthsary, at the anchor minute (fixed date, flexible scope).
-- Partner permissions (approved): memories (create, edit/delete own) and **letters both ways (CR-01, TD-021)**: each writes letters for the other; author controls own; recipient opens when unlocked; owner may delete any visible letter but cannot read hers before they unlock.
+- Permissions (approved, TD-021/TD-022): **shared authorship everywhere**: both add to every content section; each edits/deletes own; drafts private to author; owner may also remove anything he can see. Letters: recipient opens when unlocked; owner cannot read hers early. Settings, key, anchor: owner-only.
+- Featured photos on Home (TD-023, CR-03): delivered with S5 Memories.
 - Sign-in (approved, TD-008): partner scans a **QR key** and is signed in automatically, with no login screen. The key lives in the URL fragment and is removed after sign-in; it is never committed or logged. Owner uses email + password on a separate route. Key rotation = revoke + reprint.
 - Address (approved, TD-017): free `<project>.vercel.app`; project name non-identifying and frozen before the QR is printed.
 - Partner device: **Android** (Chrome assumed; also test Samsung Internet if Samsung). Test priority 1 = Android Chrome.
@@ -89,7 +91,7 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 
 - THINK and DESIGN approved.
 - S0: Vite + React 19 + TS 5.9 strict + Tailwind 4 tokens, ESLint, Vitest, CI (app + database jobs), Vercel headers (CSP, noindex).
-- S1a: migrations 0001–0007 (+0008 CR-01); `npm run test:db` → 101 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
+- S1a: migrations 0001–0007 (+0008 CR-01, 0009 CR-02); `npm run test:db` → 122 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
 - S1b: QR key landing (fragment stripped before network, tested), owner sign-in, locked screen, guards, `npm run partner-key -- create|rotate`.
 - S2: `lib/dates/monthsary.ts` (27 tests, device-TZ independent), counter, next monthsary, monthsary-day celebration, welcome envelope (A1), settings.
 - S3: shared media lib (client compression → WebP, EXIF stripped; upload; cached signed URLs), Polaroid, PhotoPicker; Our Story timeline with the anchor placed chronologically, owner CRUD with drafts/highlight/photo; Home corner card. Feature routes lazy-loaded.
