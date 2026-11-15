@@ -106,4 +106,5 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - KI-04 Main bundle ~117 KB gzip after route splitting (budget 180 KB). Keep feature routes lazy; Motion lazy-loaded (S4).
 - KI-05 Android back button closing sheets: planned for S6 polish.
 - KI-06 Desktop Home is single-column until Letters/Memories corners exist (S4–S5).
+- KI-08 Supabase SQL editor warns on 0002/0003 (tables created before 0005 enables RLS); owner chooses "Run and enable RLS". Future migrations: enable RLS in the same file that creates a table.
 - KI-07 Orphaned storage files possible if a delete of the file fails after the row is deleted (logged warning); cleanup query planned for R2.

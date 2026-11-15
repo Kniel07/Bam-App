@@ -54,6 +54,13 @@ Do **dev** now. Repeat the same steps for **prod** around L-7.
 
 Open the file on GitHub, copy all of it, paste it into a new query, click **Run**. Each should end with "Success. No rows returned." If one fails, **stop** and send me the error message (it contains no personal data).
 
+> **"Potential issue detected… creates tables without enabling Row Level Security"** appears for `0002` and `0003`. Choose **Run and enable RLS**. RLS is switched on in `0005` anyway; this option simply closes the tables from the first second. Enabling it twice is harmless.
+
+> **If you created your owner account before running the migrations**, run this once after `0007` so your account gets a profile row:
+> ```sql
+> insert into public.profiles (id) select id from auth.users on conflict (id) do nothing;
+> ```
+
 ### A3. Create your owner account
 
 **Authentication → Users → Add user → Create new user**
