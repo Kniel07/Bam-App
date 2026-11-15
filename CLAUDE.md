@@ -8,7 +8,7 @@ state; do not rely on conversation history.
 - **Phase:** 3 — BUILD. THINK and DESIGN approved.
 - **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings.
 - **Next:** S3 Our Story → S4 Letters → S5 Memories → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
-- **Blocked on owner (needed before deploy/real-data tests):** free GitHub/Supabase/Vercel accounts (Q10).
+- **Owner in parallel:** accounts exist (Q10 answered). Owner follows `docs/deployment/SETUP-GUIDE.md` for the dev environment.
 
 ## Workflow (Kniel Framework)
 
@@ -68,6 +68,7 @@ React Router · TanStack Query · Lucide · Vitest · Playwright.
 | User flows | `docs/design/USER-FLOWS.md` |
 | Components | `docs/design/COMPONENT-SPECIFICATION.md` |
 | Responsive | `docs/design/RESPONSIVE-DESIGN.md` |
+| Setup guide (accounts, Supabase, Vercel, provisioning) | `docs/deployment/SETUP-GUIDE.md` |
 
 ## Decisions
 
