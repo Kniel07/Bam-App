@@ -36,14 +36,14 @@ export function LetterReadingPage() {
           <ErrorState onRetry={() => void opened.refetch()} />
         )
       ) : (
-        <>
+        <div className="animate-rise-in">
           <LetterPaper label={opened.data.label} body={opened.data.body} signature={nameFor(opened.data.authorId)} photoPath={opened.data.photoPath} />
           {opened.data.firstOpenedAt && relationship.data && (
             <p className="text-center text-small text-ink-soft">
               First opened {formatInstantDate(opened.data.firstOpenedAt, relationship.data.timezone)}
             </p>
           )}
-        </>
+        </div>
       )}
     </div>
   )

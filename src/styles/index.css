@@ -68,6 +68,13 @@
   --animate-pulse-soft: pulse-soft 1.8s ease-in-out infinite;
   --animate-float-up: float-up 3.2s var(--ease-gentle) forwards;
   --animate-fade-in: fade-in 400ms var(--ease-gentle);
+  --animate-page-in: page-in 250ms var(--ease-gentle) both;
+  --animate-rise-in: rise-in 450ms var(--ease-gentle) both;
+  --animate-sheet-up: sheet-up 300ms var(--ease-gentle);
+  --animate-dialog-pop: dialog-pop 250ms var(--ease-gentle);
+  --animate-backdrop-in: backdrop-in 250ms ease-out;
+  --animate-pop: pop 350ms var(--ease-gentle);
+  --animate-tick: tick 300ms var(--ease-gentle);
 
   @keyframes shimmer {
     0% { opacity: 0.55; }
@@ -80,6 +87,35 @@
   }
   @keyframes fade-in {
     from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes page-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes sheet-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes dialog-pop {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes backdrop-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
+  @keyframes tick {
+    from { opacity: 0.2; transform: translateY(-6px); }
     to { opacity: 1; transform: translateY(0); }
   }
   @keyframes float-up {
@@ -129,6 +165,7 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 1ms !important;
     scroll-behavior: auto !important;

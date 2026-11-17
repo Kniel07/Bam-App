@@ -10,6 +10,7 @@ import { formatCountdown } from '@/features/monthsary/formatCountdown'
 import { useNames } from '@/features/relationship/hooks'
 import { copy } from '@/lib/copy'
 import { useNow } from '@/lib/time/useNow'
+import { staggerStyle } from '@/lib/stagger'
 import type { Letter } from './api'
 import { EnvelopeOpening } from './EnvelopeOpening'
 import { useDeleteLetter, useLetters } from './hooks'
@@ -130,10 +131,10 @@ export function LettersPage() {
               <EmptyState title="Your letters are on their way" />
             ) : (
               <ul className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                {forMe.map((letter) => {
+                {forMe.map((letter, index) => {
                   const state = getEnvelopeState(letter, now)
                   return (
-                    <li key={letter.id} className="relative">
+                    <li key={letter.id} className="relative animate-rise-in" style={staggerStyle(index)}>
                       <Envelope
                         label={letter.label}
                         state={state}
@@ -163,10 +164,10 @@ export function LettersPage() {
               <EmptyState title="Write the first one" message='Start an envelope: "Open when…"' />
             ) : (
               <ul className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                {byMe.map((letter) => {
+                {byMe.map((letter, index) => {
                   const state = getEnvelopeState(letter, now)
                   return (
-                    <li key={letter.id} className="relative">
+                    <li key={letter.id} className="relative animate-rise-in" style={staggerStyle(index)}>
                       <Envelope
                         label={letter.label}
                         state={authorVisualState(state)}

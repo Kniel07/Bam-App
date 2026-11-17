@@ -178,6 +178,10 @@ orchestrated sequences (envelope open, reveal, shared-element zoom), lazy-loaded
 | Reason reveal (stretch) | Card flip | Each reveal |
 | Polaroid → detail | Shared-element zoom | Each open |
 | Counter minute tick | Number cross-fade | Each minute |
+| Page change (tab or link) | `page-in`: fade + 6 px rise, 250 ms | Each navigation |
+| Lists (envelopes, timeline, Home sections) | `rise-in`: 450 ms, staggered 45 ms per item (max 8 steps) | On page entry |
+| Sheets and dialogs | `sheet-up` 300 ms on mobile, `dialog-pop` 250 ms on desktop, backdrop fade | Each open |
+| Press feedback | Scale 0.97–0.98 on cards and envelopes; nav icons scale 0.9 on press and "pop" when selected | Each tap |
 | Everything else | Simple fade/slide ≤ 250 ms | — |
 
 **Never:** parallax, auto-playing carousels, continuous background animation,
@@ -185,7 +189,7 @@ bouncing elements, confetti storms.
 
 ### 6.3 Reduced motion
 
-With `prefers-reduced-motion: reduce`: all sequences become a 200 ms
+With `prefers-reduced-motion: reduce`: all animations collapse to ~1 ms with no delays (verified in Chromium); sequences become a quick
 cross-fade; floating hearts render as a static cluster; skeleton shimmer is
 replaced by a static fill.
 

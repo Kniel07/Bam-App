@@ -28,7 +28,7 @@ export function Envelope({ label, state, caption, onSelect }: EnvelopeProps) {
       type="button"
       onClick={onSelect}
       aria-label={`${label}, ${accessibleState}${caption ? `, ${caption}` : ''}`}
-      className={`group relative flex aspect-square w-full flex-col items-center justify-end overflow-hidden rounded-paper px-3 pb-4 text-center shadow-soft transition duration-[var(--duration-base)] ease-[var(--ease-gentle)] hover:-translate-y-0.5 hover:shadow-lift ${STATE_CLASSES[state]}`}
+      className={`group relative flex aspect-square w-full flex-col items-center justify-end overflow-hidden rounded-paper px-3 pb-4 text-center shadow-soft transition duration-[var(--duration-base)] ease-[var(--ease-gentle)] hover:-translate-y-0.5 hover:shadow-lift active:scale-[0.97] ${STATE_CLASSES[state]}`}
     >
       <span aria-hidden className="absolute inset-x-0 top-0 h-[38%] bg-surface/90 [clip-path:polygon(0_0,100%_0,50%_100%)]" />
       <span aria-hidden className="absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2">

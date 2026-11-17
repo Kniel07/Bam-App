@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, Outlet } from 'react-router'
+import { NavLink, Outlet, useLocation } from 'react-router'
 import { Sparkles } from 'lucide-react'
 import { MoreSheet } from '@/components/navigation/MoreSheet'
 import { IdentityAvatar, useIdentity } from '@/components/navigation/IdentityBadge'
@@ -13,6 +13,7 @@ const linkBase = 'flex items-center justify-center rounded-md font-semibold tran
 /** Member area shell: bottom tab bar on mobile, top bar from 1024 px (RESPONSIVE §2). */
 export function AppLayout() {
   const [isMoreOpen, setIsMoreOpen] = useState(false)
+  const location = useLocation()
   const hasUnreadLetters = useUnreadLetters().length > 0
   const identity = useIdentity()
   const moreLabel = identity ? `More, signed in as ${identity.name}` : 'More'
@@ -60,7 +61,10 @@ export function AppLayout() {
       </header>
 
       <main className="mx-auto w-full max-w-[1120px] px-5 pb-28 pt-6 md:px-8 lg:pb-16">
-        <Outlet />
+        {/* Gentle page entrance on every navigation (DESIGN-SYSTEM §6: fade/slide ≤ 250 ms). */}
+        <div key={location.pathname} className="animate-page-in">
+          <Outlet />
+        </div>
       </main>
 
       <nav
@@ -74,14 +78,18 @@ export function AppLayout() {
                 to={to}
                 end={to === '/'}
                 className={({ isActive }) =>
-                  `flex h-full flex-col items-center justify-center gap-0.5 text-micro font-bold tracking-wide ${isActive ? 'text-rose-deep' : 'text-ink-soft'}`
+                  `flex h-full flex-col items-center justify-center gap-0.5 text-micro font-bold tracking-wide transition-transform active:scale-90 ${isActive ? 'text-rose-deep' : 'text-ink-soft'}`
                 }
               >
-                <span className="relative">
-                  <Icon aria-hidden className="size-6" strokeWidth={1.75} />
-                  {dotFor(to)}
-                </span>
-                {label}
+                {({ isActive }) => (
+                  <>
+                    <span className={`relative ${isActive ? 'animate-pop' : ''}`}>
+                      <Icon aria-hidden className="size-6" strokeWidth={1.75} />
+                      {dotFor(to)}
+                    </span>
+                    {label}
+                  </>
+                )}
               </NavLink>
             </li>
           ))}
@@ -90,7 +98,7 @@ export function AppLayout() {
               type="button"
               onClick={() => setIsMoreOpen(true)}
               aria-label={moreLabel}
-              className="flex h-full w-full flex-col items-center justify-center gap-0.5 text-micro font-bold tracking-wide text-ink-soft"
+              className="flex h-full w-full flex-col items-center justify-center gap-0.5 text-micro font-bold tracking-wide text-ink-soft transition-transform active:scale-90"
             >
               {identity ? <IdentityAvatar /> : <Sparkles aria-hidden className="size-6" strokeWidth={1.75} />}
               More

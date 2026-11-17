@@ -91,7 +91,10 @@ export function MonthsaryCounter({ startAt, timeZone, message, now }: MonthsaryC
         {units.map((unit) => (
           <div key={unit.label} className="flex flex-col-reverse rounded-md bg-cream/80 px-0.5 py-3 text-center">
             <dt className="text-[0.6875rem] font-bold uppercase tracking-[0.04em] text-ink-soft sm:text-micro">{unit.label}</dt>
-            <dd className="font-display text-h2 tabular-nums text-rose-deep">{unit.value}</dd>
+            {/* Keyed by value: the number gently rolls over when it changes. */}
+            <dd key={unit.value} className="animate-tick font-display text-h2 tabular-nums text-rose-deep">
+              {unit.value}
+            </dd>
           </div>
         ))}
       </dl>

@@ -43,7 +43,7 @@ export function Sheet({ isOpen, onClose, title, children }: SheetProps) {
       onClick={(event) => {
         if (event.target === dialogRef.current) onClose() // backdrop tap
       }}
-      className="fixed inset-x-0 bottom-0 top-auto m-0 max-h-[92dvh] w-full max-w-none overflow-y-auto rounded-t-lg bg-surface p-0 text-ink shadow-sheet backdrop:bg-ink/30 md:inset-auto md:top-1/2 md:left-1/2 md:max-w-[560px] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-lg"
+      className="fixed inset-x-0 bottom-0 top-auto m-0 max-h-[92dvh] w-full max-w-none overflow-y-auto rounded-t-lg bg-surface p-0 text-ink shadow-sheet backdrop:bg-ink/30 backdrop:animate-backdrop-in open:animate-sheet-up md:open:animate-dialog-pop md:inset-auto md:top-1/2 md:left-1/2 md:max-w-[560px] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-lg"
     >
       <div className="px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3">
         <div aria-hidden className="mx-auto mb-3 h-1 w-10 rounded-full bg-line md:hidden" />

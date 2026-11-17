@@ -7,7 +7,7 @@ export function CornerCard({ to, title, children }: { to: string; title: string;
   return (
     <Link
       to={to}
-      className="group flex min-h-24 flex-col justify-between rounded-md bg-surface p-4 shadow-soft transition duration-[var(--duration-fast)] hover:shadow-lift"
+      className="group flex min-h-24 flex-col justify-between rounded-md bg-surface p-4 shadow-soft transition duration-[var(--duration-fast)] hover:shadow-lift active:scale-[0.98]"
     >
       <span className="flex items-center justify-between font-display text-h3 text-ink">
         {title}

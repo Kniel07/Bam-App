@@ -13,6 +13,7 @@ import type { Milestone } from './api'
 import { useDeleteMilestone, useMilestones } from './hooks'
 import { MilestoneEditorSheet } from './MilestoneEditorSheet'
 import { buildTimeline } from './timeline'
+import { staggerStyle } from '@/lib/stagger'
 
 type EditorState = { isOpen: false } | { isOpen: true; milestone?: Milestone; key: string }
 
@@ -27,6 +28,7 @@ function TimelineMarker({ isHighlighted }: { isHighlighted: boolean }) {
 }
 
 interface MilestoneItemProps {
+  index: number
   milestone: Milestone
   authorName: string | null
   canEdit: boolean
@@ -35,9 +37,9 @@ interface MilestoneItemProps {
   onRemove: () => void
 }
 
-function MilestoneItem({ milestone, authorName, canEdit, canRemove, onEdit, onRemove }: MilestoneItemProps) {
+function MilestoneItem({ index, milestone, authorName, canEdit, canRemove, onEdit, onRemove }: MilestoneItemProps) {
   return (
-    <li className="relative pl-2">
+    <li className="relative animate-rise-in pl-2" style={staggerStyle(index)}>
       <TimelineMarker isHighlighted={milestone.is_highlighted} />
       <article className={`rounded-md px-4 py-4 ${milestone.is_highlighted ? 'bg-blush shadow-soft' : ''}`}>
         <div className="flex items-start justify-between gap-3">
@@ -126,9 +128,9 @@ export function StoryPage() {
           )}
 
           <ol className="relative ml-4 flex flex-col gap-4 border-l-2 border-petal pl-4" aria-label="Timeline">
-            {buildTimeline(milestones.data ?? [], relationship.data?.start_at ?? null, timeZone).map((entry) =>
+            {buildTimeline(milestones.data ?? [], relationship.data?.start_at ?? null, timeZone).map((entry, index) =>
               entry.kind === 'anchor' ? (
-                <li key="anchor" className="relative pl-2">
+                <li key="anchor" className="relative animate-rise-in pl-2" style={staggerStyle(index)}>
                   <span aria-hidden className="absolute -left-[1.4rem] top-1 grid size-6 place-items-center rounded-full bg-rose-deep">
                     <Sparkle className="size-3 text-white" />
                   </span>
@@ -140,6 +142,7 @@ export function StoryPage() {
               ) : (
                 <MilestoneItem
                   key={entry.milestone.id}
+                  index={index}
                   milestone={entry.milestone}
                   // "added by" only for the other person's milestones
                   authorName={entry.milestone.created_by && entry.milestone.created_by !== userId ? nameFor(entry.milestone.created_by) : null}

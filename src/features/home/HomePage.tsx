@@ -12,6 +12,7 @@ import { useLetters } from '@/features/letters/hooks'
 import { useUnreadLetters } from '@/features/letters/useUnreadLetters'
 import { copy } from '@/lib/copy'
 import { useNow } from '@/lib/time/useNow'
+import { staggerStyle } from '@/lib/stagger'
 
 /** "Our Universe" — the heart of the app (PAGE-STRUCTURE §4.4). */
 export function HomePage() {
@@ -48,7 +49,7 @@ export function HomePage() {
           message={role === 'owner' ? 'Finish provisioning (see INSTALLATION) to add our beginning.' : undefined}
         />
       ) : (
-        <div>
+        <div className="animate-rise-in">
           <MonthsaryCounter
             startAt={new Date(relationship.data.start_at)}
             timeZone={relationship.data.timezone}
@@ -59,10 +60,14 @@ export function HomePage() {
         </div>
       )}
 
-      {unreadLetters.length > 0 && <WaitingForYou letters={unreadLetters} />}
+      {unreadLetters.length > 0 && (
+        <div className="animate-rise-in" style={staggerStyle(1)}>
+          <WaitingForYou letters={unreadLetters} />
+        </div>
+      )}
 
       {relationship.data && (
-        <section aria-labelledby="corners-heading" className="flex flex-col gap-3">
+        <section aria-labelledby="corners-heading" className="flex animate-rise-in flex-col gap-3" style={staggerStyle(2)}>
           <h2 id="corners-heading" className="font-sans text-micro font-bold uppercase tracking-[0.06em] text-ink-soft">
             Corners of our universe
           </h2>

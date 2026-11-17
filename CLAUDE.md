@@ -98,6 +98,7 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - S2: `lib/dates/monthsary.ts` (27 tests, device-TZ independent), counter, next monthsary, monthsary-day celebration, welcome envelope (A1), settings.
 - S3: shared media lib (client compression → WebP, EXIF stripped; upload; cached signed URLs), Polaroid, PhotoPicker; Our Story timeline with the anchor placed chronologically, owner CRUD with drafts/highlight/photo; Home corner card. Feature routes lazy-loaded.
 - CR-04: installable PWA (PNG/maskable icons, badge, manifest, install action), push-only `public/sw.js` (verified in Chromium: notification shown with icon/badge, external URLs neutralised), `push_subscriptions` + `notification_log` + `claim_due_notifications()`, Edge Function `supabase/functions/notify` (Deno type-check + web-push encryption verified under Deno), Notifications & app sheet. Real FCM delivery to a phone: not yet verified.
+- Motion polish (owner request "animations for the mobile app", within DS §6): page-in transitions, staggered rise-in lists, sheet slide-up, press feedback, nav icon pop, counter tick; all CSS; reduced-motion verified.
 - S4: Letters grid (sealed/new/locked/opened/draft), two-tap ceremony (Motion, lazy, reduced-motion fade), reading view via `open_letter()` only, owner editor (anytime / on a date, default = next monthsary minute), Home "Waiting for you", Letters corner card, unread dot in nav.
 
 ## How to verify
