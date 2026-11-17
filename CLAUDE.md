@@ -119,4 +119,5 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - KI-08 Supabase SQL editor warns on 0002/0003 (tables created before 0005 enables RLS); owner chooses "Run and enable RLS". Future migrations: enable RLS in the same file that creates a table.
 - KI-09 Vitest: `vi.fn().mockRejectedValue` is reported as unhandled even when caught; tests use plain functions for rejecting async mocks.
 - KI-10 When the owner removes her *unopened* letter, its photo path is sealed from him, so the photo file is orphaned (covered by the planned R2 cleanup).
+- KI-11 Owner applied 0012 without 0011 on dev → notifier failed on every run. Fixed by `supabase/repairs/repair_0011_after_0012.sql` (verified: reproduces the error, then 175/175 assertions pass). Setup guide now says: strictly in order.
 - KI-07 Orphaned storage files possible if a delete of the file fails after the row is deleted (logged warning); cleanup query planned for R2.

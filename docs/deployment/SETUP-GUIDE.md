@@ -61,6 +61,8 @@ Open the file on GitHub, copy all of it, paste it into a new query, click **Run*
 
 > **"Potential issue detected… creates tables without enabling Row Level Security"** appears for `0002` and `0003`. Choose **Run and enable RLS**. RLS is switched on in `0005` anyway; this option simply closes the tables from the first second. Enabling it twice is harmless.
 
+> **Run the files strictly in number order and never skip one.** Each file assumes all earlier ones are applied. If `0012` was applied while `0011` was skipped (symptom: *"claim failed: relation "public.nudges" does not exist"*), do **not** run `0011` on its own afterwards. Run `supabase/repairs/repair_0011_after_0012.sql` once instead.
+
 > **"relation … already exists" (error 42P07)** means that file was already applied on an earlier run (the editor runs a whole file all-or-nothing, so nothing changed). Don't re-run it. Check which migrations are in place:
 > ```sql
 > select
