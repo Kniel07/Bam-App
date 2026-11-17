@@ -158,6 +158,36 @@ export interface Database {
         Update: { title?: string; target_at?: string }
         Relationships: []
       }
+      question_bank: {
+        Row: { id: string; text: string; created_by: string | null; created_at: string }
+        Insert: { text: string }
+        Update: never
+        Relationships: []
+      }
+      daily_questions: {
+        Row: { day: string; question_id: string; created_at: string }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
+      question_answers: {
+        Row: { id: string; day: string; user_id: string; answer: string } & Timestamps
+        Insert: { day: string; answer: string }
+        Update: { answer?: string }
+        Relationships: []
+      }
+      love_reasons: {
+        Row: { id: string; number: number; body: string; created_by: string } & Timestamps
+        Insert: { body: string }
+        Update: { body?: string }
+        Relationships: []
+      }
+      reason_favorites: {
+        Row: { user_id: string; reason_id: string; created_at: string }
+        Insert: { reason_id: string }
+        Update: never
+        Relationships: []
+      }
       push_subscriptions: {
         Row: { id: string; user_id: string; endpoint: string; p256dh: string; auth: string } & Timestamps
         Insert: { endpoint: string; p256dh: string; auth: string }
@@ -181,6 +211,10 @@ export interface Database {
       }
       mark_welcomed: { Args: Record<never, never>; Returns: undefined }
       request_test_notification: { Args: Record<never, never>; Returns: undefined }
+      today_question: {
+        Args: Record<never, never>
+        Returns: { day: string; question_id: string; text: string; i_answered: boolean; they_answered: boolean }[]
+      }
       get_server_time: { Args: Record<never, never>; Returns: string }
       keepalive: { Args: Record<never, never>; Returns: number }
       is_member: { Args: Record<never, never>; Returns: boolean }

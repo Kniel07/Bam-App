@@ -28,7 +28,7 @@ for migration in supabase/migrations/*.sql; do
   run_file "$migration"
 done
 # Test files share fixtures, so they run in a fixed order.
-for test_file in supabase/tests/security.test.sql supabase/tests/partner_letters.test.sql supabase/tests/shared_story.test.sql supabase/tests/notifications.test.sql supabase/tests/nudges.test.sql supabase/tests/test_notifications.test.sql supabase/tests/activities.test.sql; do
+for test_file in supabase/tests/security.test.sql supabase/tests/partner_letters.test.sql supabase/tests/shared_story.test.sql supabase/tests/notifications.test.sql supabase/tests/nudges.test.sql supabase/tests/test_notifications.test.sql supabase/tests/activities.test.sql supabase/tests/questions_reasons.test.sql; do
   echo "test     $(basename "$test_file")"
   run_file "$test_file" 2>&1 | grep -E "FAIL|pass:|passed|ERROR" | sed 's/^psql:<stdin>:[0-9]*: //'
 done

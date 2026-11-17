@@ -197,12 +197,13 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 - Database: `nudges` (clients choose only `kind`; sender/time set by the database), 10-second double-tap guard per kind, 200/day cap, N4 in `claim_due_notifications()` (other member only, once, within 1 hour). Migration `0011_nudges.sql`.
 - Notification text = the fixed phrase (no names, no user-written text), consistent with CR-04 §4.
 
-## TD-026 Together activities (CR-06) — *Approved (owner, BUILD), batch A delivered*
+## TD-026 Together activities (CR-06) — *Approved (owner, BUILD), batches A + B delivered*
 
 - Owner approved activities 1–8. Delivered in batches by size/value: **A** (same-moment magic, mood check-in, hold-to-hug, countdowns) · **B** (question of the day, reasons jar) · **C** (someday list after Memories, quiz).
 - New **Together** tab (bottom nav: Home, Story, Letters, Together, More). When Memories lands, Story moves to Home corners + More to keep five slots.
 - Notification text now comes from the database (`notification_log.body`, migration 0013): new kinds need only a migration. Moods' notes and countdown titles never appear in notifications.
 - Migration `0013_activities.sql`; 29 new assertions.
+- Batch B (migration `0014_question_and_reasons.sql`, 37 assertions): question of the day assigned by the database per relationship-local day (least recently used); answers hidden from the other until both answered (RLS via `has_answered()`), answer/edit only today; 40 generic starter questions (prompts, not personal content) plus member-added questions. Reasons jar: per-author numbering by trigger, private favorites, shared-authorship rules. N9 question waiting, N10 answers ready, N11 new reasons (≤ 1/author/hour).
 
 ---
 

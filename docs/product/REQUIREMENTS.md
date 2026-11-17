@@ -152,7 +152,9 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | FR-ACT-02 | *(CR-06 #2)* Mood check-in (8 moods + optional 80-char note); the other is notified (generic text); latest moods on Together and Home. | R1 |
 | FR-ACT-03 | *(CR-06 #3)* Hold-to-hug (1–15 s); notification states the hug length; recipient can "Feel it" (vibration). | R1 |
 | FR-ACT-05 | *(CR-06 #5)* Shared countdowns (future targets only); both notified at zero (title not shown). | R1 |
-| FR-ACT-04/06/07/08 | *(CR-06)* Question of the day, Someday list, Reasons jar, Quiz: later batches. | R1/R2 |
+| FR-ACT-04 | *(CR-06 #4)* Question of the day: same question for both per local day; answers hidden until both answered; notifications for waiting/ready; members can add questions. | R1 |
+| FR-ACT-07 | *(CR-06 #7)* Reasons jar: numbered reasons per author; random draw of reasons written for you (no immediate repeat); favorites; notification at most hourly. Supersedes FR-REASON-01…04. | R1 |
+| FR-ACT-06/08 | *(CR-06)* Someday list, Quiz: batch C. | R1/R2 |
 | FR-NOTIF-06 | N3: the other member is notified when new content is published. | R2 |
 
 ---

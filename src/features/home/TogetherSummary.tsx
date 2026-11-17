@@ -7,6 +7,7 @@ import { upcomingCountdowns } from '@/features/together/Countdowns'
 import { useCountdowns, useRecentMoods } from '@/features/together/hooks'
 import { moodInfo } from '@/features/together/moods'
 import { useNow } from '@/lib/time/useNow'
+import { useTodayQuestion } from '@/features/together/QuestionOfTheDay'
 
 /** Home glance at Together: their latest mood and the next countdown. */
 export function TogetherSummary() {
@@ -20,6 +21,7 @@ export function TogetherSummary() {
   const otherName = role === 'owner' ? names.partner : names.owner
   const theirMood = moods.data?.find((mood) => mood.user_id !== myUserId)
   const next = upcomingCountdowns(countdowns.data, now)[0]
+  const question = useTodayQuestion()
 
   return (
     <Link to="/together" className="flex items-center gap-3 rounded-md bg-surface px-4 py-3 shadow-soft transition active:scale-[0.98]">
@@ -33,6 +35,11 @@ export function TogetherSummary() {
             <>🌤️ How are you both feeling today?</>
           )}
         </p>
+        {question.data && !question.data.iAnswered && (
+          <p className="truncate font-semibold text-lavender-deep">
+            💬 {question.data.theyAnswered ? `${otherName} answered today's question` : "Today's question is waiting"}
+          </p>
+        )}
         {next && (
           <p className="truncate text-rose-deep">
             ⏳ {next.title} · {formatCountdown(new Date(next.target_at), now)}

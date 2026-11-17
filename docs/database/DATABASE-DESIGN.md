@@ -277,3 +277,16 @@ Storage policies for all modules are consolidated: SELECT follows row visibility
 | `countdowns` (title ≤ 60, target_at, created_by) | members read; insert/update own with future target; delete own or owner |
 | `notification_log.body` | notification text chosen by the database |
 | `claim_due_notifications()` | recreated with `body`; adds N6 same-moment, N7 mood, N8 countdown |
+
+## 15. Change CR-06 batch B (migration 0014)
+
+| Object | Access |
+|---|---|
+| `relationship_today()` | today's date in the relationship timezone |
+| `question_bank` (text, created_by null = built-in) | members read; add own; delete own or owner; 40 generic seeds |
+| `daily_questions` (day PK, question_id) | members read; assigned only by `today_question()` |
+| `question_answers` (day, user_id, answer ≤ 500; unique per day+user) | read own always, the other's only after answering (`has_answered`); insert/update own, today only |
+| `today_question()` | assigns (LRU, then random) and returns today's question + who has answered |
+| `love_reasons` (number per author by trigger, body ≤ 280) | members read; add/edit own; delete own or owner |
+| `reason_favorites` (user_id, reason_id) | private to each member |
+| Notifier | N9 question waiting, N10 answers ready, N11 reasons (hourly bucket) |
