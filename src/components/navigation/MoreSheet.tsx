@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { Bell, LogOut, Settings } from 'lucide-react'
 import { NotificationsSheet } from '@/features/notifications/NotificationsSheet'
 import { IdentityCard } from './IdentityBadge'
+import { SECONDARY_NAV } from './navItems'
 import { Sheet } from '@/components/ui/Sheet'
 import { Button } from '@/components/ui/Button'
 import { useAuth, useRole } from '@/features/auth/useAuth'
@@ -38,6 +39,14 @@ export function MoreSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         <>
         <IdentityCard />
         <ul className="flex flex-col gap-1">
+          {SECONDARY_NAV.map(({ to, label, icon: Icon }) => (
+            <li key={to}>
+              <Link to={to} onClick={close} className="flex min-h-12 items-center gap-3 rounded-sm px-3 hover:bg-blush">
+                <Icon aria-hidden className="size-5 text-lavender-deep" />
+                {label}
+              </Link>
+            </li>
+          ))}
           <li>
             <button
               type="button"

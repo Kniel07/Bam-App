@@ -58,6 +58,7 @@ Do **dev** now. Repeat the same steps for **prod** around L-7.
 12. `0012_test_notifications.sql`
 13. `0013_activities.sql` (after it: **redeploy** the `notify` Edge Function one last time with the updated `supabase/functions/notify/index.ts`. From 0013 on, notification texts come from the database, so later files need no redeploy.)
 14. `0014_question_and_reasons.sql` (no function redeploy needed)
+15. `0015_memories_featured.sql` (no function redeploy needed)
 
 Open the file on GitHub, copy all of it, paste it into a new query, click **Run**. Each should end with "Success. No rows returned." If one fails, **stop** and send me the error message (it contains no personal data).
 

@@ -17,10 +17,12 @@ interface PolaroidProps {
   tiltSeed?: string
   withTape?: boolean
   className?: string
+  /** Shared-element name so the photo zooms between gallery and detail (View Transitions). */
+  transitionName?: string
 }
 
 /** Polaroid frame (COMPONENT-SPECIFICATION §3). */
-export function Polaroid({ path, localSrc, alt, caption, tiltSeed, withTape = true, className = '' }: PolaroidProps) {
+export function Polaroid({ path, localSrc, alt, caption, tiltSeed, withTape = true, className = '', transitionName }: PolaroidProps) {
   const signedUrl = useSignedUrl(localSrc ? null : path)
   const src = localSrc ?? signedUrl.data
   const tilt = tiltSeed ? tiltFromSeed(tiltSeed) : 0
@@ -35,7 +37,14 @@ export function Polaroid({ path, localSrc, alt, caption, tiltSeed, withTape = tr
       )}
       <div className="aspect-[4/5] overflow-hidden bg-blush">
         {src ? (
-          <img src={src} alt={alt} loading="lazy" decoding="async" className="size-full object-cover" />
+          <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+            className="size-full object-cover"
+            style={transitionName ? { viewTransitionName: transitionName } : undefined}
+          />
         ) : signedUrl.isError ? (
           <div className="grid size-full place-items-center text-ink-soft" role="img" aria-label="Photo unavailable">
             <ImageOff aria-hidden className="size-6" />

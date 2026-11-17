@@ -12,12 +12,10 @@ export interface NavItem {
  */
 export const PRIMARY_NAV: NavItem[] = [
   { to: '/', label: 'Home', icon: House },
-  { to: '/story', label: 'Story', icon: BookHeart },
   { to: '/letters', label: 'Letters', icon: Mail },
+  { to: '/memories', label: 'Memories', icon: Images },
   { to: '/together', label: 'Together', icon: HeartHandshake },
 ]
 
-/** Planned destinations, enabled slice by slice (S5 memories). */
-export const PLANNED_NAV: Record<'memories', NavItem> = {
-  memories: { to: '/memories', label: 'Memories', icon: Images },
-}
+/** Secondary destinations, listed in More (five-slot bottom bar; TD-026). */
+export const SECONDARY_NAV: NavItem[] = [{ to: '/story', label: 'Our Story', icon: BookHeart }]

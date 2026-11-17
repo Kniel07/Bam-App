@@ -290,3 +290,12 @@ Storage policies for all modules are consolidated: SELECT follows row visibility
 | `love_reasons` (number per author by trigger, body ≤ 280) | members read; add/edit own; delete own or owner |
 | `reason_favorites` (user_id, reason_id) | private to each member |
 | Notifier | N9 question waiting, N10 answers ready, N11 reasons (hourly bucket) |
+
+## 16. S5 Memories + CR-03 (migration 0015)
+
+| Object | Access |
+|---|---|
+| `memories.is_featured`, `featured_at` | changed only via `set_memory_featured(id, featured)` (members, visible memories) |
+| `memories` grants | insert (id, caption, taken_on, photo_path, status); update (caption, taken_on, photo_path) |
+| Notifier | N12 new memory → the other member (hourly per author) |
+| Realtime | `memories` in the publication |

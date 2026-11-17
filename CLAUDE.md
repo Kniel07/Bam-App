@@ -6,13 +6,14 @@ state; do not rely on conversation history.
 ## Current status
 
 - **Phase:** 3 — BUILD. THINK and DESIGN approved.
-- **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings · S3 Our Story · S4 Letters.
+- **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings · S3 Our Story · S4 Letters · S5 Memories (+ featured photos, CR-03).
 - **Owner must apply in Supabase SQL editor:** `0008_partner_letters.sql`, `0009_shared_story.sql`, `0010_notifications.sql`.
 - **CR-06 Together (TD-026):** batches A (same-moment, mood, hold-to-hug, countdowns) and B (question of the day, reasons jar) built. Owner must run `0013_activities.sql` (+ redeploy `notify`, last time) and `0014_question_and_reasons.sql`. Batch C (someday list after Memories, quiz) next.
 - **Notification diagnostics:** owner must run `0012_test_notifications.sql`, redeploy `notify`, then use "Send me a test notification" (SETUP-GUIDE Troubleshooting).
 - **CR-05 nudges built (TD-025):** owner must run `0011_nudges.sql` and redeploy the `notify` function (paste updated code).
 - **CR-04 notifications built (TD-024):** owner must run `0010_notifications.sql` and follow SETUP-GUIDE Part F (keys, function, cron, Vercel var).
-- **Next:** S5 Memories (+ featured photos on Home, CR-03) → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
+- **Owner must apply:** `0015_memories_featured.sql` (no function redeploy).
+- **Next:** S6 Ops (keep-alive, encrypted backups + restore drill, Android back button) → VALIDATE → CR-06 batch C (someday list, quiz). Reasons (S7) delivered in CR-06B.
 - **Dev environment live:** Vercel (production URL points at the dev Supabase project), migrations applied, owner + partner provisioned, QR sign-in verified by owner. Prod project setup at L-7 (SETUP-GUIDE Part E).
 
 ## Workflow (Kniel Framework)
@@ -96,11 +97,12 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 
 - THINK and DESIGN approved.
 - S0: Vite + React 19 + TS 5.9 strict + Tailwind 4 tokens, ESLint, Vitest, CI (app + database jobs), Vercel headers (CSP, noindex).
-- S1a: migrations 0001–0007 (+0008 CR-01, 0009 CR-02, 0010 CR-04, 0011 CR-05, 0012 diagnostics, 0013 CR-06A, 0014 CR-06B); `npm run test:db` → 241 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
+- S1a: migrations 0001–0007 (+0008 CR-01, 0009 CR-02, 0010 CR-04, 0011 CR-05, 0012 diagnostics, 0013 CR-06A, 0014 CR-06B, 0015 S5); `npm run test:db` → 257 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
 - S1b: QR key landing (fragment stripped before network, tested), owner sign-in, locked screen, guards, `npm run partner-key -- create|rotate`.
 - S2: `lib/dates/monthsary.ts` (27 tests, device-TZ independent), counter, next monthsary, monthsary-day celebration, welcome envelope (A1), settings.
 - S3: shared media lib (client compression → WebP, EXIF stripped; upload; cached signed URLs), Polaroid, PhotoPicker; Our Story timeline with the anchor placed chronologically, owner CRUD with drafts/highlight/photo; Home corner card. Feature routes lazy-loaded.
 - CR-04: installable PWA (PNG/maskable icons, badge, manifest, install action), push-only `public/sw.js` (verified in Chromium: notification shown with icon/badge, external URLs neutralised), `push_subscriptions` + `notification_log` + `claim_due_notifications()`, Edge Function `supabase/functions/notify` (Deno type-check + web-push encryption verified under Deno), Notifications & app sheet. Real FCM delivery to a phone: not yet verified.
+- S5: Memories gallery (paged, polaroids, featured badges), detail with View-Transition zoom, feature on Home for any member, add/edit/delete (own; owner removes any), Home "Our favorite moments" strip + corner; nav Home · Letters · Memories · Together · More (Story in More).
 - CR-06 batch B: Question of the day (hidden until both answered, earlier questions, add your own) and Reasons jar (flip reveal, favorites, write/edit/delete, see all) on Together; Home line for today's question.
 - CR-06 batch A: Together tab (mood check-in, countdowns), hold-to-hug + "Feel it", same-moment banner, Home Together summary; notification text from DB.
 - CR-05 Nudges: "I MISS YOU" heart + 3 nudges on Home (burst, vibration), live received banner + weekly tally (Realtime), push via `notify` (instant invoke + cron fallback).
@@ -118,7 +120,6 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - KI-03 Playwright's fake clock breaks `@date-fns/tz` (Date subclass). Test-harness only; visual tests must use data-relative dates instead of a fake clock.
 - KI-04 Main bundle ~117 KB gzip after route splitting (budget 180 KB). Keep feature routes lazy; Motion lazy-loaded (S4).
 - KI-05 Android back button closing sheets: planned for S6 polish.
-- KI-06 Desktop Home is single-column until Letters/Memories corners exist (S4–S5).
 - KI-08 Supabase SQL editor warns on 0002/0003 (tables created before 0005 enables RLS); owner chooses "Run and enable RLS". Future migrations: enable RLS in the same file that creates a table.
 - KI-09 Vitest: `vi.fn().mockRejectedValue` is reported as unhandled even when caught; tests use plain functions for rejecting async mocks.
 - KI-10 When the owner removes her *unopened* letter, its photo path is sealed from him, so the photo file is orphaned (covered by the planned R2 cleanup).

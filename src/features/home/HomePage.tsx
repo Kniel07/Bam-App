@@ -10,6 +10,7 @@ import { CornerCard } from './CornerCard'
 import { WaitingForYou } from './WaitingForYou'
 import { NudgePad } from '@/features/nudges/NudgePad'
 import { TogetherSummary } from './TogetherSummary'
+import { FeaturedStrip } from './FeaturedStrip'
 import { useLetters } from '@/features/letters/hooks'
 import { useUnreadLetters } from '@/features/letters/useUnreadLetters'
 import { copy } from '@/lib/copy'
@@ -64,6 +65,12 @@ export function HomePage() {
 
       {relationship.data && (
         <div className="animate-rise-in" style={staggerStyle(1)}>
+          <FeaturedStrip />
+        </div>
+      )}
+
+      {relationship.data && (
+        <div className="animate-rise-in" style={staggerStyle(1)}>
           <NudgePad />
         </div>
       )}
@@ -88,6 +95,9 @@ export function HomePage() {
           <div className="grid gap-3 sm:grid-cols-2">
             <CornerCard to="/story" title="Our Story">
               {latestMilestone ? `Latest: ${latestMilestone.title}` : 'Where it all began.'}
+            </CornerCard>
+            <CornerCard to="/memories" title="Our Memories">
+              A scrapbook that keeps growing.
             </CornerCard>
             <CornerCard to="/letters" title="Letters">
               {unreadLetters.length > 0

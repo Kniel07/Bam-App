@@ -128,6 +128,8 @@ export interface Database {
           photo_path: string
           status: ContentStatus
           created_by: string | null
+          is_featured: boolean
+          featured_at: string | null
         } & Timestamps
         Insert: {
           id: string
@@ -135,9 +137,8 @@ export interface Database {
           taken_on?: string
           photo_path: string
           status?: ContentStatus
-          created_by: string
         }
-        Update: { caption?: string; taken_on?: string; photo_path?: string; status?: ContentStatus }
+        Update: { caption?: string; taken_on?: string; photo_path?: string }
         Relationships: []
       }
       nudges: {
@@ -211,6 +212,7 @@ export interface Database {
       }
       mark_welcomed: { Args: Record<never, never>; Returns: undefined }
       request_test_notification: { Args: Record<never, never>; Returns: undefined }
+      set_memory_featured: { Args: { p_memory_id: string; p_featured: boolean }; Returns: undefined }
       today_question: {
         Args: Record<never, never>
         Returns: { day: string; question_id: string; text: string; i_answered: boolean; they_answered: boolean }[]

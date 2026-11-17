@@ -180,9 +180,10 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 - Settings, partner key and the anchor moment remain **owner-only** (they govern the whole site and its security).
 - Storage policies consolidated: read follows row visibility; upload needs a new folder or your own row; overwrite only by the uploader; delete by the uploader or the owner.
 
-## TD-023 Featured photos on Home (CR-03) — *Approved (owner, BUILD), delivered in S5*
+## TD-023 Featured photos on Home (CR-03) — *Approved (owner, BUILD), delivered (S5)*
 
 - Either member can mark a memory as featured; featured memories appear on Home. Implemented with S5 Memories (`memories.is_featured`).
+- Featuring goes through `set_memory_featured()` (any member, any visible memory) so it grants no general edit rights; client column grants exclude `created_by` and the featured fields (migration `0015_memories_featured.sql`).
 
 ## TD-024 Phone notifications via Web Push (CR-04) — *Approved (owner, BUILD)*
 
@@ -213,6 +214,7 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 |---|---|---|---|---|
 | THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | **Approved by owner** |
 | BUILD | TD-024 detail | Test notifications (`request_test_notification()`, N5) and failure reasons/status codes in the `notify` response; subscribe only after the service worker is active | Owner report: notifications not arriving; makes each link of the chain observable | Implementation detail |
+| BUILD S5 | TD-026 nav + FR-ADMIN-02 detail | Bottom nav becomes Home · Letters · Memories · Together · More; Our Story moves to More and the Home corner card. Memories have no draft toggle in the UI (scrapbook entries publish immediately; the column remains) | Five-slot bar; simpler scrapbook | Planned in TD-026 / implementation detail |
 | BUILD | New TD-026 | Together activities 1–8 (batch A built); Together tab; notification text from DB | Owner request: "add the 1–8 interactive activities" | **Approved by owner** |
 | BUILD | New TD-025 | Nudges ("I miss you" heart + 3 nudges) with notifications | Owner request: heart "I MISS YOU" that notifies the other person | **Approved by owner** |
 | BUILD | FR-AUTH-10 | **Previous:** owner route not linked anywhere. **New:** quiet "Owner sign-in" link on the locked screen; signed-in identity (avatar colour + "Signed in as" card) shown in the nav and More | Owner request: open the installed app as the owner and tell the accounts apart. The installed app has no address bar; knowing the route exists reveals nothing (password-protected) | **Approved by owner** |

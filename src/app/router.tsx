@@ -39,6 +39,11 @@ export const router = createBrowserRouter([
             path: 'letters/:letterId',
             lazy: async () => ({ Component: (await import('@/features/letters/LetterReadingPage')).LetterReadingPage }),
           },
+          { path: 'memories', lazy: async () => ({ Component: (await import('@/features/memories/MemoriesPage')).MemoriesPage }) },
+          {
+            path: 'memories/:memoryId',
+            lazy: async () => ({ Component: (await import('@/features/memories/MemoryDetailPage')).MemoryDetailPage }),
+          },
           { path: 'together', lazy: async () => ({ Component: (await import('@/features/together/TogetherPage')).TogetherPage }) },
           { path: 'story', lazy: async () => ({ Component: (await import('@/features/story/StoryPage')).StoryPage }) },
           {
