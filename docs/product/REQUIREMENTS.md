@@ -145,6 +145,9 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | FR-NOTIF-03 | N1: a scheduled letter's recipient is notified within ~1 minute of unlocking, exactly once. | R1 |
 | FR-NOTIF-04 | N2: both members are notified when a monthsary begins, exactly once. | R1 |
 | FR-NOTIF-05 | Notification text is generic: never letter text, labels, captions or names. | R1 |
+| FR-NUDGE-01 | *(CR-05)* A big "I MISS YOU" heart on Home sends the other member a phone notification and shows them a live in-app banner. | R1 |
+| FR-NUDGE-02 | *(CR-05)* Three more one-tap nudges: Thinking of you, Sending a hug, Good night. | R1 |
+| FR-NUDGE-03 | *(CR-05)* Double taps within 10 s count once; daily cap 200; senders cannot be forged. | R1 |
 | FR-NOTIF-06 | N3: the other member is notified when new content is published. | R2 |
 
 ---

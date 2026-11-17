@@ -8,6 +8,7 @@ import { WelcomeEnvelope } from '@/features/welcome/WelcomeEnvelope'
 import { useMilestones } from '@/features/story/hooks'
 import { CornerCard } from './CornerCard'
 import { WaitingForYou } from './WaitingForYou'
+import { NudgePad } from '@/features/nudges/NudgePad'
 import { useLetters } from '@/features/letters/hooks'
 import { useUnreadLetters } from '@/features/letters/useUnreadLetters'
 import { copy } from '@/lib/copy'
@@ -57,6 +58,12 @@ export function HomePage() {
             now={now}
           />
           <NextMonthsaryPill startAt={new Date(relationship.data.start_at)} timeZone={relationship.data.timezone} now={now} />
+        </div>
+      )}
+
+      {relationship.data && (
+        <div className="animate-rise-in" style={staggerStyle(1)}>
+          <NudgePad />
         </div>
       )}
 

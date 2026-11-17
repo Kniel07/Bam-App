@@ -1,6 +1,7 @@
 // Supabase Edge Function `notify` (Deno). CR-04 Phase A.
 //
-// Called every minute by Supabase Cron. Claims due events in the database
+// Called every minute by Supabase Cron, and right after a nudge is sent (CR-05)
+// for instant delivery. Claims due events in the database
 // (exactly once each) and sends a Web Push to every device of each recipient.
 // Safe to call by anyone holding the public anon key: it only delivers what is
 // due, and the database guarantees each event is sent once.
@@ -12,7 +13,13 @@
 import webpush from 'npm:web-push@3.6.7'
 import { createClient } from 'npm:@supabase/supabase-js@2.119.0'
 
-type Kind = 'letter_unlocked' | 'monthsary'
+type Kind =
+  | 'letter_unlocked'
+  | 'monthsary'
+  | 'nudge_miss_you'
+  | 'nudge_thinking_of_you'
+  | 'nudge_hug'
+  | 'nudge_good_night'
 
 interface ClaimedEvent {
   event_key: string
@@ -22,9 +29,21 @@ interface ClaimedEvent {
 }
 
 // Generic on purpose: the lock screen never shows content, labels or names (CR-04 §4).
+// Nudge texts are fixed phrases, never user-written content (CR-05).
 const MESSAGES: Record<Kind, { title: string; body: string }> = {
   letter_unlocked: { title: 'Our Little Universe', body: 'A letter just unlocked for you 💌' },
   monthsary: { title: 'Our Little Universe', body: 'Happy monthsary 💗 Something is waiting for you.' },
+  nudge_miss_you: { title: 'Our Little Universe', body: '💗 I miss you' },
+  nudge_thinking_of_you: { title: 'Our Little Universe', body: '💭 Thinking of you' },
+  nudge_hug: { title: 'Our Little Universe', body: '🤗 Sending you a hug' },
+  nudge_good_night: { title: 'Our Little Universe', body: '🌙 Good night' },
+}
+
+// The app calls this function from the browser after sending a nudge.
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
 function requireEnv(name: string): string {
@@ -33,7 +52,8 @@ function requireEnv(name: string): string {
   return value
 }
 
-Deno.serve(async () => {
+Deno.serve(async (request) => {
+  if (request.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS })
   try {
     const supabase = createClient(requireEnv('SUPABASE_URL'), requireEnv('SUPABASE_SERVICE_ROLE_KEY'), {
       auth: { persistSession: false, autoRefreshToken: false },
@@ -52,7 +72,9 @@ Deno.serve(async () => {
         .eq('user_id', event.user_id)
       if (devicesError) throw new Error(`device lookup failed: ${devicesError.message}`)
 
-      const payload = JSON.stringify({ ...MESSAGES[event.kind], url: event.url, tag: event.event_key })
+      const message = MESSAGES[event.kind]
+      if (!message) continue // unknown kind from a newer database: skip rather than fail
+      const payload = JSON.stringify({ ...message, url: event.url, tag: event.event_key })
       for (const device of devices ?? []) {
         try {
           await webpush.sendNotification(
@@ -75,9 +97,9 @@ Deno.serve(async () => {
     }
 
     // Counts only: never log endpoints, keys or user ids.
-    return Response.json({ events: events?.length ?? 0, sent, removed })
+    return Response.json({ events: events?.length ?? 0, sent, removed }, { headers: CORS_HEADERS })
   } catch (failure) {
     console.error(failure instanceof Error ? failure.message : 'notify failed')
-    return Response.json({ error: 'notify failed' }, { status: 500 })
+    return Response.json({ error: 'notify failed' }, { status: 500, headers: CORS_HEADERS })
   }
 })

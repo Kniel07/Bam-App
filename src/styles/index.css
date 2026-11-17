@@ -75,6 +75,7 @@
   --animate-backdrop-in: backdrop-in 250ms ease-out;
   --animate-pop: pop 350ms var(--ease-gentle);
   --animate-tick: tick 300ms var(--ease-gentle);
+  --animate-burst: burst 900ms var(--ease-gentle) both;
 
   @keyframes shimmer {
     0% { opacity: 0.55; }
@@ -117,6 +118,11 @@
   @keyframes tick {
     from { opacity: 0.2; transform: translateY(-6px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes burst {
+    0% { transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateY(0) scale(0.4); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateY(-110px) scale(1); opacity: 0; }
   }
   @keyframes float-up {
     0% { transform: translateY(0) scale(0.8); opacity: 0; }

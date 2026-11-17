@@ -9,6 +9,7 @@
 export type MemberRole = 'owner' | 'partner'
 export type ContentStatus = 'draft' | 'published'
 export type UnlockType = 'on_demand' | 'scheduled'
+export type NudgeKind = 'miss_you' | 'thinking_of_you' | 'hug' | 'good_night'
 
 type Timestamps = { created_at: string; updated_at: string }
 
@@ -136,6 +137,12 @@ export interface Database {
           created_by: string
         }
         Update: { caption?: string; taken_on?: string; photo_path?: string; status?: ContentStatus }
+        Relationships: []
+      }
+      nudges: {
+        Row: { id: string; sender_id: string; kind: NudgeKind; created_at: string }
+        Insert: { kind: NudgeKind }
+        Update: never
         Relationships: []
       }
       push_subscriptions: {

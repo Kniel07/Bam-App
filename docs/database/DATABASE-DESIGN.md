@@ -258,3 +258,12 @@ Storage policies for all modules are consolidated: SELECT follows row visibility
 | `push_subscriptions` (user_id, endpoint unique https, p256dh, auth) | members manage only their own rows (select/insert/update keys/delete) |
 | `notification_log` (event_key, user_id) PK | no client access; guarantees each event is delivered once per person |
 | `claim_due_notifications(p_now, windows)` | **service_role only**; claims N1 (letters unlocked in the last day → recipient) and N2 (latest monthsary within 12 h → both), returns only newly claimed rows |
+
+## 13. Change CR-05: nudges (migration 0011)
+
+| Object | Access |
+|---|---|
+| `nudges` (sender_id default auth.uid(), kind, created_at default now()) | members read all; insert only `kind` as themselves (column grant); no update/delete |
+| `limit_nudges()` trigger | 10 s per sender+kind, 200 per sender per day |
+| `claim_due_notifications()` | adds N4: each nudge → the other member, once, within 1 hour |
+| Realtime | `nudges` added to the `supabase_realtime` publication (RLS applies) |

@@ -8,6 +8,7 @@ state; do not rely on conversation history.
 - **Phase:** 3 — BUILD. THINK and DESIGN approved.
 - **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings · S3 Our Story · S4 Letters.
 - **Owner must apply in Supabase SQL editor:** `0008_partner_letters.sql`, `0009_shared_story.sql`, `0010_notifications.sql`.
+- **CR-05 nudges built (TD-025):** owner must run `0011_nudges.sql` and redeploy the `notify` function (paste updated code).
 - **CR-04 notifications built (TD-024):** owner must run `0010_notifications.sql` and follow SETUP-GUIDE Part F (keys, function, cron, Vercel var).
 - **Next:** S5 Memories (+ featured photos on Home, CR-03) → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
 - **Dev environment live:** Vercel (production URL points at the dev Supabase project), migrations applied, owner + partner provisioned, QR sign-in verified by owner. Prod project setup at L-7 (SETUP-GUIDE Part E).
@@ -93,11 +94,12 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 
 - THINK and DESIGN approved.
 - S0: Vite + React 19 + TS 5.9 strict + Tailwind 4 tokens, ESLint, Vitest, CI (app + database jobs), Vercel headers (CSP, noindex).
-- S1a: migrations 0001–0007 (+0008 CR-01, 0009 CR-02, 0010 CR-04); `npm run test:db` → 148 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
+- S1a: migrations 0001–0007 (+0008 CR-01, 0009 CR-02, 0010 CR-04, 0011 CR-05); `npm run test:db` → 167 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
 - S1b: QR key landing (fragment stripped before network, tested), owner sign-in, locked screen, guards, `npm run partner-key -- create|rotate`.
 - S2: `lib/dates/monthsary.ts` (27 tests, device-TZ independent), counter, next monthsary, monthsary-day celebration, welcome envelope (A1), settings.
 - S3: shared media lib (client compression → WebP, EXIF stripped; upload; cached signed URLs), Polaroid, PhotoPicker; Our Story timeline with the anchor placed chronologically, owner CRUD with drafts/highlight/photo; Home corner card. Feature routes lazy-loaded.
 - CR-04: installable PWA (PNG/maskable icons, badge, manifest, install action), push-only `public/sw.js` (verified in Chromium: notification shown with icon/badge, external URLs neutralised), `push_subscriptions` + `notification_log` + `claim_due_notifications()`, Edge Function `supabase/functions/notify` (Deno type-check + web-push encryption verified under Deno), Notifications & app sheet. Real FCM delivery to a phone: not yet verified.
+- CR-05 Nudges: "I MISS YOU" heart + 3 nudges on Home (burst, vibration), live received banner + weekly tally (Realtime), push via `notify` (instant invoke + cron fallback).
 - Motion polish (owner request "animations for the mobile app", within DS §6): page-in transitions, staggered rise-in lists, sheet slide-up, press feedback, nav icon pop, counter tick; all CSS; reduced-motion verified.
 - S4: Letters grid (sealed/new/locked/opened/draft), two-tap ceremony (Motion, lazy, reduced-motion fade), reading view via `open_letter()` only, owner editor (anytime / on a date, default = next monthsary minute), Home "Waiting for you", Letters corner card, unread dot in nav.
 

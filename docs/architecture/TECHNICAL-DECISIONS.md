@@ -191,6 +191,12 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 - Generic notification text only; tap opens the app behind sign-in. Design: `docs/design/CR-04-NOTIFICATIONS.md`.
 - Edge Function deployed with JWT verification off: calling it only delivers due events once, so a public trigger is harmless; avoids storing any key in the cron job.
 
+## TD-025 Nudges (CR-05) — *Approved (owner, BUILD)*
+
+- One-tap nudges between members: "I miss you" (big heart on Home), "Thinking of you", "Sending you a hug", "Good night". Each sends the other person a phone notification immediately (client invokes `notify`; the every-minute schedule is the fallback) and appears live in the open app (Supabase Realtime, RLS-filtered).
+- Database: `nudges` (clients choose only `kind`; sender/time set by the database), 10-second double-tap guard per kind, 200/day cap, N4 in `claim_due_notifications()` (other member only, once, within 1 hour). Migration `0011_nudges.sql`.
+- Notification text = the fixed phrase (no names, no user-written text), consistent with CR-04 §4.
+
 ---
 
 ## Change log
@@ -198,6 +204,7 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 | Date | Decision | Change | Reason | Approval |
 |---|---|---|---|---|
 | THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | **Approved by owner** |
+| BUILD | New TD-025 | Nudges ("I miss you" heart + 3 nudges) with notifications | Owner request: heart "I MISS YOU" that notifies the other person | **Approved by owner** |
 | BUILD | FR-AUTH-10 | **Previous:** owner route not linked anywhere. **New:** quiet "Owner sign-in" link on the locked screen; signed-in identity (avatar colour + "Signed in as" card) shown in the nav and More | Owner request: open the installed app as the owner and tell the accounts apart. The installed app has no address bar; knowing the route exists reveals nothing (password-protected) | **Approved by owner** |
 | BUILD | PRD §5 non-goal → TD-024 | **Previous:** no notifications in v1. **New:** Web Push to the installed app (Phase A at launch) | Owner request: "notifications for the installed mobile app" | **Approved by owner** |
 | BUILD S4 | Q4 → TD-022 | **Previous:** partner adds memories (and letters, CR-01) only. **New:** partner adds to every content section; author model everywhere; settings stay owner-only | Owner request: "give her adding access to all" | **Approved by owner** |
