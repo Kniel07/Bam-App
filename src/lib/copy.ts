@@ -7,6 +7,7 @@ export const copy = {
   locked: {
     title: 'This little universe is private.',
     message: 'Scan your key to come in.',
+    ownerLink: 'Owner sign-in',
   },
   key: {
     opening: 'Opening our little universe…',
@@ -23,6 +24,7 @@ export const copy = {
     forgot: 'Forgot password?',
     resetSent: 'If that email belongs to the owner, a reset link is on its way.',
     resetNeedsEmail: 'Enter your email first, then tap "Forgot password?".',
+    notOwner: 'Not the owner? Scan your key card instead.',
   },
   config: {
     missing: 'The app is not configured yet (missing Supabase settings).',

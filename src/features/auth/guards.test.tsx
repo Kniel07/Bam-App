@@ -28,6 +28,11 @@ describe('route guards', () => {
     expect(screen.queryByText('private home')).not.toBeInTheDocument()
   })
 
+  it('offers the owner a way to sign in from the locked screen (installed app has no address bar)', () => {
+    renderWith({ status: 'signedOut' })
+    expect(screen.getByRole('link', { name: copy.locked.ownerLink })).toHaveAttribute('href', '/owner')
+  })
+
   it('shows the locked screen to a signed-in non-member', () => {
     renderWith({ status: 'notMember', userId: 'x' })
     expect(screen.getByText(copy.locked.title)).toBeInTheDocument()

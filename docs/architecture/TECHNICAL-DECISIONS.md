@@ -198,6 +198,7 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 | Date | Decision | Change | Reason | Approval |
 |---|---|---|---|---|
 | THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | **Approved by owner** |
+| BUILD | FR-AUTH-10 | **Previous:** owner route not linked anywhere. **New:** quiet "Owner sign-in" link on the locked screen; signed-in identity (avatar colour + "Signed in as" card) shown in the nav and More | Owner request: open the installed app as the owner and tell the accounts apart. The installed app has no address bar; knowing the route exists reveals nothing (password-protected) | **Approved by owner** |
 | BUILD | PRD §5 non-goal → TD-024 | **Previous:** no notifications in v1. **New:** Web Push to the installed app (Phase A at launch) | Owner request: "notifications for the installed mobile app" | **Approved by owner** |
 | BUILD S4 | Q4 → TD-022 | **Previous:** partner adds memories (and letters, CR-01) only. **New:** partner adds to every content section; author model everywhere; settings stay owner-only | Owner request: "give her adding access to all" | **Approved by owner** |
 | BUILD S4 | New TD-023 | Featured photos shown on Home | Owner request: "partner can add feature photos… shown on the homepage" | **Approved by owner** (S5) |

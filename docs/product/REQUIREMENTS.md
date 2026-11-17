@@ -25,7 +25,7 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | FR-AUTH-07 | Sign-out is available from the navigation (owner); the partner has it in a less prominent place so she isn't signed out by accident. | R1 |
 | FR-AUTH-08 | Recovery is documented. Partner: owner rotates her key and makes a new QR. Owner: password reset email. | R1 |
 | FR-AUTH-09 | **Partner QR key sign-in:** scanning the partner's QR code signs her into her account automatically, with no login screen and nothing typed. The key is carried in the URL fragment (`#…`, never sent to servers) and removed from the address bar immediately after sign-in. | R1 |
-| FR-AUTH-10 | **Owner sign-in:** email + password on a separate owner sign-in route that isn't linked from the partner experience. | R1 |
+| FR-AUTH-10 | **Owner sign-in:** email + password on a separate route `/owner`. *(Amended, BUILD)* A quiet "Owner sign-in" link on the locked screen leads there, because the installed app has no address bar. | R1 |
 | FR-AUTH-11 | **Key rotation:** the owner can revoke the partner's key and generate a new QR. Rotation invalidates the old key and ends existing partner sessions. R1 does this through a documented Supabase dashboard procedure; R2 adds an in-app button. | R1 (procedure) / R2 (UI) |
 | FR-AUTH-12 | The QR code is generated offline or locally by the owner. The key is never committed to git, logged, or stored in plain text in the database. | R1 |
 

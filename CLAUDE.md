@@ -38,7 +38,7 @@ clarification at a time.
 - Launch = the first monthsary, at the anchor minute (fixed date, flexible scope).
 - Permissions (approved, TD-021/TD-022): **shared authorship everywhere**: both add to every content section; each edits/deletes own; drafts private to author; owner may also remove anything he can see. Letters: recipient opens when unlocked; owner cannot read hers early. Settings, key, anchor: owner-only.
 - Featured photos on Home (TD-023, CR-03): delivered with S5 Memories.
-- Sign-in (approved, TD-008): partner scans a **QR key** and is signed in automatically, with no login screen. The key lives in the URL fragment and is removed after sign-in; it is never committed or logged. Owner uses email + password on a separate route. Key rotation = revoke + reprint.
+- Sign-in (approved, TD-008): partner scans a **QR key** and is signed in automatically, with no login screen. The key lives in the URL fragment and is removed after sign-in; it is never committed or logged. Owner uses email + password at `/owner`, reachable from a quiet "Owner sign-in" link on the locked screen (installed app has no address bar). Nav "More" shows the signed-in identity (lavender = owner, rose = partner). Key rotation = revoke + reprint.
 - Address (approved, TD-017): free `<project>.vercel.app`; project name non-identifying and frozen before the QR is printed.
 - Partner device: **Android** (Chrome assumed; also test Samsung Internet if Samsung). Test priority 1 = Android Chrome.
 

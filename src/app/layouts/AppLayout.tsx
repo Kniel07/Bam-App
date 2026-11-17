@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router'
 import { Sparkles } from 'lucide-react'
 import { MoreSheet } from '@/components/navigation/MoreSheet'
+import { IdentityAvatar, useIdentity } from '@/components/navigation/IdentityBadge'
 import { PRIMARY_NAV } from '@/components/navigation/navItems'
 import { Sparkle } from '@/components/shared/Decorations'
 import { copy } from '@/lib/copy'
@@ -13,6 +14,8 @@ const linkBase = 'flex items-center justify-center rounded-md font-semibold tran
 export function AppLayout() {
   const [isMoreOpen, setIsMoreOpen] = useState(false)
   const hasUnreadLetters = useUnreadLetters().length > 0
+  const identity = useIdentity()
+  const moreLabel = identity ? `More, signed in as ${identity.name}` : 'More'
   const dotFor = (to: string) =>
     to === '/letters' && hasUnreadLetters ? (
       <span aria-label="new letters" className="absolute -right-1 -top-0.5 size-2.5 rounded-full bg-rose-deep ring-2 ring-surface" />
@@ -44,8 +47,14 @@ export function AppLayout() {
               </li>
             ))}
           </ul>
-          <button type="button" onClick={() => setIsMoreOpen(true)} className={`${linkBase} min-h-11 gap-2 px-4 text-ink-soft hover:text-ink`}>
-            <Sparkles aria-hidden className="size-5" /> More
+          <button
+            type="button"
+            onClick={() => setIsMoreOpen(true)}
+            aria-label={moreLabel}
+            className={`${linkBase} min-h-11 gap-2 px-4 text-ink-soft hover:text-ink`}
+          >
+            {identity ? <IdentityAvatar /> : <Sparkles aria-hidden className="size-5" />}
+            {identity ? identity.name : 'More'}
           </button>
         </nav>
       </header>
@@ -80,9 +89,10 @@ export function AppLayout() {
             <button
               type="button"
               onClick={() => setIsMoreOpen(true)}
+              aria-label={moreLabel}
               className="flex h-full w-full flex-col items-center justify-center gap-0.5 text-micro font-bold tracking-wide text-ink-soft"
             >
-              <Sparkles aria-hidden className="size-6" strokeWidth={1.75} />
+              {identity ? <IdentityAvatar /> : <Sparkles aria-hidden className="size-6" strokeWidth={1.75} />}
               More
             </button>
           </li>

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Navigate, useNavigate } from 'react-router'
+import { Link, Navigate, useNavigate } from 'react-router'
 import { BareLayout } from '@/app/layouts/BareLayout'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase/client'
 import { copy } from '@/lib/copy'
 import { useAuth } from './useAuth'
 
-/** Owner email + password sign-in at /owner (FR-AUTH-10). Not linked from partner UI. */
+/** Owner email + password sign-in at /owner (FR-AUTH-10, amended: reachable from the locked screen). */
 export function OwnerSignIn() {
   const navigate = useNavigate()
   const { auth } = useAuth()
@@ -87,6 +87,9 @@ export function OwnerSignIn() {
           {copy.ownerSignIn.forgot}
         </button>
       </form>
+      <Link to="/" className="mt-6 inline-flex min-h-11 items-center text-small text-ink-soft underline decoration-line underline-offset-4">
+        {copy.ownerSignIn.notOwner}
+      </Link>
     </BareLayout>
   )
 }
