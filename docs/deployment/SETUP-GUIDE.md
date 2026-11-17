@@ -59,6 +59,16 @@ Open the file on GitHub, copy all of it, paste it into a new query, click **Run*
 
 > **"Potential issue detected… creates tables without enabling Row Level Security"** appears for `0002` and `0003`. Choose **Run and enable RLS**. RLS is switched on in `0005` anyway; this option simply closes the tables from the first second. Enabling it twice is harmless.
 
+> **"relation … already exists" (error 42P07)** means that file was already applied on an earlier run (the editor runs a whole file all-or-nothing, so nothing changed). Don't re-run it. Check which migrations are in place:
+> ```sql
+> select
+>   to_regprocedure('public.is_letter_author(uuid)') is not null                                 as m0008,
+>   to_regprocedure('public.can_write_story_folder(text)') is not null                           as m0009,
+>   to_regclass('public.push_subscriptions') is not null                                         as m0010,
+>   has_column_privilege('authenticated', 'public.push_subscriptions', 'endpoint', 'UPDATE')     as m0010_latest;
+> ```
+> All `true` = up to date. Run only the files whose column is `false`.
+
 > **If you created your owner account before running the migrations**, run this once after `0007` so your account gets a profile row:
 > ```sql
 > insert into public.profiles (id) select id from auth.users on conflict (id) do nothing;
