@@ -2,10 +2,19 @@
 
 | Field | Value |
 |---|---|
-| Status | **PROPOSED — awaiting owner approval** |
+| Status | **APPROVED by owner (BUILD), with amendment A-1** |
 | Requested by | Owner ("add notifications for phone of the web app") |
 | Changes | PRD §5 non-goal "Notifications (email, push) in v1" → in scope |
 | Related | TD-003 (Supabase), TD-008/TD-018 (no partner email), ARCHITECTURE §6 |
+
+## 0. Amendment A-1 (owner): the installed app is the target
+
+"What I need is for the installed mobile app to have its notifications."
+The app must be properly installable on Android (PNG icons incl. maskable,
+monochrome status-bar badge, complete manifest, an "Install the app" action in
+More). Notifications then arrive with the app's own name and icon. The browser
+tab also works, but the installed app is the primary experience. On iPhone,
+Web Push works only for the installed (Home Screen) app, iOS 16.4+.
 
 ## 1. Goal
 

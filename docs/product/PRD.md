@@ -57,7 +57,7 @@ Non-commercial, so success is qualitative but testable:
 
 - Public profiles, sharing, social features, comments, chat.
 - Multi-couple / multi-tenant support.
-- Notifications (email, push) in v1.
+- ~~Notifications (email, push) in v1.~~ Changed by CR-04 (TD-024): Web Push to the installed app is in scope; email remains out of scope.
 - Native mobile apps.
 - AI-generated personal content. All personal content is written by the owner.
 - Paid services or subscriptions.

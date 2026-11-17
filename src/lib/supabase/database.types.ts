@@ -138,6 +138,12 @@ export interface Database {
         Update: { caption?: string; taken_on?: string; photo_path?: string; status?: ContentStatus }
         Relationships: []
       }
+      push_subscriptions: {
+        Row: { id: string; user_id: string; endpoint: string; p256dh: string; auth: string } & Timestamps
+        Insert: { endpoint: string; p256dh: string; auth: string }
+        Update: { endpoint?: string; p256dh?: string; auth?: string }
+        Relationships: []
+      }
     }
     Views: Record<never, never>
     Functions: {

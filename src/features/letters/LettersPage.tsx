@@ -20,7 +20,7 @@ type EditorState = { isOpen: false } | { isOpen: true; letter?: Letter; key: str
 
 /** Caption for a letter written FOR the viewer. */
 function captionForRecipient(letter: Letter, state: EnvelopeState, now: Date): string | undefined {
-  if (state === 'locked' && letter.unlock_at) return `Not yet… opens ${formatCountdown(new Date(letter.unlock_at), now)}`
+  if (state === 'locked' && letter.unlock_at) return `opens ${formatCountdown(new Date(letter.unlock_at), now)}`
   if (state === 'opened') return 'opened'
   if (state === 'new') return 'just unlocked'
   return undefined
@@ -72,7 +72,7 @@ export function LettersPage() {
   function openForRecipient(letter: Letter, state: EnvelopeState) {
     setLockedNotice(null)
     if (state === 'locked') {
-      setLockedNotice(captionForRecipient(letter, state, now) ?? 'Not yet…')
+      setLockedNotice(`Not yet… ${captionForRecipient(letter, state, now) ?? ''}`.trim())
       return
     }
     if (state === 'opened') {

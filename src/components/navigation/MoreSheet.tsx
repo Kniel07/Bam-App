@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
-import { LogOut, Settings } from 'lucide-react'
+import { Bell, LogOut, Settings } from 'lucide-react'
+import { NotificationsSheet } from '@/features/notifications/NotificationsSheet'
 import { Sheet } from '@/components/ui/Sheet'
 import { Button } from '@/components/ui/Button'
 import { useAuth, useRole } from '@/features/auth/useAuth'
@@ -10,6 +11,7 @@ export function MoreSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const role = useRole()
   const { signOut } = useAuth()
   const [isConfirmingSignOut, setIsConfirmingSignOut] = useState(false)
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
 
   const close = () => {
     setIsConfirmingSignOut(false)
@@ -17,7 +19,8 @@ export function MoreSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   }
 
   return (
-    <Sheet isOpen={isOpen} onClose={close} title="More">
+    <>
+    <Sheet isOpen={isOpen && !isNotificationsOpen} onClose={close} title="More">
       {isConfirmingSignOut ? (
         <div className="flex flex-col gap-4">
           <p className="text-body">{role === 'partner' ? copy.signOut.partnerConfirm : copy.signOut.ownerConfirm}</p>
@@ -32,6 +35,16 @@ export function MoreSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         </div>
       ) : (
         <ul className="flex flex-col gap-1">
+          <li>
+            <button
+              type="button"
+              onClick={() => setIsNotificationsOpen(true)}
+              className="flex min-h-12 w-full items-center gap-3 rounded-sm px-3 text-left hover:bg-blush"
+            >
+              <Bell aria-hidden className="size-5 text-lavender-deep" />
+              Notifications &amp; app
+            </button>
+          </li>
           {role === 'owner' && (
             <li>
               <Link to="/settings" onClick={close} className="flex min-h-12 items-center gap-3 rounded-sm px-3 hover:bg-blush">
@@ -53,5 +66,13 @@ export function MoreSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         </ul>
       )}
     </Sheet>
+    <NotificationsSheet
+      isOpen={isOpen && isNotificationsOpen}
+      onClose={() => {
+        setIsNotificationsOpen(false)
+        close()
+      }}
+    />
+    </>
   )
 }

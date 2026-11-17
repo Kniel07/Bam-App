@@ -52,9 +52,9 @@ export function Envelope({ label, state, caption, onSelect }: EnvelopeProps) {
       )}
       <span className="relative line-clamp-2 font-hand text-hand leading-tight text-ink">{label}</span>
       {caption && (
-        <span className="relative mt-1 flex items-center gap-1 text-small text-ink-soft">
-          {state === 'opened' && <Check aria-hidden className="size-3.5" />}
-          {caption}
+        <span className="relative mt-1 flex max-w-full items-center justify-center gap-1 text-small text-ink-soft">
+          {state === 'opened' && <Check aria-hidden className="size-3.5 shrink-0" />}
+          <span className="truncate">{caption}</span>
         </span>
       )}
     </button>

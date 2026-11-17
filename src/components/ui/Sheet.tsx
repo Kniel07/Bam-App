@@ -15,19 +15,31 @@ export interface SheetProps {
  */
 export function Sheet({ isOpen, onClose, title, children }: SheetProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
+  // The browser fires "close" for every close; only user dismissals (Esc, back,
+  // backdrop) may call onClose, never the app hiding the sheet via `isOpen`.
+  const isClosingProgrammatically = useRef(false)
 
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
     if (isOpen && !dialog.open) dialog.showModal()
-    if (!isOpen && dialog.open) dialog.close()
+    if (!isOpen && dialog.open) {
+      isClosingProgrammatically.current = true
+      dialog.close()
+    }
   }, [isOpen])
 
   return (
     <dialog
       ref={dialogRef}
       aria-label={title}
-      onClose={onClose}
+      onClose={() => {
+        if (isClosingProgrammatically.current) {
+          isClosingProgrammatically.current = false
+          return
+        }
+        onClose()
+      }}
       onClick={(event) => {
         if (event.target === dialogRef.current) onClose() // backdrop tap
       }}

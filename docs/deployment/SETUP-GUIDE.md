@@ -53,6 +53,7 @@ Do **dev** now. Repeat the same steps for **prod** around L-7.
 7. `0007_storage.sql`
 8. `0008_partner_letters.sql`
 9. `0009_shared_story.sql`
+10. `0010_notifications.sql`
 
 Open the file on GitHub, copy all of it, paste it into a new query, click **Run**. Each should end with "Success. No rows returned." If one fails, **stop** and send me the error message (it contains no personal data).
 
@@ -177,6 +178,34 @@ Open the printed address followed by `/owner` and sign in with your owner accoun
 - Repeat Parts A and D against the **prod** project, then replace both Vercel variables with the prod values and **Redeploy** (Part C, steps 4–5).
 - Around **L-2**, run `npm run partner-key -- rotate` on prod to issue the **final** key, then print that QR. Any earlier test cards stop working.
 - After launch, switch the GitHub repository to **private** (TD-016).
+
+---
+
+## Part F: Phone notifications (CR-04, one time per environment)
+
+Needs migration `0010_notifications.sql` applied first.
+
+1. **Create the notification keys** in a fresh codespace (see Part D for opening one):
+   ```bash
+   npx web-push generate-vapid-keys
+   ```
+   It prints a **Public Key** and a **Private Key**. Keep this terminal open.
+2. **Supabase → Edge Functions → Secrets → Add new secret**, three times:
+
+   | Name | Value |
+   |---|---|
+   | `VAPID_PUBLIC_KEY` | the Public Key |
+   | `VAPID_PRIVATE_KEY` | the Private Key (**never** paste this anywhere else) |
+   | `VAPID_SUBJECT` | `https://<your-project-name>.vercel.app` |
+
+3. **Deploy the function:** Supabase → Edge Functions → **Deploy a new function → Via Editor**. Name it `notify`, paste the contents of `supabase/functions/notify/index.ts`, deploy. Then open its **Settings** (Details tab) and turn **"Verify JWT" / "Enforce JWT verification" OFF**, then save.
+4. **Schedule it:** SQL Editor → paste `supabase/notifications.cron.example.sql`, replace `<PROJECT_REF>`, run. The last query should show `notify-every-minute | * * * * * | true`.
+5. **Vercel → Settings → Environment Variables:** add `VITE_VAPID_PUBLIC_KEY` = the **Public** Key (all environments), then **Redeploy**.
+6. **Delete the codespace.**
+7. **On each phone:** open the site in **Chrome** → More → **Notifications & app** → **Install the app**, then open the installed app → More → Notifications & app → **Turn on notifications** → Allow.
+8. **Test:** write a letter for the other person, set to unlock in ~3 minutes, publish. Their phone should get *"A letter just unlocked for you 💌"* within about a minute of the unlock time, even with the app closed.
+
+> Samsung / battery savers: if notifications arrive late, set **Settings → Apps → Chrome (and the installed app) → Battery → Unrestricted**. Letters still unlock on time either way.
 
 ## What to send me (safe to share)
 

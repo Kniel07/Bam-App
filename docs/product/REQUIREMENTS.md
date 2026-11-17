@@ -136,6 +136,17 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | FR-ADMIN-04 | Consolidated settings/permissions screen. | R2 |
 | FR-ADMIN-05 | Storage usage readout vs. free-tier limit. | R2 |
 
+### 1.11 Notifications — `NOTIF` *(CR-04)*
+
+| ID | Requirement | Rel. |
+|---|---|---|
+| FR-NOTIF-01 | The app is installable on Android (manifest, PNG + maskable icons, status-bar badge, "Install the app" action). | R1 |
+| FR-NOTIF-02 | Each member can turn phone notifications on/off per device. | R1 |
+| FR-NOTIF-03 | N1: a scheduled letter's recipient is notified within ~1 minute of unlocking, exactly once. | R1 |
+| FR-NOTIF-04 | N2: both members are notified when a monthsary begins, exactly once. | R1 |
+| FR-NOTIF-05 | Notification text is generic: never letter text, labels, captions or names. | R1 |
+| FR-NOTIF-06 | N3: the other member is notified when new content is published. | R2 |
+
 ---
 
 ## 2. Date rules — `DR`

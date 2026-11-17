@@ -184,6 +184,13 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 
 - Either member can mark a memory as featured; featured memories appear on Home. Implemented with S5 Memories (`memories.is_featured`).
 
+## TD-024 Phone notifications via Web Push (CR-04) — *Approved (owner, BUILD)*
+
+- Installed app (PWA) receives Web Push: push-only service worker (no caching), `push_subscriptions` (RLS: own devices), `notification_log` (exactly once), `claim_due_notifications()` (service role only), Edge Function `notify` called every minute by Supabase Cron.
+- Phase A at launch: N1 letter unlocked → recipient; N2 monthsary → both. Phase B (new content) after launch.
+- Generic notification text only; tap opens the app behind sign-in. Design: `docs/design/CR-04-NOTIFICATIONS.md`.
+- Edge Function deployed with JWT verification off: calling it only delivers due events once, so a public trigger is harmless; avoids storing any key in the cron job.
+
 ---
 
 ## Change log
@@ -191,6 +198,7 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 | Date | Decision | Change | Reason | Approval |
 |---|---|---|---|---|
 | THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | **Approved by owner** |
+| BUILD | PRD §5 non-goal → TD-024 | **Previous:** no notifications in v1. **New:** Web Push to the installed app (Phase A at launch) | Owner request: "notifications for the installed mobile app" | **Approved by owner** |
 | BUILD S4 | Q4 → TD-022 | **Previous:** partner adds memories (and letters, CR-01) only. **New:** partner adds to every content section; author model everywhere; settings stay owner-only | Owner request: "give her adding access to all" | **Approved by owner** |
 | BUILD S4 | New TD-023 | Featured photos shown on Home | Owner request: "partner can add feature photos… shown on the homepage" | **Approved by owner** (S5) |
 | BUILD S4 | Q4 / TD-009 / TD-019 → TD-021 | **Previous:** partner reads letters only; owner reads all content. **New:** both write letters; author + recipient model; owner may delete any visible letter but cannot read her letters before they unlock | Owner request: "add the create letter for the partner" | **Approved by owner** |

@@ -26,6 +26,7 @@
 | R16 | **Home-screen web app sign-in mismatch.** Lowered: partner uses Android, where Chrome-installed web apps share Chrome's sign-in. Remaining case: her phone's QR scanner opens a different default browser (e.g. Samsung Internet) than the one she later uses | L | M | Low | Test the QR scan → browser path on her actual phone; if the browsers differ, she rescans once in the right one | Validate | Open |
 | R17 | Site address changes after the QR card is printed → card stops working | L | M | Low | Project name fixed before the first QR is generated (TD-017); any later domain change requires a redirect | Owner | Open |
 | R18 | Backup artifacts exceed the free GitHub artifact quota as photos grow | M | M | Medium | 30-day retention; monitor size; switch to DB-only artifacts + owner's monthly encrypted media download (ARCHITECTURE §6) | Owner | Open |
+| R19 | Push delivery delayed or blocked (battery savers, denied permission, Cron/Edge limits) | M | L | Low | Notifications are a bonus: unlocking never depends on them; setup guide covers battery settings; in-app dots remain | Owner | Open |
 
 ## Review cadence
 

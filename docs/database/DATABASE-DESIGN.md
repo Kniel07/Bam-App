@@ -250,3 +250,11 @@ New helpers: `is_letter_author(uuid)`, `can_read_letter_content(uuid)`, `can_wri
 
 `story_milestones` follows the author model: SELECT member and (author or published); INSERT member as author; UPDATE author only (no ownership change); DELETE author or owner.
 Storage policies for all modules are consolidated: SELECT follows row visibility; INSERT needs a new folder or your own row (`can_write_story_folder`, `can_write_letter_folder`, `can_write_memory_folder`); UPDATE uploader only; DELETE uploader or owner.
+
+## 12. Change CR-04: notifications (migration 0010)
+
+| Object | Access |
+|---|---|
+| `push_subscriptions` (user_id, endpoint unique https, p256dh, auth) | members manage only their own rows (select/insert/update keys/delete) |
+| `notification_log` (event_key, user_id) PK | no client access; guarantees each event is delivered once per person |
+| `claim_due_notifications(p_now, windows)` | **service_role only**; claims N1 (letters unlocked in the last day → recipient) and N2 (latest monthsary within 12 h → both), returns only newly claimed rows |
