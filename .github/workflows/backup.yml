@@ -1,0 +1,46 @@
+# Weekly encrypted backup (TD-013, TD-020, risk R2). Database rows + accounts +
+# photos, encrypted with the owner's PUBLIC age key before leaving the runner.
+# The artifact is unreadable without the private key, which never touches
+# GitHub. Restore: SETUP-GUIDE Part G. GitHub emails the owner if it fails.
+name: Backup
+on:
+  schedule:
+    - cron: '41 19 * * 6' # weekly, Saturday 19:41 UTC
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: backup
+  cancel-in-progress: false
+jobs:
+  backup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install pg_dump 17 and age
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-common age
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -qq postgresql-client-17
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+      - name: Back up and encrypt
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          BACKUP_AGE_RECIPIENT: ${{ secrets.BACKUP_AGE_RECIPIENT }}
+        run: bash scripts/backup/backup.sh "$RUNNER_TEMP/backup"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: olu-backup-${{ github.run_number }}
+          path: ${{ runner.temp }}/backup/*.tar.age
+          retention-days: 30
+          compression-level: 0 # already encrypted; can't compress
+          if-no-files-found: error

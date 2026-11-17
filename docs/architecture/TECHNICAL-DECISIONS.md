@@ -212,6 +212,7 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 
 | Date | Decision | Change | Reason | Approval |
 |---|---|---|---|---|
+| BUILD S6 | TD-013/TD-020 detail | Restore rebuilds the schema from `supabase/migrations` and loads a data-only dump (column inserts, replica mode, seeded rows replaced); the live schema dump is kept in each backup for drift checks. Back button: each open sheet owns one same-URL history entry (`lib/history/backStack`) | Restore needs no superuser and is tested end to end locally/CI; a schema dump of a Supabase project drags platform objects along | Implementation detail |
 | THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | **Approved by owner** |
 | BUILD | TD-024 detail | Test notifications (`request_test_notification()`, N5) and failure reasons/status codes in the `notify` response; subscribe only after the service worker is active | Owner report: notifications not arriving; makes each link of the chain observable | Implementation detail |
 | BUILD S5 | TD-026 nav + FR-ADMIN-02 detail | Bottom nav becomes Home · Letters · Memories · Together · More; Our Story moves to More and the Home corner card. Memories have no draft toggle in the UI (scrapbook entries publish immediately; the column remains) | Five-slot bar; simpler scrapbook | Planned in TD-026 / implementation detail |

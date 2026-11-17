@@ -5,6 +5,7 @@ import { KeyLanding } from '@/features/auth/KeyLanding'
 import { HomePage } from '@/features/home/HomePage'
 import { EmptyState } from '@/components/ui/States'
 import { KEY_ROUTE } from '@/lib/constants'
+import { setNavigationPendingProbe } from '@/lib/history/backStack'
 
 function NotFoundPage() {
   return (
@@ -58,3 +59,6 @@ export const router = createBrowserRouter([
     ],
   },
 ])
+
+// Lets sheets closed by a link tap leave the navigation alone (lib/history/backStack).
+setNavigationPendingProbe(() => router.state.navigation.state !== 'idle')

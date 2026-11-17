@@ -1,0 +1,32 @@
+# Keeps the free Supabase project from pausing after a week without activity
+# (TD-012, TD-020, risk R1). Calls the harmless keepalive() function, which
+# reads nothing. GitHub emails the owner if it fails.
+name: Keep-alive
+on:
+  schedule:
+    - cron: '17 3 */3 * *' # every 3 days, 03:17 UTC
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call keepalive()
+        env:
+          KEEPALIVE_URL: ${{ secrets.KEEPALIVE_URL }}
+          KEEPALIVE_ANON_KEY: ${{ secrets.KEEPALIVE_ANON_KEY }}
+        run: |
+          if [ -z "$KEEPALIVE_URL" ] || [ -z "$KEEPALIVE_ANON_KEY" ]; then
+            echo "::error::Missing KEEPALIVE_URL or KEEPALIVE_ANON_KEY secret (SETUP-GUIDE Part G)."
+            exit 1
+          fi
+          result=$(curl --silent --show-error --fail --retry 3 --retry-delay 20 --max-time 30 \
+            -X POST "${KEEPALIVE_URL%/}/rest/v1/rpc/keepalive" \
+            -H "apikey: $KEEPALIVE_ANON_KEY" -H "Content-Type: application/json" -d '{}')
+          if [ "$result" != "1" ]; then
+            echo "::error::Unexpected answer from keepalive(): $result"
+            exit 1
+          fi
+          echo "Supabase answered; project stays awake."

@@ -192,7 +192,7 @@ Open the printed address followed by `/owner` and sign in with your owner accoun
 
 ## Part E: Before launch (prod)
 
-- Repeat Parts A and D against the **prod** project, then replace both Vercel variables with the prod values and **Redeploy** (Part C, steps 4–5).
+- Set up the **prod** project: either repeat Parts A and D, or (recommended) do Part A1 + A2 only and fill it with the restore drill (Part G4), which also brings your real content and both accounts over from dev. Then replace both Vercel variables with the prod values and **Redeploy** (Part C, steps 4–5), redo Part F for prod, and point the Part G secrets at prod.
 - Around **L-2**, run `npm run partner-key -- rotate` on prod to issue the **final** key, then print that QR. Any earlier test cards stop working.
 - After launch, switch the GitHub repository to **private** (TD-016).
 
@@ -251,6 +251,103 @@ select
 | everything fine, still nothing | Phone-side blocking | Notifications allowed, battery Unrestricted, DND off |
 
 > Samsung / battery savers: if notifications arrive late, set **Settings → Apps → Chrome (and the installed app) → Battery → Unrestricted**. Letters still unlock on time either way.
+
+---
+
+## Part G: Keep-alive, backups and the restore drill (S6, one time)
+
+Supabase's free plan **pauses a project after a week without visits** and offers
+**no downloadable backups**. Two GitHub jobs cover this (TD-012/013/020):
+
+| Job | When | What |
+|---|---|---|
+| **Keep-alive** | every 3 days | Pings the database so it never pauses |
+| **Backup** | every Saturday + on demand | Copies all rows, both accounts and every photo, **encrypts** them, keeps 30 days of copies in GitHub |
+
+GitHub emails you if either job fails. Until you finish G1–G3 they will fail, so expect those emails.
+
+All secrets below go into **GitHub → the repository → Settings → Secrets and variables → Actions → New repository secret**. Secrets stay hidden: GitHub never shows them in logs or to visitors, even while the repository is public. Use the project the real app uses (today: the one your Vercel production points at).
+
+### G1. Keep-alive (5 minutes)
+
+| Secret | Value |
+|---|---|
+| `KEEPALIVE_URL` | Project URL, e.g. `https://<ref>.supabase.co` |
+| `KEEPALIVE_ANON_KEY` | the **anon / publishable** key (the same one Vercel has) |
+
+Then **Actions → Keep-alive → Run workflow**. It should turn green within a minute.
+
+### G2. Your backup key (10 minutes, in a fresh codespace)
+
+Backups are locked with a key pair: GitHub gets the **public** half (can only lock), you keep the **private** half (can unlock). Even if someone downloaded a backup, it's unreadable without your private key.
+
+```bash
+sudo apt-get update && sudo apt-get install -y age
+```
+
+```bash
+age-keygen -o backup-key.txt && cat backup-key.txt
+```
+
+It prints three lines. Copy **all three** into your password manager as a secure note named e.g. "Universe backup key". The line `# public key: age1…` holds the public half; the line starting `AGE-SECRET-KEY-` is the private half.
+
+> **If you lose the private key, every backup becomes useless.** Keep it in the password manager. Never paste it into GitHub, Vercel, Supabase or chat.
+
+Delete the file and the codespace afterwards (`rm backup-key.txt`).
+
+### G3. Backup secrets (10 minutes)
+
+| Secret | Value |
+|---|---|
+| `BACKUP_AGE_RECIPIENT` | the **public** key only: `age1…` (no `# public key:` prefix) |
+| `SUPABASE_URL` | Project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | the **service role / secret** key |
+| `SUPABASE_DB_URL` | Supabase → **Connect** → **Session pooler** → copy the URI and put your database password in place of `[YOUR-PASSWORD]` |
+
+- Use the **Session pooler** address (it ends in `pooler.supabase.com:5432`). The "Direct connection" doesn't work from GitHub.
+- If your database password contains special characters (`@ : / ? # %`), it must be URL-encoded inside the URI. If in doubt, reset the database password (Project Settings → Database) to one with letters and digits only, and update your password manager.
+- This is the only place outside your own computer where the secret key lives (approved in ARCHITECTURE §5).
+
+Then **Actions → Backup → Run workflow**. When it's green, the run page shows an artifact `olu-backup-<number>` (one `.tar.age` file). The log shows only counts, never content.
+
+### G4. Restore drill (about 30 minutes, required before launch)
+
+A backup only counts once it has been restored. Do this once before launch, then every 3 months.
+
+1. **An empty Supabase project.** The free plan allows two projects. Use the **prod** project you create for Part E (recommended: the drill then also moves your real data into prod), or a scratch project you delete afterwards. Don't create your owner account in it (skip A3) or provision it (skip D): the restore brings both accounts. Do set A1 (sign-ups off, Site URL).
+2. **Download the backup:** GitHub → Actions → Backup → the latest green run → artifact `olu-backup-<number>` → unzip, so you have `olu-backup-….tar.age`.
+3. **Open a fresh codespace** and drag the `.tar.age` file into it. Install the tools (psql must be version 17):
+   ```bash
+   sudo apt-get update && sudo apt-get install -y age postgresql-common && sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && sudo apt-get install -y postgresql-client-17 && npm ci
+   ```
+4. **Put your private key in a file:**
+   ```bash
+   mkdir -p private && nano private/backup-key.txt
+   ```
+   Paste the three lines from your password manager, save (Ctrl+O, Enter, Ctrl+X). `private/` is never committed.
+5. **Point at the empty project** (values from the *target* project: Session pooler URI with its password, Project URL, secret key):
+   ```bash
+   export TARGET_DB_URL='<session pooler URI>' TARGET_SUPABASE_URL='https://<ref>.supabase.co' TARGET_SERVICE_ROLE_KEY='<secret key>'
+   ```
+6. **Restore:**
+   ```bash
+   bash scripts/backup/restore.sh olu-backup-*.tar.age private/backup-key.txt
+   ```
+   It applies the migrations, loads both accounts and every row, uploads the photos, and ends with **"Row counts match"**. It refuses to run against a project that already has accounts or a relationship.
+7. **Spot-check** by running the app against the restored project in the codespace:
+   ```bash
+   printf 'VITE_SUPABASE_URL=%s\nVITE_SUPABASE_ANON_KEY=%s\n' "$TARGET_SUPABASE_URL" '<target anon key>' > .env.local && npm run dev
+   ```
+   Open the forwarded address → `/owner` → sign in with **your usual password**. Check: counter correct, a letter you wrote opens, a memory photo loads, the Story timeline is complete. Her current QR key works on the restored project too.
+8. **Clean up:** `rm private/backup-key.txt .env.local`, delete the codespace, and delete the scratch project if you used one. Tell me "restore drill passed" (or the last lines of the output if it failed).
+
+**Not inside a backup** (redo on a new project): Auth settings (A1), the `notify` function, its secrets and schedule (Part F), and the Vercel variables (Part C).
+
+### G5. Monthly 2-minute check
+
+- GitHub → Actions: Keep-alive and Backup show recent green runs.
+- GitHub disables scheduled jobs in a **public** repository after 60 days without commits. If a job shows "disabled", click **Enable workflow**. (After the repository goes private this stops happening.)
+- If Supabase ever says the project is **paused**: Dashboard → the project → **Restore project** (free; data is kept), then run Keep-alive once.
 
 ## What to send me (safe to share)
 

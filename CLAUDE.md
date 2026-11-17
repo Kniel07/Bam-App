@@ -6,14 +6,16 @@ state; do not rely on conversation history.
 ## Current status
 
 - **Phase:** 3 — BUILD. THINK and DESIGN approved.
-- **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings · S3 Our Story · S4 Letters · S5 Memories (+ featured photos, CR-03).
+- **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings · S3 Our Story · S4 Letters · S5 Memories (+ featured photos, CR-03) · S6 Ops (back button, keep-alive, encrypted backups, restore script).
 - **Owner must apply in Supabase SQL editor:** `0008_partner_letters.sql`, `0009_shared_story.sql`, `0010_notifications.sql`.
 - **CR-06 Together (TD-026):** batches A (same-moment, mood, hold-to-hug, countdowns) and B (question of the day, reasons jar) built. Owner must run `0013_activities.sql` (+ redeploy `notify`, last time) and `0014_question_and_reasons.sql`. Batch C (someday list after Memories, quiz) next.
 - **Notification diagnostics:** owner must run `0012_test_notifications.sql`, redeploy `notify`, then use "Send me a test notification" (SETUP-GUIDE Troubleshooting).
 - **CR-05 nudges built (TD-025):** owner must run `0011_nudges.sql` and redeploy the `notify` function (paste updated code).
 - **CR-04 notifications built (TD-024):** owner must run `0010_notifications.sql` and follow SETUP-GUIDE Part F (keys, function, cron, Vercel var).
 - **Owner must apply:** `0015_memories_featured.sql` (no function redeploy).
-- **Next:** S6 Ops (keep-alive, encrypted backups + restore drill, Android back button) → VALIDATE → CR-06 batch C (someday list, quiz). Reasons (S7) delivered in CR-06B.
+- **S6 owner actions:** SETUP-GUIDE Part G (G1 keep-alive secrets, G2 age key, G3 backup secrets + first manual run, G4 restore drill before launch). Real-Supabase backup run and drill not yet verified (only local/CI on synthetic data).
+- **Open decision:** FR-ADMIN-03 preview-as-partner (S6 scope in ARCHITECTURE §9) not built; asked owner whether to keep it given shared authorship (TD-022).
+- **Next:** VALIDATE → CR-06 batch C (someday list, quiz). Reasons (S7) delivered in CR-06B.
 - **Dev environment live:** Vercel (production URL points at the dev Supabase project), migrations applied, owner + partner provisioned, QR sign-in verified by owner. Prod project setup at L-7 (SETUP-GUIDE Part E).
 
 ## Workflow (Kniel Framework)
@@ -95,6 +97,8 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 
 ## Completed
 
+- S6: Android back closes sheets (tested in jsdom + Chromium incl. stacked sheets and links inside sheets); `keepalive.yml` (every 3 days); `backup.yml` (weekly, pg_dump 17 + photos → age-encrypted artifact, 30 days); `scripts/backup/{backup,restore,lib}.sh` + `storage.ts`; `npm run test:backup` round-trip (dump → encrypt → decrypt → restore: byte-identical rows, refuses non-empty target, fails without replica mode) also in CI; full backup.sh/restore.sh drill run locally against fake Storage.
+
 - THINK and DESIGN approved.
 - S0: Vite + React 19 + TS 5.9 strict + Tailwind 4 tokens, ESLint, Vitest, CI (app + database jobs), Vercel headers (CSP, noindex).
 - S1a: migrations 0001–0007 (+0008 CR-01, 0009 CR-02, 0010 CR-04, 0011 CR-05, 0012 diagnostics, 0013 CR-06A, 0014 CR-06B, 0015 S5); `npm run test:db` → 257 assertions on local Postgres 16 (S1–S14 + constraints + storage + time unlock); negative control verified.
@@ -111,7 +115,7 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 
 ## How to verify
 
-`npm run typecheck && npm run lint && npm test && npm run test:db && npm run build`
+`npm run typecheck && npm run lint && npm test && npm run test:db && npm run test:backup && npm run build`
 
 ## Known issues
 
@@ -119,7 +123,7 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - KI-02 `database.types.ts` is hand-written; regenerate from the real project and diff.
 - KI-03 Playwright's fake clock breaks `@date-fns/tz` (Date subclass). Test-harness only; visual tests must use data-relative dates instead of a fake clock.
 - KI-04 Main bundle ~117 KB gzip after route splitting (budget 180 KB). Keep feature routes lazy; Motion lazy-loaded (S4).
-- KI-05 Android back button closing sheets: planned for S6 polish.
+- KI-05 Resolved (S6): back button closes the top sheet (`lib/history/backStack`). After following a link inside a sheet, one later back press lands on the same page once (dead history entry; avoids racing the router).
 - KI-12 Chrome "Touch to Search" bar appeared on long press (e.g. hold-to-hug). Fixed: app text is non-selectable (`user-select: none` on `html`); inputs/textareas stay selectable. Per-phone fallback: Chrome → Settings → Google services → Touch to Search off.
 - KI-08 Supabase SQL editor warns on 0002/0003 (tables created before 0005 enables RLS); owner chooses "Run and enable RLS". Future migrations: enable RLS in the same file that creates a table.
 - KI-09 Vitest: `vi.fn().mockRejectedValue` is reported as unhandled even when caught; tests use plain functions for rejecting async mocks.

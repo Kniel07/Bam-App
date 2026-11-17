@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 import { X } from 'lucide-react'
+import { useCloseOnBack } from '@/lib/history/useCloseOnBack'
 
 export interface SheetProps {
   isOpen: boolean
@@ -11,13 +12,14 @@ export interface SheetProps {
 /**
  * Bottom sheet on mobile, centred dialog from 768 px (COMPONENT-SPECIFICATION §1).
  * Built on the native <dialog>: focus trapping, Esc to close, and focus restore
- * come from the browser.
+ * come from the browser. The Android back button closes the sheet (useCloseOnBack).
  */
 export function Sheet({ isOpen, onClose, title, children }: SheetProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   // The browser fires "close" for every close; only user dismissals (Esc, back,
   // backdrop) may call onClose, never the app hiding the sheet via `isOpen`.
   const isClosingProgrammatically = useRef(false)
+  useCloseOnBack(isOpen, onClose)
 
   useEffect(() => {
     const dialog = dialogRef.current

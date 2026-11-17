@@ -136,9 +136,9 @@ A committed `.env.example` lists names with empty values.
 | Job | Schedule | What | Failure handling |
 |---|---|---|---|
 | `ci.yml` | each push | typecheck, lint, unit tests, build | Blocks merge |
-| `keepalive.yml` | every 3 days | `POST /rest/v1/rpc/keepalive` | GitHub emails owner on failure |
-| `backup.yml` | weekly + manual | `pg_dump` (schema + data) + download bucket → tar → `age` encrypt → upload artifact (30-day retention) | GitHub emails owner on failure |
-| Restore drill | before launch, then quarterly | Decrypt → restore into a scratch Supabase project → spot-check | Documented in MAINTENANCE (DOCUMENT phase) |
+| `keepalive.yml` | every 3 days | `POST /rest/v1/rpc/keepalive` (expects `1`) | GitHub emails owner on failure |
+| `backup.yml` | weekly (Sat) + manual | `scripts/backup/backup.sh`: `pg_dump` public schema (reference) + public data + `auth.users`/`auth.identities` (column inserts), row counts, photos via Storage API → tar → `age` encrypt → artifact (30-day retention). Logs counts only | GitHub emails owner on failure |
+| Restore drill | before launch, then quarterly | `scripts/backup/restore.sh` on the owner's machine: decrypt → migrations → load data in one transaction with `session_replication_role = replica` (no triggers, no notifications) → upload photos → compare row counts; refuses a non-empty target. SETUP-GUIDE Part G4 | `npm run test:backup` proves the DB path in CI on synthetic data |
 
 Note on GitHub artifact storage: private repos on the free plan include a
 limited artifact quota (~500 MB). Once photos approach it, switch to

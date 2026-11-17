@@ -8,6 +8,7 @@
 *.dump
 *.sql.gz
 *.age
+olu-backup-*
 
 # Dependencies and build output
 node_modules/
