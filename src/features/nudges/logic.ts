@@ -5,6 +5,8 @@ const DAY = 24 * 3_600_000
 export interface NudgeSummary {
   /** Latest nudge from the other person within the last 24 hours. */
   latestReceived: Nudge | null
+  /** When you both pressed "I miss you" within 60 s of each other (last 24 h). */
+  togetherAt: string | null
   sentThisWeek: number
   receivedThisWeek: number
 }
@@ -25,7 +27,28 @@ export function summarizeNudges(nudges: Nudge[], myUserId: string | null, now: D
       if (at >= dayAgo && (!latestReceived || at > new Date(latestReceived.created_at).getTime())) latestReceived = nudge
     }
   }
-  return { latestReceived, sentThisWeek, receivedThisWeek }
+  return { latestReceived, togetherAt: findTogetherMoment(nudges, now), sentThisWeek, receivedThisWeek }
+}
+
+const SAME_MOMENT_MS = 60_000
+
+/**
+ * Same-moment magic (CR-06 #1): the latest "I miss you" that the other person
+ * also pressed within 60 seconds. Mirrors N6 in the database.
+ */
+export function findTogetherMoment(nudges: Nudge[], now: Date): string | null {
+  const recent = nudges
+    .filter((nudge) => nudge.kind === 'miss_you' && now.getTime() - new Date(nudge.created_at).getTime() < DAY)
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+  for (const later of recent) {
+    const laterAt = new Date(later.created_at).getTime()
+    const match = recent.find((earlier) => {
+      const earlierAt = new Date(earlier.created_at).getTime()
+      return earlier.sender_id !== later.sender_id && earlier.id !== later.id && earlierAt <= laterAt && laterAt - earlierAt < SAME_MOMENT_MS
+    })
+    if (match) return later.created_at
+  }
+  return null
 }
 
 /** "just now", "5 min ago", "3 h ago". */

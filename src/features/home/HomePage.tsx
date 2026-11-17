@@ -9,6 +9,7 @@ import { useMilestones } from '@/features/story/hooks'
 import { CornerCard } from './CornerCard'
 import { WaitingForYou } from './WaitingForYou'
 import { NudgePad } from '@/features/nudges/NudgePad'
+import { TogetherSummary } from './TogetherSummary'
 import { useLetters } from '@/features/letters/hooks'
 import { useUnreadLetters } from '@/features/letters/useUnreadLetters'
 import { copy } from '@/lib/copy'
@@ -64,6 +65,12 @@ export function HomePage() {
       {relationship.data && (
         <div className="animate-rise-in" style={staggerStyle(1)}>
           <NudgePad />
+        </div>
+      )}
+
+      {relationship.data && (
+        <div className="animate-rise-in" style={staggerStyle(1)}>
+          <TogetherSummary />
         </div>
       )}
 

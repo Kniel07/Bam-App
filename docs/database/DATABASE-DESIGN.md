@@ -267,3 +267,13 @@ Storage policies for all modules are consolidated: SELECT follows row visibility
 | `limit_nudges()` trigger | 10 s per sender+kind, 200 per sender per day |
 | `claim_due_notifications()` | adds N4: each nudge → the other member, once, within 1 hour |
 | Realtime | `nudges` added to the `supabase_realtime` publication (RLS applies) |
+
+## 14. Change CR-06 batch A (migration 0013)
+
+| Object | Access |
+|---|---|
+| `nudges.hug_seconds` (1–30, hugs only) | insert with `kind` |
+| `moods` (user_id default auth.uid(), mood enum, note ≤ 80, created_at) | members read; insert own (mood, note); 1 per minute |
+| `countdowns` (title ≤ 60, target_at, created_by) | members read; insert/update own with future target; delete own or owner |
+| `notification_log.body` | notification text chosen by the database |
+| `claim_due_notifications()` | recreated with `body`; adds N6 same-moment, N7 mood, N8 countdown |

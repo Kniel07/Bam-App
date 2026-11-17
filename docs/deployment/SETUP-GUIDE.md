@@ -55,7 +55,8 @@ Do **dev** now. Repeat the same steps for **prod** around L-7.
 9. `0009_shared_story.sql`
 10. `0010_notifications.sql`
 11. `0011_nudges.sql`
-12. `0012_test_notifications.sql` (after 0011/0012: **redeploy** the `notify` Edge Function with the updated `supabase/functions/notify/index.ts`)
+12. `0012_test_notifications.sql`
+13. `0013_activities.sql` (after it: **redeploy** the `notify` Edge Function one last time with the updated `supabase/functions/notify/index.ts`. From 0013 on, notification texts come from the database, so later files need no redeploy.)
 
 Open the file on GitHub, copy all of it, paste it into a new query, click **Run**. Each should end with "Success. No rows returned." If one fails, **stop** and send me the error message (it contains no personal data).
 

@@ -28,7 +28,7 @@ export function useRecentNudges() {
 export function useSendNudge() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (kind: NudgeKind) => sendNudge(kind),
+    mutationFn: ({ kind, hugSeconds }: { kind: NudgeKind; hugSeconds?: number }) => sendNudge(kind, hugSeconds),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: nudgeKeys.recent }),
   })
 }

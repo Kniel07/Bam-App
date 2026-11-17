@@ -1,4 +1,4 @@
-import { BookHeart, House, Images, Mail, type LucideIcon } from 'lucide-react'
+import { BookHeart, HeartHandshake, House, Images, Mail, type LucideIcon } from 'lucide-react'
 
 export interface NavItem {
   to: string
@@ -14,6 +14,7 @@ export const PRIMARY_NAV: NavItem[] = [
   { to: '/', label: 'Home', icon: House },
   { to: '/story', label: 'Story', icon: BookHeart },
   { to: '/letters', label: 'Letters', icon: Mail },
+  { to: '/together', label: 'Together', icon: HeartHandshake },
 ]
 
 /** Planned destinations, enabled slice by slice (S5 memories). */

@@ -10,6 +10,7 @@ export type MemberRole = 'owner' | 'partner'
 export type ContentStatus = 'draft' | 'published'
 export type UnlockType = 'on_demand' | 'scheduled'
 export type NudgeKind = 'miss_you' | 'thinking_of_you' | 'hug' | 'good_night'
+export type MoodKind = 'happy' | 'loving' | 'sleepy' | 'sad' | 'stressed' | 'grumpy' | 'excited' | 'missing'
 
 type Timestamps = { created_at: string; updated_at: string }
 
@@ -140,9 +141,21 @@ export interface Database {
         Relationships: []
       }
       nudges: {
-        Row: { id: string; sender_id: string; kind: NudgeKind; created_at: string }
-        Insert: { kind: NudgeKind }
+        Row: { id: string; sender_id: string; kind: NudgeKind; hug_seconds: number | null; created_at: string }
+        Insert: { kind: NudgeKind; hug_seconds?: number | null }
         Update: never
+        Relationships: []
+      }
+      moods: {
+        Row: { id: string; user_id: string; mood: MoodKind; note: string | null; created_at: string }
+        Insert: { mood: MoodKind; note?: string | null }
+        Update: never
+        Relationships: []
+      }
+      countdowns: {
+        Row: { id: string; title: string; target_at: string; created_by: string } & Timestamps
+        Insert: { id?: string; title: string; target_at: string }
+        Update: { title?: string; target_at?: string }
         Relationships: []
       }
       push_subscriptions: {

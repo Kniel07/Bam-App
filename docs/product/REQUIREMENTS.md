@@ -148,6 +148,11 @@ Every requirement has an ID so DESIGN, BUILD and VALIDATE can trace it.
 | FR-NUDGE-01 | *(CR-05)* A big "I MISS YOU" heart on Home sends the other member a phone notification and shows them a live in-app banner. | R1 |
 | FR-NUDGE-02 | *(CR-05)* Three more one-tap nudges: Thinking of you, Sending a hug, Good night. | R1 |
 | FR-NUDGE-03 | *(CR-05)* Double taps within 10 s count once; daily cap 200; senders cannot be forged. | R1 |
+| FR-ACT-01 | *(CR-06 #1)* Same-moment magic: both pressing "I MISS YOU" within 60 s → special banner + notification for both, once. | R1 |
+| FR-ACT-02 | *(CR-06 #2)* Mood check-in (8 moods + optional 80-char note); the other is notified (generic text); latest moods on Together and Home. | R1 |
+| FR-ACT-03 | *(CR-06 #3)* Hold-to-hug (1–15 s); notification states the hug length; recipient can "Feel it" (vibration). | R1 |
+| FR-ACT-05 | *(CR-06 #5)* Shared countdowns (future targets only); both notified at zero (title not shown). | R1 |
+| FR-ACT-04/06/07/08 | *(CR-06)* Question of the day, Someday list, Reasons jar, Quiz: later batches. | R1/R2 |
 | FR-NOTIF-06 | N3: the other member is notified when new content is published. | R2 |
 
 ---

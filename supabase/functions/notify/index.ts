@@ -27,7 +27,11 @@ interface ClaimedEvent {
   user_id: string
   kind: Kind
   url: string
+  /** Text chosen by the database (migration 0013+); MESSAGES is the fallback. */
+  body?: string | null
 }
+
+const TITLE = 'Our Little Universe'
 
 // Generic on purpose: the lock screen never shows content, labels or names (CR-04 §4).
 // Nudge texts are fixed phrases, never user-written content (CR-05).
@@ -78,8 +82,9 @@ Deno.serve(async (request) => {
       if (devicesError) throw new Error(`device lookup failed: ${devicesError.message}`)
 
       if (!devices || devices.length === 0) noDevice += 1
-      const message = MESSAGES[event.kind]
-      if (!message) continue // unknown kind from a newer database: skip rather than fail
+      // New kinds only need a migration: the database supplies the text.
+      const message = event.body ? { title: TITLE, body: event.body } : MESSAGES[event.kind]
+      if (!message) continue
       const payload = JSON.stringify({ ...message, url: event.url, tag: event.event_key })
       for (const device of devices ?? []) {
         try {

@@ -39,6 +39,7 @@ export const router = createBrowserRouter([
             path: 'letters/:letterId',
             lazy: async () => ({ Component: (await import('@/features/letters/LetterReadingPage')).LetterReadingPage }),
           },
+          { path: 'together', lazy: async () => ({ Component: (await import('@/features/together/TogetherPage')).TogetherPage }) },
           { path: 'story', lazy: async () => ({ Component: (await import('@/features/story/StoryPage')).StoryPage }) },
           {
             element: <RequireOwner />,

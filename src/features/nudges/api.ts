@@ -29,11 +29,18 @@ export async function fetchRecentNudges(): Promise<Nudge[]> {
  * notifier to deliver it now. If that call fails, the every-minute schedule
  * delivers it anyway, so it is fire-and-forget.
  */
-export async function sendNudge(kind: NudgeKind): Promise<void> {
-  const { error } = await supabase.from('nudges').insert({ kind })
+export async function sendNudge(kind: NudgeKind, hugSeconds?: number): Promise<void> {
+  const { error } = await supabase
+    .from('nudges')
+    .insert(kind === 'hug' && hugSeconds ? { kind, hug_seconds: Math.min(30, Math.max(1, Math.round(hugSeconds))) } : { kind })
   if (error) {
     if (error.message.includes('nudge_too_soon')) throw new NudgeTooSoonError()
     throw new ApiError('Could not send the nudge', error)
   }
+  pokeNotifier()
+}
+
+/** Ask the notifier to deliver now; the every-minute schedule is the fallback. */
+export function pokeNotifier(): void {
   void supabase.functions.invoke('notify', { body: {} }).catch(() => undefined)
 }
