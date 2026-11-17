@@ -76,7 +76,10 @@ export async function enablePush(): Promise<PushStatus> {
   const permission = await Notification.requestPermission()
   if (permission !== 'granted') return permission === 'denied' ? 'blocked' : 'off'
 
-  const registration = (await registerServiceWorker()) ?? (await navigator.serviceWorker.ready)
+  // Subscribing needs an *active* worker; `ready` waits until it is (Chrome
+  // rejects subscribe() on a worker that is still installing).
+  await registerServiceWorker()
+  const registration = await navigator.serviceWorker.ready
   const subscription =
     (await registration.pushManager.getSubscription()) ??
     (await registration.pushManager.subscribe({
@@ -108,4 +111,47 @@ export async function disablePush(): Promise<PushStatus> {
     await subscription.unsubscribe()
   }
   return 'off'
+}
+
+export type TestResult =
+  | { kind: 'sent' }
+  | { kind: 'too-soon' }
+  | { kind: 'no-device' }
+  | { kind: 'key-mismatch' }
+  | { kind: 'server-not-configured'; reason: string }
+  | { kind: 'push-failed'; statuses: number[] }
+  | { kind: 'queued' }
+
+interface NotifyResponse {
+  sent?: number
+  noDevice?: number
+  failedStatuses?: number[]
+  reason?: string
+}
+
+/**
+ * Sends a test notification to this member's own devices and explains the
+ * outcome in plain words (diagnostics for "notifications don't arrive").
+ */
+export async function sendTestNotification(): Promise<TestResult> {
+  const { error } = await supabase.rpc('request_test_notification')
+  if (error) {
+    if (error.message.includes('test_too_soon')) return { kind: 'too-soon' }
+    throw new PushError('Could not request a test notification', error)
+  }
+  const { data, error: invokeError } = await supabase.functions.invoke<NotifyResponse>('notify', { body: {} })
+  if (invokeError) {
+    // The function answered with an error body (e.g. a missing secret), or could not be reached.
+    const context = (invokeError as { context?: Response }).context
+    const body = context && typeof context.json === 'function' ? ((await context.json().catch(() => null)) as NotifyResponse | null) : null
+    if (body?.reason) return { kind: 'server-not-configured', reason: body.reason }
+    // Unreachable right now: the every-minute schedule will still deliver it.
+    return { kind: 'queued' }
+  }
+  if (data?.failedStatuses?.some((status) => status === 401 || status === 403)) return { kind: 'key-mismatch' }
+  if (data?.failedStatuses && data.failedStatuses.length > 0) return { kind: 'push-failed', statuses: data.failedStatuses }
+  if ((data?.sent ?? 0) > 0) return { kind: 'sent' }
+  if ((data?.noDevice ?? 0) > 0) return { kind: 'no-device' }
+  // Already claimed by the every-minute run a moment earlier.
+  return { kind: 'queued' }
 }

@@ -54,7 +54,8 @@ Do **dev** now. Repeat the same steps for **prod** around L-7.
 8. `0008_partner_letters.sql`
 9. `0009_shared_story.sql`
 10. `0010_notifications.sql`
-11. `0011_nudges.sql` (after it: **redeploy** the `notify` Edge Function with the updated `supabase/functions/notify/index.ts`)
+11. `0011_nudges.sql`
+12. `0012_test_notifications.sql` (after 0011/0012: **redeploy** the `notify` Edge Function with the updated `supabase/functions/notify/index.ts`)
 
 Open the file on GitHub, copy all of it, paste it into a new query, click **Run**. Each should end with "Success. No rows returned." If one fails, **stop** and send me the error message (it contains no personal data).
 
@@ -215,6 +216,34 @@ Needs migration `0010_notifications.sql` applied first.
 6. **Delete the codespace.**
 7. **On each phone:** open the site in **Chrome** → More → **Notifications & app** → **Install the app**, then open the installed app → More → Notifications & app → **Turn on notifications** → Allow.
 8. **Test:** write a letter for the other person, set to unlock in ~3 minutes, publish. Their phone should get *"A letter just unlocked for you 💌"* within about a minute of the unlock time, even with the app closed.
+
+### Troubleshooting: notifications don't arrive
+
+1. On the phone: installed app → More → **Notifications & app** → turn notifications **off and on** once → **Send me a test notification**. The message under the button names the broken link (keys mismatch, phone not registered, missing secret…).
+2. If it's still unclear, run this in the SQL editor and send the result (it contains counts and status codes only, no keys):
+
+```sql
+select
+  (select count(*) from cron.job where jobname = 'notify-every-minute' and active)              as cron_active,
+  (select json_agg(d) from (select status, left(return_message, 120) as msg, start_time
+                              from cron.job_run_details order by start_time desc limit 3) d)   as cron_runs,
+  (select json_agg(r) from (select status_code, left(content::text, 200) as body, created
+                              from net._http_response order by created desc limit 3) r)        as function_calls,
+  (select json_agg(json_build_object('role', m.role,
+          'devices', (select count(*) from public.push_subscriptions s where s.user_id = m.user_id)))
+     from public.relationship_members m)                                                        as devices,
+  (select count(*) from public.notification_log where claimed_at > now() - interval '1 day')    as events_last_day;
+```
+
+| What you see | Meaning | Fix |
+|---|---|---|
+| error `schema "cron" does not exist` / `cron_active = 0` | Scheduler not set up | Part F step 4 |
+| `function_calls` status `401` | "Verify JWT" still on | Turn it off on the `notify` function |
+| status `404` | Function missing or misnamed | Deploy it with the name `notify` |
+| status `500`, body has `reason` | e.g. `Missing secret VAPID_SUBJECT` | Add that secret (Part F step 2) |
+| body `failedStatuses: [403]` | Public key in Vercel ≠ `VAPID_PUBLIC_KEY` | Use one key pair everywhere, redeploy Vercel, re-enable on phones |
+| `devices` 0 for a person | That phone never subscribed | Turn notifications on in the app |
+| everything fine, still nothing | Phone-side blocking | Notifications allowed, battery Unrestricted, DND off |
 
 > Samsung / battery savers: if notifications arrive late, set **Settings → Apps → Chrome (and the installed app) → Battery → Unrestricted**. Letters still unlock on time either way.
 

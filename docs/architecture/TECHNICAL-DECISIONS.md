@@ -204,6 +204,7 @@ Rejected for now: state managers (Redux/Zustand: no shared client state to justi
 | Date | Decision | Change | Reason | Approval |
 |---|---|---|---|---|
 | THINK | TD-011 | 00:00 → anchor minute | Anchor is just after midnight; one anchor is simpler | **Approved by owner** |
+| BUILD | TD-024 detail | Test notifications (`request_test_notification()`, N5) and failure reasons/status codes in the `notify` response; subscribe only after the service worker is active | Owner report: notifications not arriving; makes each link of the chain observable | Implementation detail |
 | BUILD | New TD-025 | Nudges ("I miss you" heart + 3 nudges) with notifications | Owner request: heart "I MISS YOU" that notifies the other person | **Approved by owner** |
 | BUILD | FR-AUTH-10 | **Previous:** owner route not linked anywhere. **New:** quiet "Owner sign-in" link on the locked screen; signed-in identity (avatar colour + "Signed in as" card) shown in the nav and More | Owner request: open the installed app as the owner and tell the accounts apart. The installed app has no address bar; knowing the route exists reveals nothing (password-protected) | **Approved by owner** |
 | BUILD | PRD §5 non-goal → TD-024 | **Previous:** no notifications in v1. **New:** Web Push to the installed app (Phase A at launch) | Owner request: "notifications for the installed mobile app" | **Approved by owner** |

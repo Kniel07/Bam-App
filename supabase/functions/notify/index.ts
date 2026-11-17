@@ -20,6 +20,7 @@ type Kind =
   | 'nudge_thinking_of_you'
   | 'nudge_hug'
   | 'nudge_good_night'
+  | 'test'
 
 interface ClaimedEvent {
   event_key: string
@@ -37,6 +38,7 @@ const MESSAGES: Record<Kind, { title: string; body: string }> = {
   nudge_thinking_of_you: { title: 'Our Little Universe', body: '💭 Thinking of you' },
   nudge_hug: { title: 'Our Little Universe', body: '🤗 Sending you a hug' },
   nudge_good_night: { title: 'Our Little Universe', body: '🌙 Good night' },
+  test: { title: 'Our Little Universe', body: '🔔 Test notification: it works on this phone!' },
 }
 
 // The app calls this function from the browser after sending a nudge.
@@ -65,6 +67,9 @@ Deno.serve(async (request) => {
 
     let sent = 0
     let removed = 0
+    let noDevice = 0
+    // Push-service status codes of failed sends (e.g. 403 = VAPID key mismatch). Diagnostics only.
+    const failedStatuses: number[] = []
     for (const event of (events ?? []) as ClaimedEvent[]) {
       const { data: devices, error: devicesError } = await supabase
         .from('push_subscriptions')
@@ -72,6 +77,7 @@ Deno.serve(async (request) => {
         .eq('user_id', event.user_id)
       if (devicesError) throw new Error(`device lookup failed: ${devicesError.message}`)
 
+      if (!devices || devices.length === 0) noDevice += 1
       const message = MESSAGES[event.kind]
       if (!message) continue // unknown kind from a newer database: skip rather than fail
       const payload = JSON.stringify({ ...message, url: event.url, tag: event.event_key })
@@ -90,16 +96,23 @@ Deno.serve(async (request) => {
             await supabase.from('push_subscriptions').delete().eq('id', device.id)
             removed += 1
           } else {
+            failedStatuses.push(status ?? 0)
             console.error(`push failed (status ${status ?? 'unknown'})`)
           }
         }
       }
     }
 
-    // Counts only: never log endpoints, keys or user ids.
-    return Response.json({ events: events?.length ?? 0, sent, removed }, { headers: CORS_HEADERS })
+    // Counts and status codes only: never endpoints, keys or user ids.
+    // Visible in net._http_response.content for the every-minute calls.
+    return Response.json(
+      { events: events?.length ?? 0, sent, removed, noDevice, failedStatuses },
+      { headers: CORS_HEADERS },
+    )
   } catch (failure) {
-    console.error(failure instanceof Error ? failure.message : 'notify failed')
-    return Response.json({ error: 'notify failed' }, { status: 500, headers: CORS_HEADERS })
+    // Our own error messages name the missing secret or failing step, never a value.
+    const reason = failure instanceof Error ? failure.message : 'unknown'
+    console.error(reason)
+    return Response.json({ error: 'notify failed', reason }, { status: 500, headers: CORS_HEADERS })
   }
 })

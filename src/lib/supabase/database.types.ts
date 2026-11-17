@@ -167,6 +167,7 @@ export interface Database {
         }[]
       }
       mark_welcomed: { Args: Record<never, never>; Returns: undefined }
+      request_test_notification: { Args: Record<never, never>; Returns: undefined }
       get_server_time: { Args: Record<never, never>; Returns: string }
       keepalive: { Args: Record<never, never>; Returns: number }
       is_member: { Args: Record<never, never>; Returns: boolean }
