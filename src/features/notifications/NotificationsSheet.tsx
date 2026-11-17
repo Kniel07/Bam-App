@@ -39,6 +39,22 @@ function describeTest(result: TestResult): string {
   return TEST_TEXT[result.kind]
 }
 
+/**
+ * Readable failure text for this sheet. Shows the underlying reason (e.g.
+ * "Could not find the function public.request_test_notification"): these are
+ * server or browser messages that never contain keys, and they make problems
+ * diagnosable instead of a generic "lost in space".
+ */
+function describeError(caught: unknown): string {
+  if (caught instanceof PushError) {
+    const cause = caught.cause as { message?: string; code?: string } | undefined
+    const detail = cause?.message ? ` (${cause.code ? `${cause.code}: ` : ''}${cause.message})` : ''
+    return `${caught.message}${detail}`
+  }
+  if (caught instanceof Error && caught.message) return `${copy.errors.generic} (${caught.name}: ${caught.message})`
+  return copy.errors.generic
+}
+
 function InstallSection() {
   const { state, install } = useInstallPrompt()
   if (state === 'installed') return <p className="text-small text-success">The app is installed on this phone.</p>
@@ -84,8 +100,8 @@ export function NotificationsSheet({ isOpen, onClose }: { isOpen: boolean; onClo
     setTestMessage(null)
     try {
       setTestMessage(describeTest(await sendTestNotification()))
-    } catch {
-      setTestMessage(copy.errors.generic)
+    } catch (caught) {
+      setTestMessage(describeError(caught))
     } finally {
       setIsTesting(false)
     }
@@ -97,7 +113,7 @@ export function NotificationsSheet({ isOpen, onClose }: { isOpen: boolean; onClo
     try {
       setStatus(turnOn ? await enablePush() : await disablePush())
     } catch (caught) {
-      setError(caught instanceof PushError ? caught.message : copy.errors.generic)
+      setError(describeError(caught))
     } finally {
       setIsWorking(false)
     }
