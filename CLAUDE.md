@@ -120,6 +120,7 @@ See `docs/product/PRD.md` §9 (Q3–Q11).
 - KI-03 Playwright's fake clock breaks `@date-fns/tz` (Date subclass). Test-harness only; visual tests must use data-relative dates instead of a fake clock.
 - KI-04 Main bundle ~117 KB gzip after route splitting (budget 180 KB). Keep feature routes lazy; Motion lazy-loaded (S4).
 - KI-05 Android back button closing sheets: planned for S6 polish.
+- KI-12 Chrome "Touch to Search" bar appeared on long press (e.g. hold-to-hug). Fixed: app text is non-selectable (`user-select: none` on `html`); inputs/textareas stay selectable. Per-phone fallback: Chrome → Settings → Google services → Touch to Search off.
 - KI-08 Supabase SQL editor warns on 0002/0003 (tables created before 0005 enables RLS); owner chooses "Run and enable RLS". Future migrations: enable RLS in the same file that creates a table.
 - KI-09 Vitest: `vi.fn().mockRejectedValue` is reported as unhandled even when caught; tests use plain functions for rejecting async mocks.
 - KI-10 When the owner removes her *unopened* letter, its photo path is sealed from him, so the photo file is orphaned (covered by the planned R2 cleanup).

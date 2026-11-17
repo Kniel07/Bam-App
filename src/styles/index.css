@@ -154,6 +154,21 @@
   html {
     color-scheme: light; /* DS-01: light theme only in R1 */
     -webkit-tap-highlight-color: transparent;
+    /*
+     * App-like touch behaviour: long presses (e.g. hold-to-hug) must not select
+     * text, which makes Chrome on Android open its "Touch to Search" bar or a
+     * callout menu. Fields where you type stay selectable (below).
+     */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input,
+  textarea,
+  [contenteditable='true'] {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
   }
   body {
     @apply bg-cream font-sans text-body text-ink antialiased;
