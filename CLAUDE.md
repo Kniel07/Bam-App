@@ -8,6 +8,7 @@ state; do not rely on conversation history.
 - **Phase:** 3 — BUILD. THINK and DESIGN approved.
 - **Slices done:** S0 scaffold · S1a migrations + RLS tests · S1b auth · S2 dates, counter, Home, welcome, settings · S3 Our Story · S4 Letters.
 - **Owner must apply in Supabase SQL editor:** `0008_partner_letters.sql`, then `0009_shared_story.sql`.
+- **Proposed, awaiting approval:** CR-04 phone notifications (`docs/design/CR-04-NOTIFICATIONS.md`).
 - **Next:** S5 Memories (+ featured photos on Home, CR-03) → S6 Ops → (S7 Reasons stretch). See ARCHITECTURE §9.
 - **Dev environment live:** Vercel (production URL points at the dev Supabase project), migrations applied, owner + partner provisioned, QR sign-in verified by owner. Prod project setup at L-7 (SETUP-GUIDE Part E).
 
@@ -71,6 +72,7 @@ React Router · TanStack Query · Lucide · Vitest · Playwright.
 | Components | `docs/design/COMPONENT-SPECIFICATION.md` |
 | Responsive | `docs/design/RESPONSIVE-DESIGN.md` |
 | Setup guide (accounts, Supabase, Vercel, provisioning) | `docs/deployment/SETUP-GUIDE.md` |
+| CR-04 notifications proposal | `docs/design/CR-04-NOTIFICATIONS.md` |
 
 ## Decisions
 
